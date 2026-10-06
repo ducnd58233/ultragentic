@@ -404,17 +404,15 @@ def check_auto_template(root: Path, auto_schema: dict) -> int:
 def check_experiment_fixtures(root: Path, experiment_schema: dict) -> int:
     """Validate the example experiment run against config/metrics $defs.
 
-    experiments/_example/001/ is real, checked-in documentation of the shape
-    (schemas/experiment-run.schema.json section 4.7 of
-    docs/*/restructure-ultragentic-docs/SPEC.md), not a
-    throwaway test-only fixture - a project starting its own experiments/
-    tree can copy it.
+    scripts/fixtures/experiment-run/ holds a real example of the shape. The
+    runtime repo's Go suite reads the same two files through its toolkit
+    checkout, so the Python and Go sides pin one fixture and cannot drift.
     """
-    example_dir = root / "experiments" / "_example" / "001"
+    example_dir = root / "scripts" / "fixtures" / "experiment-run"
     failures = 0
     for stem, def_name in (("config", "config"), ("metrics", "metrics")):
         path = example_dir / f"{stem}.json"
-        label = f"experiments/_example/001/{stem}.json validates against experiment-run.schema.json#/$defs/{def_name}"
+        label = f"scripts/fixtures/experiment-run/{stem}.json validates against experiment-run.schema.json#/$defs/{def_name}"
         if not path.is_file():
             print(f"  FAIL  {path} is missing", file=sys.stderr)
             failures += 1

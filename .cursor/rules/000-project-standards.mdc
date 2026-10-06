@@ -6,6 +6,8 @@ alwaysApply: true
 
 # Project context
 
+Read **`MISTAKES.md`** at the project root: its rules bind like the charter.
+
 Follow the repository charter in **`AGENTS.md`** at the project root for shared conventions, security expectations, and the canonical **`.ai-agents/`** layout (skills, agents, commands, hooks).
 This repository is domain-agnostic; do not add product-domain logic into shared agent assets.
 

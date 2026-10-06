@@ -84,8 +84,8 @@ run in a series shares the same fields to diff against. `metrics.json` carries t
 block as `experiment/METRICS.json`, and the ledger is where `trials` and `reportedSplitEvaluations`
 are counted from, so a run that is not in the ledger is not allowed to claim a held-out split is
 unspent. `JUDGEMENT.md` is prose, like `SUMMARY.md`,
-and is not schema-validated. A worked example:
-[`experiments/_example/001/`](../../../experiments/_example/001/).
+and is not schema-validated. Worked
+fixtures: [`scripts/fixtures/experiment-run/`](../../../scripts/fixtures/experiment-run/).
 
 Whether `experiments/` is gitignored is this project's own `AGENTS.md`
 choice, the same as `docs/` already is - a research or competition repo will

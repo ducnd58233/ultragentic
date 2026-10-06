@@ -2,9 +2,9 @@
 
 <routing>
 
-Lookup table for Claude subagent files in this folder. **After you add, rename, or remove a `*.md` subagent, update this table in the same change.**
+Lookup table for subagent files in this folder. **After you add, rename, or remove a `*.md` subagent, update this table in the same change.**
 
-Subagents are primarily for **Claude Code** (typically via `.claude/agents` linked to this folder). Cursor users may `@`-reference the same files as prompts.
+Every host reads the same files: Claude Code via `.claude/agents`, opencode via `.opencode/agents`, Codex via generated `.codex/agents/*.toml`. Cursor users `@`-reference them as prompts. Where a host has no subagent tool, run the role inline.
 
 | Task type / use case | Subagent file | Tool scope (YAML `tools` map, values `true`) |
 |----------------------|---------------|---------------------------|

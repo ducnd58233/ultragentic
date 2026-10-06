@@ -1,8 +1,8 @@
-# Agent personas (Claude subagents)
+# Agent personas (subagents)
 
 <context>
 
-Markdown files in this folder define **single-role** specialists consumed as Claude Code subagents (commonly via `.claude/agents` linked to this folder). Cursor does not load these automatically; use the same instructions by `@`-referencing a file in chat.
+Markdown files in this folder define **single-role** specialists the single source for every host. `scripts/link-ai-agents.*` exposes them as **Claude Code** subagents (`.claude/agents`), **opencode** agents (`.opencode/agents`), and generated **Codex** agent files (`.codex/agents/*.toml`, do not edit). **Cursor** does not load them as subagents; `@`-reference a file in chat. Tool names in a persona are Claude Code names; on a host without that tool, use the nearest equivalent or run the steps yourself.
 </context>
 
 ## Three-layer model

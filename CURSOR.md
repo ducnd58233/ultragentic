@@ -12,6 +12,7 @@ This repository is a **shared, domain-agnostic agent-assets toolkit** (skills, a
 <prerequisites>
 
 1. [`AGENTS.md`](AGENTS.md) - shared project charter and conventions (includes **MUST** rules for templates and routers).
+1. [`MISTAKES.md`](MISTAKES.md) - rules graduated from repeated mistakes; they bind like the charter.
 2. [`.ai-agents/ROUTER.md`](.ai-agents/ROUTER.md) - master router before choosing a skill, subagent, command, or hook; after adding assets, update the folder **`ROUTER.md`** table.
 3. [`.ai-agents/README.md`](.ai-agents/README.md) - how `.ai-agents` maps to Claude, Cursor, and Codex.
 

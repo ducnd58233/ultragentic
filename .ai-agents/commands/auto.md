@@ -61,19 +61,12 @@ reads the objective and prints the words that decided the graph; follow "Choosin
 [`goal.md`](goal.md). On `/auto` the runtime acts on a guess only when the signal is strong, and
 otherwise asks for the word, because nobody is at intake to correct it.
 
-`/auto` has two limits the other graphs do not. `ultragentic auto tutor` is refused, because a tutor
+`/auto` has two limits the other graphs do not. `auto tutor` is refused, because a tutor
 needs a learner present, so use `/goal tutor`. And `auto task` stops at `approve_delivery` every time:
 it reaches the work on its own, and a person opens the one gate that lets anything leave the
 workspace.
 
-If the binary is not on `PATH`, **stop. Run no phase.** Report:
-
-```text
-/auto requires the ultragentic runtime, which is not installed.
-  bash scripts/install-runtime.sh                                      # macOS, Linux, Git Bash
-  powershell -ExecutionPolicy Bypass -File scripts/install-runtime.ps1 # Windows
-Then run `ultragentic doctor` and start /auto again.
-```
+If the binary is not on `PATH`, run no phase yet. Follow [`runtime-bootstrap.md`](../references/runtime-bootstrap.md): ask the user once to accept the runtime license, install it yourself with `ensure-runtime`, run `ultragentic doctor`, then continue. If the user declines or the install fails, **stop**.
 
 If the binary runs but `doctor` reports problems, **stop. Run no phase.** Do **not**
 claim the runtime is missing. Report the doctor failures and fix that workspace

@@ -11,6 +11,7 @@ Lookup table for skills under this folder. **After you create, rename, or delete
 | Always-on coding reliability guardrails | [`karpathy-guardrails`](karpathy-guardrails) | Non-trivial implementation; avoid assumptions/overengineering/scope drift |
 | Token-efficient execution and concise delivery | [`token-efficient-execution`](token-efficient-execution) | High-volume loops; minimize verbosity without losing correctness |
 | Always-on write-time secrecy constraints | [`secure-by-default`](secure-by-default) | Any work touching auth, user data, logging, error handling, config, or a client surface; keeps secrets and PII out of bundles, storage, consoles, UI, responses, and logs |
+| Check the other agent plugins, skills, CLIs and MCP servers for updates; ask before updating | [`forget-me-not`](forget-me-not) | The user asks if their agent tooling is up to date, or wants plugins, skills, or agent CLIs refreshed |
 | Core design principles, pattern selection, plain code/comments (extensible, maintainable code) | [`engineering-principles`](engineering-principles) | SOLID/DRY/KISS/YAGNI; module/class boundaries; coupling/duplication; choosing design patterns; over-engineering review; comment/writing style and no-AI-wording |
 | Multi-axis PR review, merge quality | [`code-review-and-quality`](code-review-and-quality) | Before merge; evaluating agent output |
 | HTTP/API contracts, OpenAPI alignment | [`api-and-interface-design`](api-and-interface-design) | New endpoints; schema design |

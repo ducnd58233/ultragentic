@@ -407,6 +407,16 @@ done
 # a repository that does ship its own assets is never shadowed.
 link_or_copy "$ASSETS" "$HOME_DIR/$GLOBAL_TOOLKIT_DIR/.ai-agents"
 
+# The runtime bootstrap. An agent working in any repository finds the installer
+# at ~/.ultragentic/scripts and installs the runtime itself the first time a
+# delivery command needs it (references/runtime-bootstrap.md). The installer
+# reads the pinned key from its own directory and the license from one level up,
+# so all of them are placed with that layout.
+for f in ensure-runtime.sh ensure-runtime.ps1 install-runtime.sh install-runtime.ps1 ultragentic-release.pub.pem forget-me-not.py; do
+  link_or_copy "$SCRIPT_DIR/$f" "$HOME_DIR/$GLOBAL_TOOLKIT_DIR/scripts/$f"
+done
+link_or_copy "$SCRIPT_DIR/../RUNTIME-LICENSE.md" "$HOME_DIR/$GLOBAL_TOOLKIT_DIR/RUNTIME-LICENSE.md"
+
 # Instructions. Codex concatenates the global file with the project's rather
 # than choosing between them, so a pointer here is additive by construction.
 write_managed_block "$CODEX_HOME/AGENTS.md"

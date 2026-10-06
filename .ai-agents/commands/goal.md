@@ -34,14 +34,7 @@ Follow [`goal-driven-delivery`](../skills/goal-driven-delivery/SKILL.md) and [`r
 ultragentic doctor
 ```
 
-If the binary is not on `PATH`, **stop. Run no phase.** Report:
-
-```text
-/goal requires the ultragentic runtime, which is not installed.
-  bash scripts/install-runtime.sh                                      # macOS, Linux, Git Bash
-  powershell -ExecutionPolicy Bypass -File scripts/install-runtime.ps1 # Windows
-Then run `ultragentic doctor` and start /goal again.
-```
+If the binary is not on `PATH`, run no phase yet. Follow [`runtime-bootstrap.md`](../references/runtime-bootstrap.md): ask the user once to accept the runtime license, install it yourself with `ensure-runtime`, run `ultragentic doctor`, then continue. If the user declines or the install fails, **stop**.
 
 If the binary runs but `doctor` reports problems, **stop. Run no phase.** Do **not**
 claim the runtime is missing. Report the doctor failures and fix that workspace
@@ -66,8 +59,8 @@ ultragentic checkpoint --slug <slug> --check <name> --source <source> --passed
 ```
 
 Host agents derive slug and graph from the command and the objective; do not ask the user for them.
-Use `ultragentic auto "<objective>"` when the workspace opted into auto mode. It is the same graph with
-the approval gates answered by evidence and extra quality stages on the path; the node-by-node
+Use `ultragentic auto "<objective>"` once the workspace opted in. Same graph, with
+gates answered by evidence and extra quality stages; the node-by-node
 difference is the table at the top of [`auto.md`](auto.md).
 Use `ultragentic research "<topic>"` or `ultragentic auto research "<topic>"` for the
 researcher graph. The next section covers how `goal` and `auto` choose among all of them.
@@ -215,7 +208,7 @@ Merge to `main` only after **GO** and **explicit human approval** ([`build.md`](
 4. Choose the slug; its documents will live in `docs/<category>/<slug>/` (the run picks the
    category from the workflow, or pass `--category`). Confirm `<slug>` with the human when not obvious. The
    slug is a short English gloss of the objective, never a mechanical transliteration of
-   non-English input (`AGENTS.md` "A slug is English"). When the task is small enough that no
+   non-English input (`charter-detail.md` "Docs and naming", moved out of `AGENTS.md`). When the task is small enough that no
    SPEC/PLAN is warranted, still start the run with `--slug no-docs-<short-name>` rather than skip
    slug creation (`AGENTS.md` "A 'no docs needed' decision still gets a slug").
 5. State **ASSUMPTIONS** and the measurable **done** line.

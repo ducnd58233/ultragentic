@@ -25,11 +25,11 @@ Domain rules live in each repo's own `AGENTS.md`.
 
 ## Quick start
 
-You need `git`, `curl`, and `openssl`. The runtime is a signed binary download, so Go is not needed. Some hooks call
+You need `git`, `curl`, and `openssl` (the runtime installs itself on first use; see [The runtime](#the-runtime)). Some hooks call
 `python3` (3.8+, stdlib); on Windows, disable the Microsoft Store `python3` alias or those hooks fail
 silently.
 
-**1. Install globally** (every project on this machine gets the commands and the `ultragentic` runtime):
+**1. Install globally** (every project on this machine gets the commands; the `ultragentic` runtime follows on first use):
 
 ```bash
 git clone https://github.com/ducnd58233/ultragentic.git
@@ -41,13 +41,7 @@ sh scripts/install-global.sh
 Keep the clone: the installed skills and commands are links back to it, so `git pull` updates them.
 On Git Bash they are copies instead; re-run the script after pulling.
 
-**2. Check the setup:**
-
-```bash
-ultragentic doctor   # repeat until OK
-```
-
-**3. Open your coding agent in any repo and give it a goal:**
+**2. Open your coding agent in any repo and give it a goal:**
 
 ```text
 /ua-goal Add host token counts to the Chat toolbar.
@@ -332,6 +326,12 @@ ultragentic skills convert-report ~/.agents/skills/<name>
 Where files land, the Codex `~/.codex/skills` trap, and host-only keys:
 [Third-party Agent Skills in AUTHORING.md](.ai-agents/AUTHORING.md#third-party-agent-skills-not-this-toolkit).
 
+### Keep your other agent tooling fresh (FORGET-ME-NOT)
+
+`/ua-forget-me-not` takes an inventory of everything your agents use besides Ultragentic (Claude
+Code plugins, skills, agent CLIs such as `claude`, `codex` and `opencode`, and MCP servers by name
+only), says what is out of date, and asks which to update. It changes nothing without your yes.
+
 ## Watch a run
 
 ```bash
@@ -348,17 +348,21 @@ makes `/goal`, `/auto`, `/build`, `/test`, `/review`, and `/ship` enforceable is
 runtime, a **closed-source binary** built in a private repository and published here as release
 assets.
 
-- **Install:** `scripts/install-runtime.sh` (macOS, Linux, Git Bash) or `scripts/install-runtime.ps1`
-  (Windows). The global and workspace install scripts run it for you.
-- **You are asked to accept the license first.** The runtime is under
-  [`RUNTIME-LICENSE.md`](RUNTIME-LICENSE.md): free to use, including commercially, but no reverse
-  engineering and no redistribution. In CI, set `UA_ACCEPT_LICENSE=1` to accept non-interactively.
+**You don't install it.** The first time your agent runs a delivery command and finds no runtime,
+it asks you once to accept the runtime license, then downloads and installs it itself and carries on.
+(`sh scripts/install-global.sh` also offers to install it when you run it in a terminal.)
+
+- **The license is your call.** [`RUNTIME-LICENSE.md`](RUNTIME-LICENSE.md): free to use, including
+  commercially, but no reverse engineering and no redistribution. The agent never accepts it for you,
+  and it stops instead of installing when nobody is there to ask (CI, unattended runs).
 - **Every download is verified.** The installer checks an ECDSA signature over `SHA256SUMS` against
   the key pinned in [`scripts/ultragentic-release.pub.pem`](scripts/ultragentic-release.pub.pem),
   then the binary's checksum. A missing or bad signature stops the install; nothing skips it.
 - **Third-party components** in the binary and their licenses: [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
-- **Without the runtime,** the delivery commands stop and tell you to install it. They never
-  pretend to run.
+- **Manual install,** if you prefer: `bash scripts/install-runtime.sh` (macOS, Linux, Git Bash) or
+  `powershell -ExecutionPolicy Bypass -File scripts/install-runtime.ps1` (Windows). In CI, set
+  `UA_ACCEPT_LICENSE=1`.
+- **Without the runtime,** the delivery commands do not pretend to run; the markdown assets work as is.
 
 ## Upgrading from vibe-agent
 
@@ -399,3 +403,10 @@ and follow [AUTHORING.md](.ai-agents/AUTHORING.md).
 Paths like `.claude/`, `.cursor/`, and `.codex/` are generated views; re-run the link script after
 changes. To install someone else's skill, use [Add third-party skills](#add-third-party-skills), not
 this folder.
+
+**Who merges.** Only the repository owner merges, and only to `main` through a pull request. `main`
+rejects direct pushes, force pushes, and deletion, and a pull request needs the `check` job green and
+the owner as code owner (`.github/CODEOWNERS`). Outside contributions are welcome as pull requests
+from a fork; the owner decides what lands. Agents working in this repo never merge or push to
+`main` on their own: merging needs the owner's explicit say-so after `/ship` returns GO (see
+"Merge approval" in [AGENTS.md](AGENTS.md)).

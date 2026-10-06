@@ -106,7 +106,7 @@ are worse than none: they teach the model a partition that does not hold.
 
 **Document files** (deliverables under `docs/<category>/<slug>/`, and the templates in
 [`templates/docs/`](templates/docs/) that produce them). Each type requires a fixed, ordered subset;
-`ultragentic docs types` prints it and `ultragentic docs check` enforces it:
+`ultragentic docs types` prints it and `docs check` enforces it:
 
 | Tag | Holds |
 |---|---|
@@ -144,6 +144,8 @@ correct to violate given a good reason, it is `<rules>`. If violating it is alwa
 - **Every section belongs to a block.** An untagged region between two tagged ones asks the model to
   guess what kind of instruction it is reading, which is the ambiguity the tags exist to remove.
   Every asset under `.ai-agents/` is tagged, including short ones.
+- **Stay within the size budget.** A file over its budget loses rules for short-context models. Limits and
+  writing rules: [`concise-docs.md`](references/concise-docs.md); `docs budget` enforces them.
 - **Nest only for genuine containment, one level deep.** Anthropic's prompting guidance says to
   "nest tags when content has a natural hierarchy", and its example is a container holding items of
   the same kind. A long `<procedure>` whose phases each carry their own `<verification>` is that
@@ -170,7 +172,7 @@ frontmatter, a tag nested inside itself, or nesting past one level.
 | Any asset's YAML frontmatter, or its first body line | `python3 scripts/check-frontmatter.py` - invalid frontmatter does not error, it silently demotes the first body line to the description, and Cursor's command loader demotes it even when the frontmatter is valid |
 | Anything, before trusting a harness read | `bash scripts/check-generated-views.sh` - a canonical edit does not reach the harness until the link script re-runs |
 | `.ai-agents/graphs/*.yaml` or `schemas/*.json` | `python3 scripts/check-graphs.py` and `python3 scripts/check-schemas.py` |
-| [`runtime/`](../runtime) | `cd runtime && make check` |
+| `ultragentic-runtime` (private) | `make check` there |
 | `.ai-agents/agents/*.md` or `.ai-agents/commands/*.md` | re-run the link script, then `powershell -File scripts/check-codex-assets.ps1 -Global` so Codex generated agents and best-effort prompt files stay in sync |
 
 The python checks need `python3 -m pip install -r scripts/requirements.txt`. Full table:
@@ -267,7 +269,7 @@ as the source of truth.
 3. `bash scripts/check-ai-agents-routers.sh`
 4. After agents or commands change: `powershell -File scripts/check-codex-assets.ps1` (or `-Global` when install layout matters)
 5. After hooks or runtime change: `ultragentic doctor` (hook resolution and host contract rows)
-6. After runtime Go change: `cd runtime && make check`
+6. After a runtime change: `make check` in its repo
 
 **Host-only exceptions:** allowed only when the vendor API lacks the capability and the gap is
 recorded in [`host-hook-contracts.md`](references/host-hook-contracts.md). The spec must say which
@@ -291,8 +293,8 @@ permissions, hooks, and runtime gates.
 | Linux, macOS, WSL, Git Bash | `sh scripts/install-global.sh` |
 | Windows | `powershell -ExecutionPolicy Bypass -File scripts/install-global.ps1` |
 
-Both also install the runtime binary, downloading a published release and falling back to building
-from source, so a fresh machine needs one command. Set `UA_SKIP_RUNTIME` to install only the
+Both also install the runtime binary, downloading a signed release after a license prompt, so a
+fresh machine needs one command. Set `UA_SKIP_RUNTIME` to install only the
 markdown. A failed download never fails the install: the assets work without the binary, and the
 delivery commands that need the control plane say so.
 
