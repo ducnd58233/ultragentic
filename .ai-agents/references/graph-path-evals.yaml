@@ -1,0 +1,1097 @@
+# Graph path fixtures: given these outcomes, which nodes does a run visit?
+#
+# Routing evals grade a model's choice of asset. These grade the graph, with no
+# model in the loop, so they run in CI on every change. An edge that starts
+# firing on the default path is one line of YAML, and nothing else in the suite
+# would notice.
+#
+# Reading a path: the first entry is the initial node, then one entry per step,
+# being where the run sits after that step. A step that leaves the run where it
+# was repeats the node rather than hiding it.
+#
+# Every check names its source, because run state refuses evidence without
+# provenance. A fixture that omitted it would describe a state the runtime
+# cannot reach.
+#
+# Reference: ../references/loop-and-graph-engineering.md
+
+apiVersion: ultragentic/v1
+kind: GraphPathEvals
+
+metadata:
+  description: Node paths through goal-delivery for the outcomes a real run produces.
+
+spec:
+  scenarios:
+    - name: gated happy path reaches done
+      graph: goal-delivery
+      steps:
+        - check: {name: intake_confirmed, passed: true, source: human_event}
+        - {} # spec is an artifact node; the fallback edge carries it
+        - check: {name: spec_approved, passed: true, source: human_event}
+        - {} # plan
+        - check: {name: plan_approved, passed: true, source: human_event}
+        - {} # build
+        - check: {name: unit, passed: true, source: exit_code}
+        - check: {name: e2e, passed: true, source: exit_code}
+        - check: {name: slop, passed: true, source: exit_code}
+        - result: {changes_requested: false}
+        - check: {name: pr_open, passed: true, source: exit_code}
+        - check: {name: ci, passed: true, source: ci_api}
+        - check: {name: reviews, passed: true, source: human_event}
+        - check: {name: ship, passed: true, source: human_event}
+        - check: {name: merge_approved, passed: true, source: human_event}
+        - {} # remember
+        - check: {name: tasks_remaining, passed: false, source: exit_code}
+        - {} # improve
+      expect:
+        status: done
+        path:
+          - intake
+          - spec
+          - approve_spec
+          - plan
+          - approve_plan
+          - build
+          - test
+          - e2e
+          - slop
+          - review
+          - open_pr
+          - pr_checks
+          - external_reviews
+          - ship
+          - approve_merge
+          - remember
+          - task_complete
+          - improve
+          - done
+
+    - name: research flag routes through research
+      graph: goal-delivery
+      flags: {research_required: true}
+      steps:
+        - check: {name: intake_confirmed, passed: true, source: human_event}
+        - {}
+      expect:
+        status: running
+        path: [intake, research, spec]
+
+    - name: a rejected spec goes back to spec
+      graph: goal-delivery
+      steps:
+        - check: {name: intake_confirmed, passed: true, source: human_event}
+        - {}
+        - check: {name: spec_approved, passed: false, source: human_event}
+      expect:
+        status: running
+        path: [intake, spec, approve_spec, spec]
+
+    - name: a rejected plan goes back to plan
+      graph: goal-delivery
+      steps:
+        - check: {name: intake_confirmed, passed: true, source: human_event}
+        - {}
+        - check: {name: spec_approved, passed: true, source: human_event}
+        - {}
+        - check: {name: plan_approved, passed: false, source: human_event}
+      expect:
+        status: running
+        path: [intake, spec, approve_spec, plan, approve_plan, plan]
+
+    - name: failing unit tests return to build
+      graph: goal-delivery
+      steps:
+        - check: {name: intake_confirmed, passed: true, source: human_event}
+        - {}
+        - check: {name: spec_approved, passed: true, source: human_event}
+        - {}
+        - check: {name: plan_approved, passed: true, source: human_event}
+        - {}
+        - check: {name: unit, passed: false, source: exit_code}
+      expect:
+        status: running
+        path: [intake, spec, approve_spec, plan, approve_plan, build, test, build]
+
+    - name: a skipped e2e check still opens its gate
+      graph: goal-delivery
+      steps:
+        - check: {name: intake_confirmed, passed: true, source: human_event}
+        - {}
+        - check: {name: spec_approved, passed: true, source: human_event}
+        - {}
+        - check: {name: plan_approved, passed: true, source: human_event}
+        - {}
+        - check: {name: unit, passed: true, source: exit_code}
+        - check: {name: e2e, skipped: true, source: exit_code}
+      expect:
+        status: running
+        path: [intake, spec, approve_spec, plan, approve_plan, build, test, e2e, slop]
+
+    - name: review findings return to build
+      graph: goal-delivery
+      steps:
+        - check: {name: intake_confirmed, passed: true, source: human_event}
+        - {}
+        - check: {name: spec_approved, passed: true, source: human_event}
+        - {}
+        - check: {name: plan_approved, passed: true, source: human_event}
+        - {}
+        - check: {name: unit, passed: true, source: exit_code}
+        - check: {name: e2e, passed: true, source: exit_code}
+        - check: {name: slop, passed: true, source: exit_code}
+        - result: {changes_requested: true}
+      expect:
+        status: running
+        path: [intake, spec, approve_spec, plan, approve_plan, build, test, e2e, slop, review, build]
+
+    - name: a remaining task returns to build rather than ending
+      graph: goal-delivery
+      steps:
+        - check: {name: intake_confirmed, passed: true, source: human_event}
+        - {}
+        - check: {name: spec_approved, passed: true, source: human_event}
+        - {}
+        - check: {name: plan_approved, passed: true, source: human_event}
+        - {}
+        - check: {name: unit, passed: true, source: exit_code}
+        - check: {name: e2e, passed: true, source: exit_code}
+        - check: {name: slop, passed: true, source: exit_code}
+        - result: {changes_requested: false}
+        - check: {name: pr_open, passed: true, source: exit_code}
+        - check: {name: ci, passed: true, source: ci_api}
+        - check: {name: reviews, passed: true, source: human_event}
+        - check: {name: ship, passed: true, source: human_event}
+        - check: {name: merge_approved, passed: true, source: human_event}
+        - {} # remember
+        - check: {name: tasks_remaining, passed: true, source: exit_code}
+      expect:
+        status: running
+        path:
+          - intake
+          - spec
+          - approve_spec
+          - plan
+          - approve_plan
+          - build
+          - test
+          - e2e
+          - slop
+          - review
+          - open_pr
+          - pr_checks
+          - external_reviews
+          - ship
+          - approve_merge
+          - remember
+          - task_complete
+          - build
+
+    # The third blocker at one node ends the run where it stands. The run never
+    # moves to the `failed` node: Advance returns terminal before resolving an
+    # edge, so `build -> failed when blocked` does not carry it. That is why the
+    # coverage note reports `failed` uncovered, and the note is accurate rather
+    # than a gap in these fixtures.
+    - name: three blockers at build end the run in place
+      graph: goal-delivery
+      steps:
+        - check: {name: intake_confirmed, passed: true, source: human_event}
+        - {}
+        - check: {name: spec_approved, passed: true, source: human_event}
+        - {}
+        - check: {name: plan_approved, passed: true, source: human_event}
+        - blocker: dependency will not install
+        - blocker: dependency will not install
+        - blocker: dependency will not install
+      expect:
+        status: failed
+        path: [intake, spec, approve_spec, plan, approve_plan, build, build, build, build]
+
+    # The gate in front of the irreversible action is earned per task. Before
+    # task_complete reset the per-task checks, the second cycle sailed through
+    # approve_merge on the first cycle's approval, and pre-tool-use stopped
+    # refusing pushes to a protected branch for the same reason.
+    - name: a second task stops at the merge gate again
+      graph: goal-delivery
+      steps:
+        - check: {name: intake_confirmed, passed: true, source: human_event}
+        - {} # spec
+        - check: {name: spec_approved, passed: true, source: human_event}
+        - {} # plan
+        - check: {name: plan_approved, passed: true, source: human_event}
+        - {} # build
+        - check: {name: unit, passed: true, source: exit_code}
+        - check: {name: e2e, passed: true, source: exit_code}
+        - check: {name: slop, passed: true, source: exit_code}
+        - result: {changes_requested: false}
+        - check: {name: pr_open, passed: true, source: exit_code}
+        - check: {name: ci, passed: true, source: ci_api}
+        - check: {name: reviews, passed: true, source: human_event}
+        - check: {name: ship, passed: true, source: human_event}
+        - check: {name: merge_approved, passed: true, source: human_event}
+        - {} # remember
+        - check: {name: tasks_remaining, passed: true, source: exit_code}
+        - {} # build
+        - check: {name: unit, passed: true, source: exit_code}
+        - check: {name: e2e, passed: true, source: exit_code}
+        - check: {name: slop, passed: true, source: exit_code}
+        - result: {changes_requested: false}
+        - check: {name: pr_open, passed: true, source: exit_code}
+        - check: {name: ci, passed: true, source: ci_api}
+        - check: {name: reviews, passed: true, source: human_event}
+        - check: {name: ship, passed: true, source: human_event}
+        - {} # approve_merge with no fresh approval
+      expect:
+        status: running
+        path:
+          - intake
+          - spec
+          - approve_spec
+          - plan
+          - approve_plan
+          - build
+          - test
+          - e2e
+          - slop
+          - review
+          - open_pr
+          - pr_checks
+          - external_reviews
+          - ship
+          - approve_merge
+          - remember
+          - task_complete
+          - build
+          - test
+          - e2e
+          - slop
+          - review
+          - open_pr
+          - pr_checks
+          - external_reviews
+          - ship
+          - approve_merge
+          - build
+
+    # docs/auto-ship-reviews T4. human_redirect is read from every in-flight
+    # node, evaluated before that node's own edges - proven here by setting it
+    # from the start and showing the very first node reached after intake
+    # (spec, which is also mid-fan-out on the happy path above) routes
+    # straight back rather than continuing to approve_spec.
+    - name: a human redirect returns to intake from spec
+      graph: goal-delivery
+      flags: {human_redirect: true}
+      steps:
+        - check: {name: intake_confirmed, passed: true, source: human_event}
+        - {} # spec's human_redirect edge fires before its normal fallback to approve_spec
+      expect:
+        status: awaiting_human # back at intake, a human_gate, waiting on a fresh intake_confirmed
+        path: [intake, spec, intake]
+
+    - name: researcher happy path reaches done
+      graph: researcher-delivery
+      steps:
+        - check: {name: intake_confirmed, passed: true, source: human_event}
+        - {} # literature
+        - check: {name: applicability_approved, passed: true, source: human_event}
+        - {} # hypothesis
+        - {} # experiment_design
+        - check: {name: design_approved, passed: true, source: human_event}
+        - {} # experiment_run
+        - check: {name: experiment_done, passed: true, source: file_assert}
+        - check: {name: results_acceptable, passed: true, source: file_assert}
+        - {} # findings
+        - {} # writeup
+      expect:
+        status: done
+        path:
+          - intake
+          - literature
+          - approve_applicability
+          - hypothesis
+          - experiment_design
+          - approve_design
+          - experiment_run
+          - experiment_monitor
+          - results_eval
+          - findings
+          - writeup
+          - done
+
+    - name: researcher monitor loops while experiment runs
+      graph: researcher-delivery
+      steps:
+        - check: {name: intake_confirmed, passed: true, source: human_event}
+        - {}
+        - check: {name: applicability_approved, passed: true, source: human_event}
+        - {}
+        - {}
+        - check: {name: design_approved, passed: true, source: human_event}
+        - {}
+        - check: {name: experiment_done, passed: false, source: file_assert}
+      expect:
+        status: running
+        path:
+          - intake
+          - literature
+          - approve_applicability
+          - hypothesis
+          - experiment_design
+          - approve_design
+          - experiment_run
+          - experiment_monitor
+          - experiment_run
+
+    - name: researcher auto skips intake then applicability gate
+      graph: researcher-delivery
+      flags: {auto: true, applicability_ok: true}
+      steps:
+        - {} # intake -> literature (intake already skipped on enter)
+        - {} # literature -> approve_applicability (skipped via applicability_ok)
+        - {} # skipped gate opens to hypothesis
+      expect:
+        status: running
+        path: [intake, literature, approve_applicability, hypothesis]
+
+    - name: researcher loops to hypothesis when metrics fall short
+      graph: researcher-delivery
+      steps:
+        - check: {name: intake_confirmed, passed: true, source: human_event}
+        - {}
+        - check: {name: applicability_approved, passed: true, source: human_event}
+        - {}
+        - {}
+        - check: {name: design_approved, passed: true, source: human_event}
+        - {}
+        - check: {name: experiment_done, passed: true, source: file_assert}
+        - check: {name: results_acceptable, passed: false, source: file_assert}
+      expect:
+        status: running
+        path:
+          - intake
+          - literature
+          - approve_applicability
+          - hypothesis
+          - experiment_design
+          - approve_design
+          - experiment_run
+          - experiment_monitor
+          - results_eval
+          - hypothesis
+
+    - name: auto path runs expectation review before review
+      graph: goal-delivery
+      flags: {auto: true}
+      steps:
+        - {} # intake skipped via auto -> spec
+        - {} # spec -> auto_research
+        - {} # auto_research -> approve_spec
+        - check: {name: spec_approved, skipped: true, source: file_assert}
+        - {} # plan -> approve_plan
+        - check: {name: plan_approved, skipped: true, source: file_assert}
+        - {} # build
+        - check: {name: unit, passed: true, source: exit_code}
+        - {} # simplify (auto)
+        - check: {name: lint, passed: true, source: exit_code}
+        - {} # commit
+        - check: {name: e2e, passed: true, source: exit_code}
+        - check: {name: bug_hunt_ok, passed: true, source: file_assert}
+        - check: {name: slop, passed: true, source: exit_code}
+        - check: {name: expectation_ok, passed: true, source: file_assert}
+        - result: {changes_requested: false}
+        - check: {name: review_ok, passed: true, source: file_assert}
+        - {} # experiment_run -> experiment_monitor
+        - check: {name: experiment_done, passed: true, source: file_assert}
+        - check: {name: results_acceptable, passed: true, source: file_assert}
+      expect:
+        status: running
+        path:
+          - intake
+          - spec
+          - auto_research
+          - approve_spec
+          - plan
+          - approve_plan
+          - build
+          - test
+          - simplify
+          - lint
+          - commit
+          - e2e
+          - bug_hunt
+          - slop
+          - expectation_review
+          - review
+          - review_ok
+          - experiment_run
+          - experiment_monitor
+          - results_eval
+          - open_pr
+
+    - name: expectation miss reopens plan on auto path
+      graph: goal-delivery
+      flags: {auto: true}
+      steps:
+        - {}
+        - {}
+        - {}
+        - check: {name: spec_approved, skipped: true, source: file_assert}
+        - {}
+        - check: {name: plan_approved, skipped: true, source: file_assert}
+        - {}
+        - check: {name: unit, passed: true, source: exit_code}
+        - {}
+        - check: {name: lint, passed: true, source: exit_code}
+        - {}
+        - check: {name: e2e, passed: true, source: exit_code}
+        - check: {name: bug_hunt_ok, passed: true, source: file_assert}
+        - check: {name: slop, passed: true, source: exit_code}
+        - check: {name: expectation_ok, passed: false, source: file_assert}
+      expect:
+        status: running
+        path:
+          - intake
+          - spec
+          - auto_research
+          - approve_spec
+          - plan
+          - approve_plan
+          - build
+          - test
+          - simplify
+          - lint
+          - commit
+          - e2e
+          - bug_hunt
+          - slop
+          - expectation_review
+          - plan
+
+    - name: review miss returns to review on auto path
+      graph: goal-delivery
+      flags: {auto: true}
+      steps:
+        - {}
+        - {}
+        - {}
+        - check: {name: spec_approved, skipped: true, source: file_assert}
+        - {}
+        - check: {name: plan_approved, skipped: true, source: file_assert}
+        - {}
+        - check: {name: unit, passed: true, source: exit_code}
+        - {}
+        - check: {name: lint, passed: true, source: exit_code}
+        - {}
+        - check: {name: e2e, passed: true, source: exit_code}
+        - check: {name: bug_hunt_ok, passed: true, source: file_assert}
+        - check: {name: slop, passed: true, source: exit_code}
+        - check: {name: expectation_ok, passed: true, source: file_assert}
+        - result: {changes_requested: false}
+        - check: {name: review_ok, passed: false, source: file_assert}
+      expect:
+        status: running
+        path:
+          - intake
+          - spec
+          - auto_research
+          - approve_spec
+          - plan
+          - approve_plan
+          - build
+          - test
+          - simplify
+          - lint
+          - commit
+          - e2e
+          - bug_hunt
+          - slop
+          - expectation_review
+          - review
+          - review_ok
+          - review
+
+    - name: auto path runs bug hunt after e2e
+      graph: goal-delivery
+      flags: {auto: true}
+      steps:
+        - {}
+        - {}
+        - {}
+        - check: {name: spec_approved, skipped: true, source: file_assert}
+        - {}
+        - check: {name: plan_approved, skipped: true, source: file_assert}
+        - {}
+        - check: {name: unit, passed: true, source: exit_code}
+        - {}
+        - check: {name: lint, passed: true, source: exit_code}
+        - {}
+        - check: {name: e2e, passed: true, source: exit_code}
+        - check: {name: bug_hunt_ok, passed: true, source: file_assert}
+      expect:
+        status: running
+        path:
+          - intake
+          - spec
+          - auto_research
+          - approve_spec
+          - plan
+          - approve_plan
+          - build
+          - test
+          - simplify
+          - lint
+          - commit
+          - e2e
+          - bug_hunt
+          - slop
+
+    - name: bug hunt miss reopens plan on auto path
+      graph: goal-delivery
+      flags: {auto: true}
+      steps:
+        - {}
+        - {}
+        - {}
+        - check: {name: spec_approved, skipped: true, source: file_assert}
+        - {}
+        - check: {name: plan_approved, skipped: true, source: file_assert}
+        - {}
+        - check: {name: unit, passed: true, source: exit_code}
+        - {}
+        - check: {name: lint, passed: true, source: exit_code}
+        - {}
+        - check: {name: e2e, passed: true, source: exit_code}
+        - check: {name: bug_hunt_ok, passed: false, source: file_assert}
+      expect:
+        status: running
+        path:
+          - intake
+          - spec
+          - auto_research
+          - approve_spec
+          - plan
+          - approve_plan
+          - build
+          - test
+          - simplify
+          - lint
+          - commit
+          - e2e
+          - bug_hunt
+          - plan
+
+    - name: auto path runs release review after ship
+      graph: goal-delivery
+      flags: {auto: true}
+      steps:
+        - {}
+        - {}
+        - {}
+        - check: {name: spec_approved, skipped: true, source: file_assert}
+        - {}
+        - check: {name: plan_approved, skipped: true, source: file_assert}
+        - {}
+        - check: {name: unit, passed: true, source: exit_code}
+        - {}
+        - check: {name: lint, passed: true, source: exit_code}
+        - {}
+        - check: {name: e2e, passed: true, source: exit_code}
+        - check: {name: bug_hunt_ok, passed: true, source: file_assert}
+        - check: {name: slop, passed: true, source: exit_code}
+        - check: {name: expectation_ok, passed: true, source: file_assert}
+        - result: {changes_requested: false}
+        - check: {name: review_ok, passed: true, source: file_assert}
+        - {}
+        - check: {name: experiment_done, passed: true, source: file_assert}
+        - check: {name: results_acceptable, passed: true, source: file_assert}
+        - check: {name: pr_open, passed: true, source: exit_code}
+        - check: {name: ci, passed: true, source: exit_code}
+        - check: {name: reviews, passed: true, source: ci_api}
+        - check: {name: ship, passed: true, source: file_assert}
+        - check: {name: release_ok, passed: true, source: file_assert}
+        - check: {name: merge_approved, passed: true, source: file_assert}
+      expect:
+        status: running
+        path:
+          - intake
+          - spec
+          - auto_research
+          - approve_spec
+          - plan
+          - approve_plan
+          - build
+          - test
+          - simplify
+          - lint
+          - commit
+          - e2e
+          - bug_hunt
+          - slop
+          - expectation_review
+          - review
+          - review_ok
+          - experiment_run
+          - experiment_monitor
+          - results_eval
+          - open_pr
+          - pr_checks
+          - external_reviews
+          - ship
+          - release_review
+          - approve_merge
+          - merge_ci
+
+    - name: release miss routes to build on auto path
+      graph: goal-delivery
+      flags: {auto: true}
+      steps:
+        - {}
+        - {}
+        - {}
+        - check: {name: spec_approved, skipped: true, source: file_assert}
+        - {}
+        - check: {name: plan_approved, skipped: true, source: file_assert}
+        - {}
+        - check: {name: unit, passed: true, source: exit_code}
+        - {}
+        - check: {name: lint, passed: true, source: exit_code}
+        - {}
+        - check: {name: e2e, passed: true, source: exit_code}
+        - check: {name: bug_hunt_ok, passed: true, source: file_assert}
+        - check: {name: slop, passed: true, source: exit_code}
+        - check: {name: expectation_ok, passed: true, source: file_assert}
+        - result: {changes_requested: false}
+        - check: {name: review_ok, passed: true, source: file_assert}
+        - {}
+        - check: {name: experiment_done, passed: true, source: file_assert}
+        - check: {name: results_acceptable, passed: true, source: file_assert}
+        - check: {name: pr_open, passed: true, source: exit_code}
+        - check: {name: ci, passed: true, source: exit_code}
+        - check: {name: reviews, passed: true, source: ci_api}
+        - check: {name: ship, passed: true, source: file_assert}
+        - check: {name: release_ok, passed: false, source: file_assert}
+      expect:
+        status: running
+        path:
+          - intake
+          - spec
+          - auto_research
+          - approve_spec
+          - plan
+          - approve_plan
+          - build
+          - test
+          - simplify
+          - lint
+          - commit
+          - e2e
+          - bug_hunt
+          - slop
+          - expectation_review
+          - review
+          - review_ok
+          - experiment_run
+          - experiment_monitor
+          - results_eval
+          - open_pr
+          - pr_checks
+          - external_reviews
+          - ship
+          - release_review
+          - build
+
+    # task-delivery: a non-code task with a person approving the spec and the delivery.
+    - name: task happy path reaches done
+      graph: task-delivery
+      steps:
+        - check: {name: intake_confirmed, passed: true, source: human_event}
+        - {} # spec is an artifact node; the fallback edge carries it
+        - check: {name: spec_approved, passed: true, source: human_event}
+        - {} # execute
+        - check: {name: task_check, passed: true, source: exit_code}
+        - check: {name: task_review_ok, passed: true, source: file_assert}
+        - check: {name: delivery_approved, passed: true, source: human_event}
+        - {} # deliver
+        - check: {name: delivery_ok, passed: true, source: file_assert}
+      expect:
+        status: done
+        path:
+          - intake
+          - spec
+          - approve_spec
+          - execute
+          - task_check
+          - ac_review
+          - approve_delivery
+          - deliver
+          - delivery_check
+          - done
+
+    - name: task research flag routes through research
+      graph: task-delivery
+      flags: {research_required: true}
+      steps:
+        - check: {name: intake_confirmed, passed: true, source: human_event}
+        - {}
+      expect:
+        status: running
+        path: [intake, research, spec]
+
+    - name: a rejected task spec goes back to spec
+      graph: task-delivery
+      steps:
+        - check: {name: intake_confirmed, passed: true, source: human_event}
+        - {}
+        - check: {name: spec_approved, passed: false, source: human_event}
+      expect:
+        status: running
+        path: [intake, spec, approve_spec, spec]
+
+    - name: a failed task check returns to execute
+      graph: task-delivery
+      steps:
+        - check: {name: intake_confirmed, passed: true, source: human_event}
+        - {}
+        - check: {name: spec_approved, passed: true, source: human_event}
+        - {}
+        - check: {name: task_check, passed: false, source: exit_code}
+      expect:
+        status: running
+        path: [intake, spec, approve_spec, execute, task_check, execute]
+
+    - name: skipped task and review checks still open the delivery gate
+      graph: task-delivery
+      steps:
+        - check: {name: intake_confirmed, passed: true, source: human_event}
+        - {}
+        - check: {name: spec_approved, passed: true, source: human_event}
+        - {}
+        - check: {name: task_check, skipped: true, source: exit_code}
+        - check: {name: task_review_ok, skipped: true, source: file_assert}
+      expect:
+        status: awaiting_human
+        path: [intake, spec, approve_spec, execute, task_check, ac_review, approve_delivery]
+
+    - name: a failed acceptance row returns to execute
+      graph: task-delivery
+      steps:
+        - check: {name: intake_confirmed, passed: true, source: human_event}
+        - {}
+        - check: {name: spec_approved, passed: true, source: human_event}
+        - {}
+        - check: {name: task_check, passed: true, source: exit_code}
+        - check: {name: task_review_ok, passed: false, source: file_assert}
+      expect:
+        status: running
+        path: [intake, spec, approve_spec, execute, task_check, ac_review, execute]
+
+    - name: a rejected delivery returns to execute and nothing is delivered
+      graph: task-delivery
+      steps:
+        - check: {name: intake_confirmed, passed: true, source: human_event}
+        - {}
+        - check: {name: spec_approved, passed: true, source: human_event}
+        - {}
+        - check: {name: task_check, passed: true, source: exit_code}
+        - check: {name: task_review_ok, passed: true, source: file_assert}
+        - check: {name: delivery_approved, passed: false, source: human_event}
+      expect:
+        status: running
+        path: [intake, spec, approve_spec, execute, task_check, ac_review, approve_delivery, execute]
+
+    - name: a failed delivery goes back to a person, not to deliver
+      graph: task-delivery
+      steps:
+        - check: {name: intake_confirmed, passed: true, source: human_event}
+        - {}
+        - check: {name: spec_approved, passed: true, source: human_event}
+        - {}
+        - check: {name: task_check, passed: true, source: exit_code}
+        - check: {name: task_review_ok, passed: true, source: file_assert}
+        - check: {name: delivery_approved, passed: true, source: human_event}
+        - {} # deliver
+        - check: {name: delivery_ok, passed: false, source: file_assert}
+      expect:
+        status: awaiting_human
+        path:
+          - intake
+          - spec
+          - approve_spec
+          - execute
+          - task_check
+          - ac_review
+          - approve_delivery
+          - deliver
+          - delivery_check
+          - approve_delivery
+
+    - name: auto task skips intake and a clean spec gate, then stops at the delivery gate
+      graph: task-delivery
+      flags: {auto: true}
+      steps:
+        - {} # intake skipped via auto -> spec
+        - {} # spec -> approve_spec
+        - check: {name: spec_approved, skipped: true, source: file_assert}
+        - {} # execute
+        - check: {name: task_check, passed: true, source: exit_code}
+        - check: {name: task_review_ok, passed: true, source: file_assert}
+      expect:
+        status: awaiting_human # approve_delivery waits for a person, always
+        path: [intake, spec, approve_spec, execute, task_check, ac_review, approve_delivery]
+
+    - name: auto task still needs a person to open the delivery gate
+      graph: task-delivery
+      flags: {auto: true}
+      steps:
+        - {} # intake skipped via auto -> spec
+        - {} # spec -> approve_spec
+        - check: {name: spec_approved, skipped: true, source: file_assert}
+        - {} # execute
+        - check: {name: task_check, passed: true, source: exit_code}
+        - check: {name: task_review_ok, passed: true, source: file_assert}
+        - check: {name: delivery_approved, passed: true, source: human_event}
+        - {} # deliver
+        - check: {name: delivery_ok, passed: true, source: file_assert}
+      expect:
+        status: done
+        path: [intake, spec, approve_spec, execute, task_check, ac_review, approve_delivery, deliver, delivery_check, done]
+
+    # study-delivery: one learner over many sessions, ended only by the record.
+    - name: study runs two sessions and ends when every topic is learned
+      graph: study-delivery
+      steps:
+        - check: {name: intake_confirmed, passed: true, source: human_event}
+        - {} # diagnose -> study_plan
+        - {} # study_plan -> approve_study_plan
+        - check: {name: study_plan_approved, passed: true, source: human_event}
+        - {} # session -> study_check
+        - check: {name: topics_remaining, passed: true, source: file_assert}
+        - check: {name: learner_ready, passed: true, source: human_event}
+        - {} # session -> study_check
+        - check: {name: topics_remaining, passed: false, source: file_assert}
+      expect:
+        status: done
+        path:
+          - intake
+          - diagnose
+          - study_plan
+          - approve_study_plan
+          - session
+          - study_check
+          - wait_learner
+          - session
+          - study_check
+          - done
+
+    - name: study parks at the learner after a session while a topic remains
+      graph: study-delivery
+      steps:
+        - check: {name: intake_confirmed, passed: true, source: human_event}
+        - {}
+        - {}
+        - check: {name: study_plan_approved, passed: true, source: human_event}
+        - {}
+        - check: {name: topics_remaining, passed: true, source: file_assert}
+      expect:
+        status: awaiting_human # wait_learner holds until the learner returns
+        path: [intake, diagnose, study_plan, approve_study_plan, session, study_check, wait_learner]
+
+    - name: a skipped study check keeps the study going and never ends it
+      graph: study-delivery
+      steps:
+        - check: {name: intake_confirmed, passed: true, source: human_event}
+        - {}
+        - {}
+        - check: {name: study_plan_approved, passed: true, source: human_event}
+        - {}
+        - check: {name: topics_remaining, skipped: true, source: file_assert}
+      expect:
+        status: awaiting_human
+        path: [intake, diagnose, study_plan, approve_study_plan, session, study_check, wait_learner]
+
+    - name: a rejected study plan goes back to the plan
+      graph: study-delivery
+      steps:
+        - check: {name: intake_confirmed, passed: true, source: human_event}
+        - {}
+        - {}
+        - check: {name: study_plan_approved, passed: false, source: human_event}
+      expect:
+        status: running
+        path: [intake, diagnose, study_plan, approve_study_plan, study_plan]
+
+    - name: the learner changing the goal while parked goes back to intake
+      graph: study-delivery
+      flags: {human_redirect: true}
+      steps:
+        - check: {name: intake_confirmed, passed: true, source: human_event}
+        - {} # diagnose's redirect edge fires before its normal one
+      expect:
+        status: awaiting_human
+        path: [intake, diagnose, intake]
+
+    # goal-delivery with task_required: the non-code segment after the last code task.
+    - name: a mixed objective stops at the delivery gate after the last code task
+      graph: goal-delivery
+      flags: {task_required: true}
+      steps:
+        - check: {name: intake_confirmed, passed: true, source: human_event}
+        - {} # spec is an artifact node; the fallback edge carries it
+        - check: {name: spec_approved, passed: true, source: human_event}
+        - {} # plan
+        - check: {name: plan_approved, passed: true, source: human_event}
+        - {} # build
+        - check: {name: unit, passed: true, source: exit_code}
+        - check: {name: e2e, passed: true, source: exit_code}
+        - check: {name: slop, passed: true, source: exit_code}
+        - result: {changes_requested: false}
+        - check: {name: pr_open, passed: true, source: exit_code}
+        - check: {name: ci, passed: true, source: ci_api}
+        - check: {name: reviews, passed: true, source: human_event}
+        - check: {name: ship, passed: true, source: human_event}
+        - check: {name: merge_approved, passed: true, source: human_event}
+        - {} # remember
+        - check: {name: tasks_remaining, passed: false, source: exit_code}
+        - {} # improve
+        - {} # improve -> execute
+        - check: {name: task_check, passed: true, source: exit_code}
+        - check: {name: task_review_ok, passed: true, source: file_assert}
+      expect:
+        status: awaiting_human # approve_delivery waits for a person on /goal and /auto alike
+        path:
+          - intake
+          - spec
+          - approve_spec
+          - plan
+          - approve_plan
+          - build
+          - test
+          - e2e
+          - slop
+          - review
+          - open_pr
+          - pr_checks
+          - external_reviews
+          - ship
+          - approve_merge
+          - remember
+          - task_complete
+          - improve
+          - execute
+          - task_check
+          - ac_review
+          - approve_delivery
+
+    - name: a mixed objective delivers after a person approves, then is done
+      graph: goal-delivery
+      flags: {task_required: true}
+      steps:
+        - check: {name: intake_confirmed, passed: true, source: human_event}
+        - {} # spec is an artifact node; the fallback edge carries it
+        - check: {name: spec_approved, passed: true, source: human_event}
+        - {} # plan
+        - check: {name: plan_approved, passed: true, source: human_event}
+        - {} # build
+        - check: {name: unit, passed: true, source: exit_code}
+        - check: {name: e2e, passed: true, source: exit_code}
+        - check: {name: slop, passed: true, source: exit_code}
+        - result: {changes_requested: false}
+        - check: {name: pr_open, passed: true, source: exit_code}
+        - check: {name: ci, passed: true, source: ci_api}
+        - check: {name: reviews, passed: true, source: human_event}
+        - check: {name: ship, passed: true, source: human_event}
+        - check: {name: merge_approved, passed: true, source: human_event}
+        - {} # remember
+        - check: {name: tasks_remaining, passed: false, source: exit_code}
+        - {} # improve
+        - {} # improve -> execute
+        - check: {name: task_check, passed: true, source: exit_code}
+        - check: {name: task_review_ok, passed: true, source: file_assert}
+        - check: {name: delivery_approved, passed: true, source: human_event}
+        - {} # deliver
+        - check: {name: delivery_ok, passed: true, source: file_assert}
+      expect:
+        status: done
+        path:
+          - intake
+          - spec
+          - approve_spec
+          - plan
+          - approve_plan
+          - build
+          - test
+          - e2e
+          - slop
+          - review
+          - open_pr
+          - pr_checks
+          - external_reviews
+          - ship
+          - approve_merge
+          - remember
+          - task_complete
+          - improve
+          - execute
+          - task_check
+          - ac_review
+          - approve_delivery
+          - deliver
+          - delivery_check
+          - done
+
+    - name: a failed delivery in a mixed objective goes back to a person
+      graph: goal-delivery
+      flags: {task_required: true}
+      steps:
+        - check: {name: intake_confirmed, passed: true, source: human_event}
+        - {} # spec is an artifact node; the fallback edge carries it
+        - check: {name: spec_approved, passed: true, source: human_event}
+        - {} # plan
+        - check: {name: plan_approved, passed: true, source: human_event}
+        - {} # build
+        - check: {name: unit, passed: true, source: exit_code}
+        - check: {name: e2e, passed: true, source: exit_code}
+        - check: {name: slop, passed: true, source: exit_code}
+        - result: {changes_requested: false}
+        - check: {name: pr_open, passed: true, source: exit_code}
+        - check: {name: ci, passed: true, source: ci_api}
+        - check: {name: reviews, passed: true, source: human_event}
+        - check: {name: ship, passed: true, source: human_event}
+        - check: {name: merge_approved, passed: true, source: human_event}
+        - {} # remember
+        - check: {name: tasks_remaining, passed: false, source: exit_code}
+        - {} # improve
+        - {} # improve -> execute
+        - check: {name: task_check, passed: true, source: exit_code}
+        - check: {name: task_review_ok, passed: true, source: file_assert}
+        - check: {name: delivery_approved, passed: true, source: human_event}
+        - {} # deliver
+        - check: {name: delivery_ok, passed: false, source: file_assert}
+      expect:
+        status: awaiting_human
+        path:
+          - intake
+          - spec
+          - approve_spec
+          - plan
+          - approve_plan
+          - build
+          - test
+          - e2e
+          - slop
+          - review
+          - open_pr
+          - pr_checks
+          - external_reviews
+          - ship
+          - approve_merge
+          - remember
+          - task_complete
+          - improve
+          - execute
+          - task_check
+          - ac_review
+          - approve_delivery
+          - deliver
+          - delivery_check
+          - approve_delivery

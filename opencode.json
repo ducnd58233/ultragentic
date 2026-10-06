@@ -1,0 +1,46 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "shell": "pwsh",
+  "instructions": [
+    "AGENTS.md",
+    "runtime/AGENTS.md",
+    ".ai-agents/ROUTER.md",
+    ".ai-agents/skills/ROUTER.md",
+    ".ai-agents/agents/ROUTER.md",
+    ".ai-agents/commands/ROUTER.md",
+    ".ai-agents/PERMISSIONS.md",
+    ".ultragentic/.ai-agents/ROUTER.md",
+    ".ultragentic/.ai-agents/skills/ROUTER.md",
+    ".ultragentic/.ai-agents/agents/ROUTER.md",
+    ".ultragentic/.ai-agents/commands/ROUTER.md",
+    ".ultragentic/.ai-agents/PERMISSIONS.md"
+  ],
+  "permission": {
+    "edit": {
+      "*": "allow",
+      "~/**": "deny"
+    },
+    "bash": {
+      "*": "allow",
+      "rm *": "deny",
+      "shred *": "deny",
+      "git push --force*": "deny",
+      "git clean *": "deny",
+      "git push --mirror*": "deny",
+      "git filter-branch*": "deny"
+    },
+    "webfetch": "allow",
+    "websearch": "allow"
+  },
+  "mcp": {
+    "ultragentic": {
+      "type": "local",
+      "command": [
+        "ultragentic",
+        "mcp",
+        "serve"
+      ],
+      "enabled": true
+    }
+  }
+}

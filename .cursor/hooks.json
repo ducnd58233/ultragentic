@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionStart": [
+      {
+        "command": "ultragentic hook session-start --client cursor"
+      }
+    ],
+    "preToolUse": [
+      {
+        "matcher": "Write|Delete|WebFetch",
+        "command": "ultragentic hook pre-tool-use --client cursor"
+      }
+    ],
+    "beforeShellExecution": [
+      {
+        "command": "ultragentic hook pre-tool-use --client cursor"
+      }
+    ],
+    "postToolUse": [
+      {
+        "matcher": "Shell|Write|Delete|WebFetch",
+        "command": "ultragentic hook post-tool-use --client cursor"
+      }
+    ],
+    "postToolUseFailure": [
+      {
+        "matcher": "Shell|Write|Delete",
+        "command": "ultragentic hook post-tool-use-failure --client cursor"
+      }
+    ],
+    "subagentStop": [
+      {
+        "command": "ultragentic hook subagent-stop --client cursor"
+      }
+    ],
+    "stop": [
+      {
+        "command": "ultragentic hook stop --client cursor"
+      }
+    ]
+  }
+}

@@ -1,0 +1,119 @@
+name: AI agents assets check
+# bumped to retrigger path-filtered PR checks for #163
+
+on:
+  # main only. A push to any other branch with a pull request open fires both
+  # events, and the two runs check the same commit with the same steps: one is
+  # pure cost, and on a red build it is two failures to read for one problem.
+  # Branch work is covered by pull_request; main is covered here because a merge
+  # or a direct push has no pull request of its own.
+  #
+  # The path list is anchored rather than written twice. Two copies is two things
+  # to update, and the copy that goes stale is the one that stops running a
+  # check. The anchor lives on a key the workflow schema already defines, since a
+  # top-level key of its own would not validate.
+  push:
+    branches: [main]
+    paths: &paths
+      - '.ai-agents/**'
+      - '.ultragentic/.ai-agents/**'
+      - 'schemas/**'
+      - 'scripts/**'
+      - 'ua-checks.yaml'
+      - '.gitignore'
+      # The root charters every host loads each session. Left out, a pull
+      # request touching only AGENTS.md had no check on it, `gh pr checks`
+      # saw only the review bot, and the pr_checks node recorded CI passed
+      # on a run that never happened. check-xml-tags.sh already covers these.
+      - 'AGENTS.md'
+      - 'CLAUDE.md'
+      - 'CURSOR.md'
+      # Every workflow, not just this one. Naming a single file meant a change
+      # to the release workflow opened a pull request with no check on it at
+      # all - which is how a version-derivation bug reached a published
+      # release: nothing ran on the commit that introduced it.
+      - '.github/workflows/**'
+      # Host config. These were left out, so a change to a permission rule, a
+      # hook wiring, or a rules file opened a pull request with no required
+      # check on it at all: #74 changed permissions for two hosts and CI never
+      # ran. They are the directories where a mistake is silent - a permission
+      # that no longer applies, or a hook that stops firing, produces no error
+      # anywhere - which is the argument for covering them, not against.
+      - '.claude/**'
+      - '.cursor/**'
+      - '.codex/**'
+      - '.opencode/**'
+      - 'opencode.json'
+  pull_request:
+    paths: *paths
+
+# A new push supersedes the run in flight. The older one can only report on code
+# nobody will merge.
+concurrency:
+  group: assets-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Smoke test link script (symlinks to .ai-agents)
+        run: |
+          bash scripts/link-ai-agents.sh
+          test -L .claude/skills
+          test -L .cursor/skills
+          test -L .opencode/agents
+
+      - name: Verify ROUTER.md tables match folder contents
+        run: bash scripts/check-ai-agents-routers.sh
+
+      - name: Check XML section tags
+        run: bash scripts/check-xml-tags.sh
+
+      - name: Check generated harness views
+        run: bash scripts/check-generated-views.sh
+
+      - name: Check workspace install wiring
+        run: bash scripts/check-workspace-install.sh
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install check dependencies
+        run: python3 -m pip install -r scripts/requirements.txt
+
+      - name: Verify asset frontmatter parses
+        run: python3 scripts/check-frontmatter.py
+
+      - name: Verify JSON Schema contracts
+        run: python3 scripts/check-schemas.py
+
+      - name: Verify workflow graphs
+        run: python3 scripts/check-graphs.py
+
+      - name: Verify the graph checker rejects broken graphs
+        run: python3 scripts/check-graphs-test.py
+
+      # The runtime is closed source and is built in a private repository. This
+      # installs the published build through the same installer users run, so
+      # every CI run also exercises the signature and checksum verification, and
+      # then lets `doctor` load every graph, fixture, and hook wiring from this
+      # checkout. Skipped only while no release exists at all, the one state the
+      # very first push can be in.
+      - name: Install the published runtime and run doctor
+        env:
+          GH_TOKEN: ${{ github.token }}
+          UA_ACCEPT_LICENSE: '1'
+          UA_INSTALL_DIR: ${{ runner.temp }}/ua-bin
+        run: |
+          if [ -z "$(gh release list --limit 1 --json tagName --jq '.[0].tagName')" ]; then
+            echo "::warning::no runtime release is published yet; skipping install and doctor"
+            exit 0
+          fi
+          bash scripts/install-runtime.sh
+          export PATH="$UA_INSTALL_DIR:$PATH"
+          ultragentic version
+          ultragentic doctor

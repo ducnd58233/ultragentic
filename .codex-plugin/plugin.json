@@ -1,0 +1,8 @@
+{
+  "name": "ultragentic",
+  "description": "Spec-to-PR workflow for Codex CLI: agent skills, hooks, and an evidence-gated delivery runtime.",
+  "version": "0.1.0",
+  "author": { "name": "ducnd58233" },
+  "license": "MIT",
+  "homepage": "https://github.com/ducnd58233/ultragentic"
+}

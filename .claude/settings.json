@@ -1,0 +1,277 @@
+{
+  "respectGitignore": true,
+  "env": {
+    "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "80"
+  },
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
+  "permissions": {
+    "$comment": "Precedence is deny, then ask, then allow: ask beats allow. A blanket mcp__* sat in ask and made every mcp__ allow rule below dead, so the four named servers prompted on every call and the list read as a curated allowlist it was not. Removed rather than narrowed: an MCP tool matching no rule already prompts by default, which is the behaviour the blanket entry was there to get. The same shape is why WebFetch(domain:*) left ask in #74. Bash families whose destructive forms the danger list refuses precisely are not listed in ask. ask raises a prompt, and auto mode has nobody to answer one, so a tool-family entry there stalls an unattended run while also blocking `npm test` and `terraform plan` with a person watching. The danger list is command-precise, exits 2, and cannot be prompted past, which makes it the better instrument. chmod, chown, kill, killall and pkill stay because nothing else covers them yet.",
+    "allow": [
+      "Read(*)",
+      "Grep(*)",
+      "Glob(*)",
+      "Edit(.ai-agents/**)",
+      "Edit(scripts/**)",
+      "Edit(.cursor/**)",
+      "Edit(.claude/settings.json)",
+      "Edit(.codex/**)",
+      "Bash(git status*)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(powershell -File scripts/check-ai-agents-routers.ps1*)",
+      "Bash(bash scripts/check-ai-agents-routers.sh*)",
+      "Bash(./scripts/link-ai-agents.sh*)",
+      "Bash(powershell -ExecutionPolicy Bypass -File scripts/link-ai-agents.ps1*)",
+      "WebSearch",
+      "mcp__ide__*",
+      "mcp__chrome-devtools__*",
+      "mcp__playwright__*",
+      "mcp__mobile__*",
+      "Bash(ultragentic *)",
+      "Read(schemas/**)",
+      "Edit(schemas/**)",
+      "Edit(runtime/**)",
+      "Read(**)",
+      "Edit(**)",
+      "Bash(go *)",
+      "Bash(gofmt *)",
+      "Bash(golangci-lint *)",
+      "Bash(make *)",
+      "Bash(git add*)",
+      "Bash(git commit*)",
+      "Bash(git checkout*)",
+      "Bash(git switch*)",
+      "Bash(git branch*)",
+      "Bash(git push*)",
+      "Bash(git fetch*)",
+      "Bash(git pull*)",
+      "Bash(git merge*)",
+      "Bash(git rebase*)",
+      "Bash(git stash*)",
+      "Bash(git show*)",
+      "Bash(git remote*)",
+      "Bash(git worktree*)",
+      "Bash(git rm --cached*)",
+      "Bash(git restore*)",
+      "Bash(gh pr *)",
+      "Bash(gh run *)",
+      "Bash(gh api *)",
+      "Bash(gh workflow *)",
+      "Bash(gh repo view*)",
+      "Bash(bash scripts/*)",
+      "Bash(sh scripts/*)",
+      "Bash(powershell -ExecutionPolicy Bypass -File scripts/*)",
+      "Bash(python3 *)",
+      "Bash(node *)",
+      "Bash(cat *)",
+      "Bash(ls *)",
+      "Bash(sed *)",
+      "Bash(awk *)",
+      "Bash(grep *)",
+      "Bash(rg *)",
+      "Bash(find *)",
+      "Bash(head *)",
+      "Bash(tail *)",
+      "Bash(wc *)",
+      "Bash(sort *)",
+      "Bash(uniq *)",
+      "Bash(diff *)",
+      "Bash(jq *)",
+      "Bash(echo *)",
+      "Bash(printf *)",
+      "Bash(mkdir *)",
+      "Bash(cp *)",
+      "Bash(mv *)",
+      "Bash(touch *)",
+      "Bash(realpath *)",
+      "Bash(dirname *)",
+      "Bash(basename *)",
+      "Bash(pwd)",
+      "Bash(which *)",
+      "Bash(date *)",
+      "Bash(env)",
+      "Bash(curl http://127.0.0.1:*)",
+      "Bash(curl http://localhost:*)",
+      "Bash(curl -* http://127.0.0.1:*)",
+      "Bash(curl -* http://localhost:*)",
+      "WebFetch"
+    ],
+    "deny": [
+      "Read(.env*)",
+      "Read(**/.env*)",
+      "Read(**/*secret*)",
+      "Read(**/*access_token*)",
+      "Read(**/*access-token*)",
+      "Read(**/*refresh_token*)",
+      "Read(**/*refresh-token*)",
+      "Read(**/*auth_token*)",
+      "Read(**/*auth-token*)",
+      "Read(**/*api_token*)",
+      "Read(**/*api-token*)",
+      "Read(**/*id_token*)",
+      "Read(**/.token*)",
+      "Read(**/token.json)",
+      "Read(**/*.pem)",
+      "Read(**/*.key)",
+      "Bash(git push --force*)",
+      "Edit(tmp/**/manifest.json)",
+      "Edit(tmp/**/events.ndjson)",
+      "Edit(~/**)",
+      "Read(~/.ssh/**)",
+      "Read(~/.aws/**)",
+      "Bash(git clean *)",
+      "Bash(git push --mirror*)",
+      "Bash(git filter-branch*)"
+    ],
+    "ask": [
+      "NotebookEdit(*)",
+      "Bash(chmod *)",
+      "Bash(chown *)",
+      "Bash(kill *)",
+      "Bash(killall *)",
+      "Bash(pkill *)"
+    ]
+  },
+  "enableAllProjectMcpServers": false,
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash|Edit|Write|NotebookEdit|WebFetch|mcp__.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "ultragentic hook pre-tool-use --workspace ${CLAUDE_PROJECT_DIR}",
+            "timeout": 5000,
+            "statusMessage": "ua-merge-gate",
+            "async": false
+          }
+        ]
+      }
+    ],
+    "PostToolUseFailure": [
+      {
+        "matcher": "Bash|Edit|Write|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "ultragentic hook post-tool-use-failure --workspace ${CLAUDE_PROJECT_DIR}",
+            "timeout": 5000,
+            "statusMessage": "ua-journal-failure",
+            "async": false
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|NotebookEdit|WebFetch",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "ultragentic hook post-tool-use --workspace ${CLAUDE_PROJECT_DIR}",
+            "timeout": 10000,
+            "statusMessage": "ua-journal",
+            "async": false
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "if": "Bash(git *)",
+            "command": "ultragentic hook post-tool-use --workspace ${CLAUDE_PROJECT_DIR}",
+            "timeout": 10000,
+            "statusMessage": "ua-journal-git",
+            "async": false
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "ultragentic hook stop --workspace ${CLAUDE_PROJECT_DIR}",
+            "statusMessage": "ua-checkpoint",
+            "timeout": 5000,
+            "async": false
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "ultragentic hook session-start --workspace ${CLAUDE_PROJECT_DIR}",
+            "statusMessage": "ua-bootstrap",
+            "timeout": 5000,
+            "async": false
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "ultragentic hook user-prompt-submit --workspace ${CLAUDE_PROJECT_DIR}",
+            "statusMessage": "ua-route",
+            "timeout": 5000,
+            "async": false
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "ultragentic hook subagent-stop --workspace ${CLAUDE_PROJECT_DIR}",
+            "statusMessage": "ua-subagent",
+            "timeout": 5000,
+            "async": false
+          }
+        ]
+      }
+    ]
+  },
+  "disableAllHooks": false,
+  "statusLine": {
+    "type": "command",
+    "command": "echo \"workspace: reusable agent-assets toolkit\"",
+    "padding": 0
+  },
+  "outputStyle": "Explanatory",
+  "spinnerTipsEnabled": true,
+  "spinnerVerbs": {
+    "mode": "replace",
+    "verbs": [
+      "Reviewing repository context",
+      "Applying agent-skill guidance",
+      "Updating reusable assets",
+      "Checking routing consistency",
+      "Verifying configuration alignment",
+      "Preparing implementation details",
+      "Validating project standards",
+      "Finalizing safe changes"
+    ]
+  },
+  "spinnerTipsOverride": {
+    "excludeDefault": true,
+    "tips": [
+      "Start from the workspace AGENTS.md, then route through .ai-agents/ROUTER.md (or <toolkit-root>/.ai-agents/ROUTER.md).",
+      "Update folder ROUTER.md whenever assets are added, removed, or renamed."
+    ]
+  },
+  "plansDirectory": "./reports"
+}

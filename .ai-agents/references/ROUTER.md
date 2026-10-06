@@ -1,0 +1,57 @@
+# References router
+
+<routing>
+
+Lookup table for shared checklists and pattern docs under this folder. These files support skills (they are not Agent Skills `SKILL.md`).
+
+**After you add, rename, or remove a reference file, update this table in the same change.**
+
+| Topic | File | Primary skills |
+|-------|------|----------------|
+| WCAG 2.1 AA, keyboard and screen readers | [`accessibility-checklist.md`](accessibility-checklist.md) | `frontend-ui-engineering` |
+| Core Web Vitals, frontend + API + DB | [`performance-checklist.md`](performance-checklist.md) | `performance-optimization` |
+| Auth, validation, headers, CORS, OWASP | [`security-checklist.md`](security-checklist.md) | `security-and-hardening` |
+| Leak channels: bundle, client storage, console/device logs, UI/DOM, API response, server logs, CI artifacts | [`sensitive-data-exposure.md`](sensitive-data-exposure.md) | `secure-by-default`, `security-and-hardening` |
+| AAA, mocks, RTL, API, E2E | [`testing-patterns.md`](testing-patterns.md) | `test-driven-development` |
+| Fan-out `/ship`, sequential lifecycle, anti-patterns | [`orchestration-patterns.md`](orchestration-patterns.md) | `using-agent-skills`, slash commands |
+| End-to-end `/goal` delivery loop | [`goal-driven-delivery`](../skills/goal-driven-delivery/SKILL.md) skill + [`goal.md`](../commands/goal.md) command | `/goal`, `goal-driven-delivery` |
+| `/goal` verification artifacts (`tmp/`, PR wait, E2E records) | [`goal-verification-records.md`](goal-verification-records.md) | `/goal`, `qa-testing-strategy` |
+| Skill/agent/command authoring quality | [`agent-authoring-patterns.md`](agent-authoring-patterns.md) | asset authors, `agent-systems-auditor` |
+| AI agent harness responsibilities, guides, sensors, verification | [`agent-harness-engineering.md`](agent-harness-engineering.md) | `agent-harness-engineering`, `agent-systems-auditor` |
+| Inner vs outer loop, when a workflow deserves a graph, guard design | [`loop-and-graph-engineering.md`](loop-and-graph-engineering.md) | `agent-harness-engineering`, graph authors |
+| Hosts researched but not wired: what Kimi, Muse, and Antigravity publish about hooks, skills, and config. Nothing here was run | [`host-contracts-researched.md`](host-contracts-researched.md) | anyone adding a host |
+| Per-host hook contracts: event keys, output field casing, workspace root, what each host does not provide. **Generated; edit `runtime/internal/harness/contracts.go`** | [`host-hook-contracts.md`](host-hook-contracts.md) | `agent-harness-engineering`, `agent-systems-auditor`, hook authors |
+| Tool permissions, hooks, secret boundaries | [`tool-safety-and-permissions.md`](tool-safety-and-permissions.md) | `security-and-hardening`, `agent-systems-auditor` |
+| Agent/skill evaluation and forward testing | [`agent-evaluation-patterns.md`](agent-evaluation-patterns.md) | `agent-systems-auditor`, `test-driven-development` |
+| Context budgets and progressive disclosure | [`context-management-patterns.md`](context-management-patterns.md) | `context-engineering`, asset authors |
+| Measured token and memory savings: extraction, indexes, cache keys, what a runtime may own | [`token-efficiency.md`](token-efficiency.md) | `token-efficient-execution`, `agent-harness-engineering` |
+| AI/ML model development, evaluation, documentation, monitoring | [`ai-model-development-patterns.md`](ai-model-development-patterns.md) | `ai-model-engineering`, `ai-research-methodology`, `ai-engineer`, `ai-researcher` |
+| Finance formulas with worked, recomputed examples: growth, CAGR, margins, per-share, P/E, EV, NPV, loan payment, real return, currency, weighted return | [`finance-calculations.md`](finance-calculations.md) | `quantitative-accuracy`, finance profiles, `data-analyst` |
+| Learning science behind the tutor: each finding, its source status, and the review-date rule | [`learning-science.md`](learning-science.md) | `self-tutoring`, `/tutor` |
+| Research and experiment integrity: leakage, selection pressure, agent shortcutting, contamination, selective reporting, data terms; the frozen-protocol and `integrity` record rules | [`research-integrity.md`](research-integrity.md) | `researcher-harness`, `ai-research-methodology`, `ai-model-engineering`, `mlops-lifecycle`, `ai-researcher`, `ai-engineer`, `data-analyst`, `/experiment`, `/findings` |
+| Timeouts, retries, backoff, idempotency, fail-open versus fail-closed, error budgets, with recomputed arithmetic | [`resilience-patterns.md`](resilience-patterns.md) | `backend-engineering`, `concurrency-realtime-systems`, `observability-monitoring`, `devops-platform-delivery` |
+| Delivery and observability review patterns | [`ci-cd-observability-patterns.md`](ci-cd-observability-patterns.md) | `devops-platform-delivery`, `observability-monitoring` |
+| SQL/NoSQL query diagnosis and optimization | [`database-query-patterns.md`](database-query-patterns.md) | `database-query-optimization`, `database-query-auditor` |
+| Manual QA and automation strategy | [`qa-testing-strategy.md`](qa-testing-strategy.md) | `qa-testing-strategy`, `qa-tester` |
+| Design-to-code, design systems, MCP handoff | [`design-to-code-patterns.md`](design-to-code-patterns.md) | `product-design-systems`, `product-design-reviewer` |
+| Registry contract for UI generation: tokens, component inventory, degradation ladder | [`ui-component-registry.md`](ui-component-registry.md) | `ui-design-fidelity`, `frontend-ui-engineering`, `product-design-reviewer` |
+| External repos agents may consult in place: source table, consumption rules, admission checklist | [`external-source-registry.md`](external-source-registry.md) | any skill citing an external repo; asset authors, `agent-systems-auditor` |
+| Diagram authoring with Mermaid, render checks, readability | [`diagram-authoring.md`](diagram-authoring.md) | docs-writing commands, `architect-planner`, `research-investigator`, `data-analyst` |
+| Proving a mobile app rendered: crash buffer, view hierarchy, blank-frame check | [`mobile-ui-verification.md`](mobile-ui-verification.md) | `qa-testing-strategy`, `test-driven-development`, `qa-tester`, mobile stack profiles |
+| Routing fixtures: intent → expected asset, checked by `/doctor` | [`routing-evals.md`](routing-evals.md) | `agent-systems-auditor`, `using-agent-skills` |
+| Graph path fixtures: outcomes → expected node path, checked by `/doctor` and `ultragentic eval graph` | [`graph-path-evals.yaml`](graph-path-evals.yaml) | `agent-systems-auditor`, graph authors |
+| Workspace mistakes diary (`.agent-state/MISTAKES.md`), graduation into AGENTS.md, vs memory.db | [`mistakes-log.md`](mistakes-log.md) | always-on charter; all host agents |
+| Failed graph node provenance: TRACE fields, assumption ids, required FailureClass on blockers | [`failure-trace.md`](failure-trace.md) | `/goal`, `/auto`, `agent-harness-engineering`, host agents diagnosing runs |
+| Claude Code features → ultragentic owners (reuse / reject / gap), conditional `if`, bare-like CI recipe | [`claude-code-feature-map.md`](claude-code-feature-map.md) | `agent-harness-engineering`, hook authors, `/auto` operators |
+| DeepSeek Harness / Cordis features → ultragentic owners (reuse / reject / gap), host portability (Cordis not portable) | [`deepseek-harness-feature-map.md`](deepseek-harness-feature-map.md) | `agent-harness-engineering`, hook authors, `/auto` operators |
+| Cursor IDE agent features → ultragentic owners (rules, hooks UNVERIFIED, Bugbot, portability) | [`cursor-feature-map.md`](cursor-feature-map.md) | `agent-harness-engineering`, hook authors, Cursor parity work |
+| Codex CLI features → ultragentic owners (config.toml, sandbox_mode, permissionDecision, PostToolUse gap) | [`codex-feature-map.md`](codex-feature-map.md) | `agent-harness-engineering`, hook authors, Codex parity work |
+| opencode features → ultragentic owners (plugin hooks, permissions, no Stop hook) | [`opencode-feature-map.md`](opencode-feature-map.md) | `agent-harness-engineering`, hook authors, opencode parity work |
+| Antigravity features → ultragentic owners (research host, UNVERIFIED hooks) | [`antigravity-feature-map.md`](antigravity-feature-map.md) | `agent-harness-engineering`, future host wiring |
+| Kimi CLI features → ultragentic owners (TOML hooks, research host, UNVERIFIED) | [`kimi-feature-map.md`](kimi-feature-map.md) | `agent-harness-engineering`, future host wiring |
+| Muse Code features → ultragentic owners (Claude-like hooks, trust step, UNVERIFIED) | [`muse-feature-map.md`](muse-feature-map.md) | `agent-harness-engineering`, future host wiring |
+| Harness-neutral consumer charter examples (AGENTS.md, CURSOR.md, .cursor/rules) | [`consumer-charter-authoring.md`](consumer-charter-authoring.md) | asset authors, consumer-repo setup; rule in root `AGENTS.md` |
+| Supported harness parity checklist (Claude Code, Cursor, Codex, opencode) | [`AUTHORING.md`](../AUTHORING.md) section "Supported harness parity" | feature authors, `agent-harness-engineering`, hook/runtime changes |
+
+**Workspace-specific tooling** is indexed in [`../stack-profiles/ROUTER.md`](../stack-profiles/ROUTER.md). Checklists here stay generic; load matching `*.md` profiles from that router when needed.
+</routing>

@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/ducnd58233/ultragentic/schemas/tasks.schema.json",
+  "title": "Tasks",
+  "description": "The machine-readable task list a plan produces, at docs/<category>/<slug>/tasks.json. TASKS prose stays the file a person reads; this is the file a verifier reads.",
+  "type": "object",
+  "required": ["schemaVersion", "slug", "date", "version", "tasks"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "description": "The slug whose docs live in docs/<category>/<slug>/."
+    },
+    "date": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+      "description": "Date of the run this list belongs to, matching .agent-state/runs/<date>/<slug>/<version>/."
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Run revision for the slug, matching .agent-state/runs/<date>/<slug>/<version>/."
+    },
+    "tasks": {
+      "type": "array",
+      "minItems": 1,
+      "description": "An empty list would end a run rather than describe one, so it is refused.",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "status"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Unique within the file. Matches the heading in TASKS prose."
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "enum": ["queued", "in_progress", "blocked", "done", "canceled"],
+            "description": "Five states, not more. 'ready' and 'awaiting_user' are derivable from dependencies and run state, and a status nothing reads goes stale. Only done and canceled settle a task: a blocked task is still in scope."
+          },
+          "branch": {
+            "type": "string",
+            "description": "The delivery branch for this task. One task, one branch, one PR."
+          },
+          "dependsOn": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Task ids that must settle first. Every id must exist in this file."
+          },
+          "acceptance": {
+            "type": "string",
+            "description": "What makes this task done, in one line. The detail lives in TASKS prose."
+          },
+          "note": {
+            "type": "string",
+            "description": "Why a task is blocked or canceled, when the status alone does not say."
+          }
+        }
+      }
+    }
+  }
+}

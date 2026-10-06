@@ -1,0 +1,11 @@
+{
+  "name": "ultragentic",
+  "description": "Spec-to-PR workflow for Cursor: agent skills, slash commands, hooks, and an evidence-gated delivery runtime.",
+  "version": "0.1.0",
+  "author": { "name": "ducnd58233" },
+  "license": "MIT",
+  "homepage": "https://github.com/ducnd58233/ultragentic",
+  "skills": ".ai-agents/skills",
+  "commands": ".ai-agents/commands",
+  "rules": ".cursor/rules"
+}

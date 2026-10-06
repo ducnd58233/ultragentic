@@ -1,0 +1,114 @@
+---
+name: researcher-harness
+description: >-
+  Domain-agnostic research loop for ultragentic: literature with mandatory
+  Applicability and Mermaid, experiment plans with Mermaid, host/CI STATUS
+  monitoring until done or failed, findings that cite runs. Use for AI, eng,
+  finance, or non-code research on researcher-delivery. Not for product ship
+  (use goal-driven-delivery).
+disable-model-invocation: true
+---
+
+# Researcher harness
+
+## How
+
+<procedure>
+
+1. **Literature** - citation-first digest. MUST include:
+   - **Applicability** - how each source maps to *this* topic (reuse / reject / gap).
+   - **Refine** - what to change before experiments.
+   - A fenced `mermaid` literature or claim→method diagram.
+2. **Hypothesis** - testable questions derived from Refine.
+3. **Experiment design** - PLAN with Mermaid setup (data → protocol → metrics → stop), plus TASKS, plus **Evaluation protocol** and **Data and terms** sections that freeze splits, metric, thresholds, `maxGap`, trial budget, and data licence and terms before the run. Rules: [`research-integrity`](../../references/research-integrity.md).
+4. **Run** - host or CI only. Keep `experiment/STATUS.md` (`running|done|failed`).
+5. **Monitor** - `ua_verify` / `ua_experiment_status` until terminal.
+6. **Findings + writeup** - cite STATUS and artifacts; no orphan claims; state trials, failed runs, seed spread, coverage, and the selection-versus-held-out gap.
+
+Anti-fabrication: no model assertion as check evidence. Gates use `file_assert` / `human_event` / `exit_code` / `ci_api` only.
+
+GPU/sandbox: unsupported in-process. Document host/CI as the compute port.
+</procedure>
+
+## Experiment ledger, across runs (MUST when comparing iterations)
+
+<required>
+
+`experiment/STATUS.md` and `METRICS.json` under a delivery run's own
+`.agent-state/runs/<date>/<slug>/<version>/` are scoped to **one graph
+traversal** - they answer "is this run's experiment done, and did it pass,"
+then the run finishes and that evidence stops mattering. Comparing many
+iterations of a method for a paper, report, or competition submission needs a
+record that outlives any one run.
+
+Use `experiments/<project-slug>/<run-id>/`, a separate top-level convention -
+not under `.agent-state/` (ephemeral, gitignored, local; wrong home for
+something meant to be compared later) and not under one run's
+`docs/<category>/<slug>/` (scoped to a single delivery, not a series):
+
+```text
+experiments/<project-slug>/<run-id>/
+  config.json      # hyperparameters, model/version, dataset version, seed
+  metrics.json     # {"metrics": {...}, "thresholds": {...}}
+  SUMMARY.md       # one paragraph: what changed since the last run-id, and why
+  JUDGEMENT.md     # hypothesis restated, observed result, verdict - see below
+  code.sha         # git commit this run executed against
+```
+
+**Write `config.json` as soon as the run's parameters are decided, not deferred until the run
+finishes.** An interrupted or abandoned run with nothing in its `run-id` directory leaves no trace
+that it was ever attempted; one with `config.json` already written at least records what was tried,
+even if `metrics.json`, `SUMMARY.md`, and `JUDGEMENT.md` never follow.
+
+**`JUDGEMENT.md` is required whenever this ledger entry exists, not optional prose.** It is the
+durable record of the same judgement the `experiment` verifier already forces into
+`experiment/STATUS.md`'s `judgement:` line (`confirmed` / `refuted` / `inconclusive` /
+`not_applicable`; see [`experiment.md`](../../commands/experiment.md) "STATUS.md contract"), written
+out in full rather than as one word:
+
+```markdown
+# Judgement: run <run-id>
+
+Hypothesis/assumption: <restated from the PLAN or RESEARCH that motivated this run>
+Observed: <the metrics.json values that bear on it>
+Verdict: confirmed | refuted | inconclusive | not_applicable
+Why: <one paragraph connecting observed to verdict>
+Next: <what this implies for the next run-id, if anything>
+```
+
+`config.json` and `metrics.json` each validate against
+[`schemas/experiment-run.schema.json`](../../../schemas/experiment-run.schema.json)
+(`$defs/config`, `$defs/metrics`) - the same `{metrics, thresholds}` shape
+`experiment/METRICS.json` already uses, so one parser reads both, and every
+run in a series shares the same fields to diff against. `metrics.json` carries the same `integrity`
+block as `experiment/METRICS.json`, and the ledger is where `trials` and `reportedSplitEvaluations`
+are counted from, so a run that is not in the ledger is not allowed to claim a held-out split is
+unspent. `JUDGEMENT.md` is prose, like `SUMMARY.md`,
+and is not schema-validated. A worked example:
+[`experiments/_example/001/`](../../../experiments/_example/001/).
+
+Whether `experiments/` is gitignored is this project's own `AGENTS.md`
+choice, the same as `docs/` already is - a research or competition repo will
+usually track it, since comparing runs later for a writeup is the point.
+</required>
+
+## Routing & discovery
+
+<routing>
+
+- Graph: [`researcher-delivery`](../../graphs/researcher-delivery.yaml)
+- Commands: [`research.md`](../../commands/research.md), [`experiment.md`](../../commands/experiment.md), [`findings.md`](../../commands/findings.md)
+- Cursor rule: research Applicability + Mermaid MUST
+- Prefer [`ai-research-methodology`](../ai-research-methodology/SKILL.md) only for AI/ML method detail overlays
+- Integrity rules for every experiment: [`research-integrity`](../../references/research-integrity.md)
+
+Use for researcher workflows. Avoid when shipping product code through `goal-delivery`.
+</routing>
+
+## Permissions & authority
+
+<required>
+
+- Tools: Read, Grep, Glob, WebSearch, WebFetch, Bash (host experiment commands), MCP `ua_experiment_status` / `ua_verify`
+- No forging `human_event`; auto gates use document structure tests
+</required>

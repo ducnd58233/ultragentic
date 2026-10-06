@@ -1,0 +1,29 @@
+# Hooks router
+
+<routing>
+
+Lookup table for hook scripts in this folder. **After you add, rename, or remove a hook script, update this table in the same change.** Runtime-owned hooks are not listed in the table because they are commands inside `ultragentic`, not scripts on disk.
+
+| Event / concern / use case | Script | Permission notes |
+|----------------------------|--------|------------------|
+| Source-driven `WebFetch` cache revalidation (pre) | [`sdd-cache-pre.py`](sdd-cache-pre.py) | Python 3 stdlib (`urllib`); reads the `sdd_cache` table via `sdd-cache-common.py` |
+| Source-driven `WebFetch` cache write (post) | [`sdd-cache-post.py`](sdd-cache-post.py) | Python 3 stdlib (`urllib`); writes the `sdd_cache` table via `sdd-cache-common.py` |
+| Shared sdd-cache schema, path resolution, and stdin decoding (not a hook itself) | [`sdd-cache-common.py`](sdd-cache-common.py) | Python 3 stdlib (`hashlib`, `sqlite3`); loaded by both scripts above via `importlib` so the schema exists in one place, not two that can drift |
+| Offline contract check for the sdd-cache table (pre-commit only, not a hook) | [`sdd-cache-test.py`](sdd-cache-test.py) | Python 3 stdlib (`sqlite3`, `tempfile`); loads `sdd-cache-common.py` and the two scripts above, round-trips a row against a temp database, and confirms neither script keeps its own copy of the schema |
+| Strip AI/agent co-author attribution from commit messages (POSIX) | [`strip-ai-attribution.sh`](strip-ai-attribution.sh) | `sh` + `awk`; git `prepare-commit-msg` hook installed by `scripts/link-ai-agents.*` calls this; edits the commit-message file in place |
+| Strip AI/agent co-author attribution from commit messages (PowerShell) | [`strip-ai-attribution.ps1`](strip-ai-attribution.ps1) | PowerShell 5.1 and 7+ equivalent of the `.sh`; for PowerShell-driven environments and manual runs |
+
+**Authoring:** [`TEMPLATE.md`](TEMPLATE.md) - document stdin/stdout JSON and wiring in [`.cursor/hooks.json`](../../.cursor/hooks.json), [`.codex/hooks.json`](../../.codex/hooks.json), or [`.claude/settings.json`](../../.claude/settings.json).
+
+**Runtime hooks:** the control plane supplies the shared lifecycle hooks as `ultragentic hook <event>`, wired by the host config files. Keep their behavior in `runtime/internal/harness`, not in this folder.
+
+- `session-start` reports active runs, loaded rules, and confirmed memories.
+- `user-prompt-submit` injects run and routing context where the host allows it.
+- `post-tool-use` journals successful tool calls and runs the advisory file guards: `sensitive-data-guard`, `design-token-guard`, `ui-slop-guard`, and `core-logic-test-guard`.
+- `post-tool-use-failure` journals failed tool calls for hosts that split success and failure events.
+- `subagent-stop` checks whether a subagent cited paths that do not appear in its transcript.
+- `pre-tool-use` exits 2 on protected-branch pushes, unapproved PR merges, writes to run state files, and live credential literals.
+- `stop` blocks ending a turn while a run sits mid-graph with no evidence recorded, at most once per turn, and never for a run awaiting a human.
+
+Look in [`runtime/README.md`](../../runtime/README.md) when a shell command is refused or a turn will not end with no script to blame.
+</routing>

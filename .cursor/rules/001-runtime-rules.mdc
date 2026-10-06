@@ -1,0 +1,12 @@
+---
+description: Rules for editing Go backend and HTML/CSS/JS frontend under runtime/
+globs: runtime/**
+---
+
+# Runtime development rules
+
+When editing files under `runtime/`, read and follow [`runtime/AGENTS.md`](../../runtime/AGENTS.md).
+
+It covers `internal/shared` boundaries, httpserver/logging/redact usage, HTTP error handling for the loopback UI, CSS token usage, composer alignment, form patterns, and common mistakes from prior bugs.
+
+Consider these rules if they affect your changes.

@@ -1,0 +1,33 @@
+# Ultragentic
+
+> Everything you need in the agentic era: the spec-to-PR agent harness for AI coding agents. Agent skills (SKILL.md), slash commands, hooks, and a Go
+> runtime that take Claude Code, Codex CLI, Cursor, opencode, Google Antigravity, Kimi Code, or Muse
+> from a one-line goal to a reviewed pull request, advancing only on recorded evidence (tests, lint,
+> CI, review). Install once per machine, or mount into any repo as a git submodule.
+
+Use it when you want the same spec-driven development workflow (`/spec`, `/plan`, `/build`, `/test`,
+`/review`, `/ship`, `/goal`, `/auto`) and the same guardrails across several coding agents, instead
+of maintaining separate rules and prompts for each one.
+
+## Start here
+
+- [README](https://github.com/ducnd58233/ultragentic/blob/main/README.md): install (global or per-repo), supported hosts, the three ways to work
+- [Command router](https://github.com/ducnd58233/ultragentic/blob/main/.ai-agents/commands/ROUTER.md): every slash command and when to use it
+- [Asset router](https://github.com/ducnd58233/ultragentic/blob/main/.ai-agents/ROUTER.md): skills, agents, and references by task
+
+## Workflow
+
+- [/goal](https://github.com/ducnd58233/ultragentic/blob/main/.ai-agents/commands/goal.md): one objective to a merged pull request, with human approval gates
+- [/auto](https://github.com/ducnd58233/ultragentic/blob/main/.ai-agents/commands/auto.md): the same graph with gates answered by CI and file evidence
+- [Delivery graph](https://github.com/ducnd58233/ultragentic/blob/main/.ai-agents/graphs/goal-delivery.yaml): the spec → plan → build → test → review → ship nodes
+
+## Policy and authoring
+
+- [AGENTS.md](https://github.com/ducnd58233/ultragentic/blob/main/AGENTS.md): the shared behavioral baseline loaded every turn
+- [Permissions](https://github.com/ducnd58233/ultragentic/blob/main/.ai-agents/PERMISSIONS.md): permission policy per host
+- [Authoring guide](https://github.com/ducnd58233/ultragentic/blob/main/.ai-agents/AUTHORING.md): writing skills and commands, mounting into a consumer repo
+
+## Optional
+
+- [Runtime](https://github.com/ducnd58233/ultragentic/blob/main/runtime/README.md): the `ultragentic` Go binary, flags, and web UI
+- [Host hook contracts](https://github.com/ducnd58233/ultragentic/blob/main/.ai-agents/references/host-hook-contracts.md): hook events per coding host

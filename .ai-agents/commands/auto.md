@@ -1,0 +1,267 @@
+---
+description: Unattended delivery loop - /goal with the approval gates answered by evidence, behind a workspace opt-in
+---
+
+Drive one objective to a merged pull request without stopping for a person, except where a written rule says stop.
+
+<context>
+
+`/auto` and `/goal` run the same graph (`goal-delivery`), the same verifiers at every node they
+share, and the same refusals. Two things differ. The approval gates are answered by evidence instead
+of by you, and the `auto` flag routes through extra quality stages a person building by hand does
+not need a node for. Everything else, including `remember` and `improve`, is on both paths.
+
+| | `/goal` | `/auto` |
+|---|---|---|
+| `intake`, `approve_spec`, `approve_plan` | a person answers | skipped when the documents have no open markers (recorded `skipped`, never `passed`) |
+| `reviews`, `ship` | `human_event` | `ci_api` / `file_assert` evidence |
+| `approve_merge` | a person answers | the workspace opt-in plus the six merge conditions below |
+| After `spec` | `approve_spec` | `auto_research` first |
+| After `test` | `e2e` | `simplify`, `lint`, `commit`, then `e2e` |
+| After `e2e` | `slop` | `bug_hunt`, then `slop` |
+| After `slop` | `review` | `expectation_review`, then `review` |
+| After `review` | `open_pr` | `review_ok`, then the experiment loop (`experiment_run`, `experiment_monitor`, `results_eval`), then `open_pr` |
+| After `ship` | `approve_merge` | `release_review`, then `approve_merge` |
+| After `improve`, when `task_required` is set | `done` | `execute`, `task_check`, `ac_review`, then `approve_delivery`, which is a person on both paths ([`task.md`](task.md)) |
+| After the merge | `remember` | `merge_ci` (watch the default branch), then `remember` |
+
+The rows are the graph's `when: auto` / `when: "!auto"` edges and `skipWhen` gates; if they
+disagree with [`goal-delivery.yaml`](../graphs/goal-delivery.yaml), the graph is right and this table
+is stale.
+
+Read [`goal.md`](goal.md) first. Everything it says about the runtime, evidence provenance, and the
+delivery gates applies here unchanged, and this file does not restate it.
+
+Boundary this mode moves, and where that is recorded: [`AGENTS.md`](../../AGENTS.md) section
+"Delivery gates", bullets **Merge approval** and **Auto `reviews` and `ship` (reversal)**. On
+`/auto` only, `reviews` and `ship` pass from `ci_api` / `file_assert` evidence rather than from
+`human_event`; `/goal` stays human at those nodes, and no new checkpoint evidence source was added.
+</context>
+
+## Runtime is required (MUST)
+
+<required>
+
+`/auto` runs on the runtime. There is no markdown-only mode, and **you may not stand in for it**.
+
+```sh
+ultragentic doctor          # preflight; stop here if it reports problems
+ultragentic auto init       # writes the opt-in, once per workspace
+ultragentic auto "<objective from the user>"
+ultragentic auto research "<research topic from the user>"
+ultragentic auto experiment "<experiment objective from the user>"
+ultragentic auto task "<non-code task from the user>"
+ultragentic auto gate --slug <slug from start output>
+```
+
+Host agents pass the user's text as plain arguments, including a first word that names the kind of
+work (`delivery`, `research`, `experiment`, `task`). Slug and graph are derived; do not ask the user
+for `--goal`, `--graph`, or `--slug` unless resuming an existing run. With no first word the runtime
+reads the objective and prints the words that decided the graph; follow "Choosing the graph" in
+[`goal.md`](goal.md). On `/auto` the runtime acts on a guess only when the signal is strong, and
+otherwise asks for the word, because nobody is at intake to correct it.
+
+`/auto` has two limits the other graphs do not. `ultragentic auto tutor` is refused, because a tutor
+needs a learner present, so use `/goal tutor`. And `auto task` stops at `approve_delivery` every time:
+it reaches the work on its own, and a person opens the one gate that lets anything leave the
+workspace.
+
+If the binary is not on `PATH`, **stop. Run no phase.** Report:
+
+```text
+/auto requires the ultragentic runtime, which is not installed.
+  bash scripts/install-runtime.sh                                      # macOS, Linux, Git Bash
+  powershell -ExecutionPolicy Bypass -File scripts/install-runtime.ps1 # Windows
+Then run `ultragentic doctor` and start /auto again.
+```
+
+If the binary runs but `doctor` reports problems, **stop. Run no phase.** Do **not**
+claim the runtime is missing. Report the doctor failures and fix that workspace
+first (check plan, docs layout, leftover `tmp/`, hooks). `merge: false` in the
+auto opt-in is a note, not a doctor failure: auto may still run and stops at a
+green PR for a person to merge.
+
+**Three things you must not do, in order of how much damage they cause:**
+
+1. **Do not simulate the mode.** Walking the phases yourself and reporting them as done is the
+   failure this whole design exists to remove. The graph decides what runs next, from recorded
+   evidence, and the only way to move it is `ultragentic verify` or `ultragentic checkpoint`.
+2. **Do not record `human_event` on a person's behalf.** Auto mode passes the approval gates by
+   graph edges guarded on a flag, never by writing evidence that claims someone approved. There is
+   no source for model assertion, and inventing one through the human source would remove the one
+   property this control plane has that no surveyed harness has.
+3. **Do not merge without the opt-in.** A workspace with no `.agent-state/auto.yaml`, or one whose
+   file still says `merge: false`, has not agreed to it. Absence is a no.
+</required>
+
+## The task list (MUST)
+
+<required>
+
+Everything [`goal.md`](goal.md) says in its **The task list (MUST)** section applies here unchanged,
+and unattended running makes it matter more rather than less: nobody is watching to notice that a
+task was ticked late or not at all.
+
+Two consequences specific to this mode:
+
+- **A stale list stalls or loops the run.** `task_complete` decides on `task_lists`. With a person
+  driving, a wrong answer there gets spotted; with auto driving, the run simply walks another build
+  cycle for a task that is already finished, and keeps doing it.
+- **`auto gate` reads the plan document.** A task without acceptance criteria gives the spec and
+  plan gates nothing to test, and a plan that still says `TBD` keeps the gate closed - which is the
+  gate working, not a fault to route around.
+
+Canonical rules: [`planning-and-task-breakdown`](../skills/planning-and-task-breakdown/SKILL.md),
+section **Task status (MUST)**.
+</required>
+
+## The opt-in
+
+<procedure>
+
+`ultragentic auto init` writes `.agent-state/auto.yaml`. The questions live in the file rather than
+in a terminal prompt: a file is answered in a diff somebody can review, and it is still there to
+re-read later.
+
+It writes `merge: false`. Someone changes it, or auto mode stops at a green pull request and a
+person merges.
+
+`ultragentic doctor` reports which of the three states a workspace is in: no file, file answered no,
+file answered yes.
+</procedure>
+
+## What auto may decide, and what it may not
+
+<rules>
+
+Auto mode may pass `intake`, `approve_spec`, and `approve_plan` on its own when the objective is
+specific enough to spec without guessing. It may pass `approve_merge` only when **every** condition
+below already holds. Any one of them missing means it stops and a person decides.
+
+| # | Condition | Where the evidence comes from |
+|---|---|---|
+| 1 | The workspace opted in | `.agent-state/auto.yaml`, answered by a person |
+| 2 | Required PR checks passed | The CI API, not a reading of logs |
+| 3 | Every test the spec names passed | `ultragentic verify`, end-to-end included where in scope |
+| 4 | The linter is clean | No rule suppressed, no baseline widened, no test skipped to get there |
+| 5 | `/ship` returned GO | [`ship.md`](ship.md) |
+| 6 | The diff touches nothing on the danger list | The `pre-tool-use` gate |
+
+**The danger list stops auto mode every time**, whatever the other five say: schema and data
+migrations, data destruction, production writes, credential changes, history rewrites,
+infrastructure destruction, and outward publication. Those need a person, and the gate refuses with
+exit 2 rather than asking. On Claude Code that includes an MCP tool call that sends, posts, pays,
+shares, or schedules (the `outward-action` category, which applies to an auto run only).
+
+**Ambiguity is the other stop.** A goal that cannot be specified without inventing an acceptance
+criterion is ambiguous, and auto mode stops at `approve_spec` and asks. That is a test on the spec,
+not a judgement call about the prompt.
+</rules>
+
+## What is built, and what auto does not do
+
+<context>
+
+Being honest about the seam rather than describing a mode that does not exist yet.
+
+**Live today:** the opt-in file, `ultragentic auto init`, `doctor` reporting the opt-in state, the
+danger list refused before anything runs, every verifier `/goal` already runs, and the graph itself
+- the `auto` flag routes through `simplify`, `lint`, `commit`, `bug_hunt` (`bug_hunt/FINDINGS.md`),
+`expectation_review` (SPEC-tied `expectation/REVIEW.md`), `review_ok` (`review/REVIEW.md`, all five
+axis names), `release_review` (`release/REVIEW.md`) via `file_assert` (misses reopen `plan`, `build`,
+or `review`), and a watch on the default branch after the merge lands, and the `intake`,
+`approve_spec`, and `approve_plan` gates skip when the run's flags say a person is not needed. A
+skipped gate records `skipped`, never `passed`, so run state still says which gates a person
+answered. Host docs: [`bug-hunt.md`](bug-hunt.md), [`expectation.md`](expectation.md),
+[`review.md`](review.md), [`release.md`](release.md),
+[`failure-trace.md`](failure-trace.md) (write TRACE on verifier fail or third-strike before replan).
+
+```sh
+ultragentic auto "<one objective>"   # delivery graph; slug derived
+ultragentic auto research "<topic>"  # researcher-delivery graph
+ultragentic auto gate --slug <slug>  # answers gates from documents
+ultragentic auto init                # writes the opt-in, once per checkout
+```
+
+Host agents pass plain text; users never pass `--graph` or `--goal`.
+
+`auto gate` sets the flag only when the document declares nothing open: a populated **Open
+questions** section, or a `TBD` left in the prose. For `approve_applicability` it also requires
+Applicability, Refine, and a Mermaid fence; for `approve_design` it also requires a Mermaid fence
+on PLAN. An empty result is not a promise the document is complete - it is the most a text search
+can claim - which is why the gate it opens records `skipped` and never `passed`.
+
+On the auto path, `ultragentic checkpoint` runs the same document tests when a run
+lands on `approve_applicability` or `approve_design`, then walks past the gate.
+Auto research therefore continues from literature to hypothesis and from
+experiment design to `experiment_run` without a separate gate step. [`goal.md`](goal.md)
+and `ultragentic research` still park at those gates until a person approves.
+
+A goal that arrives over MCP is fenced where it enters run state, with the warning before the
+content, and content cannot close its own fence. Whoever filed that ticket is not the person
+running this.
+
+**Not yet:** nothing in this contract. What auto mode does **not** do is the work - the host coding
+agent still runs every agent node exactly as it does under [`goal.md`](goal.md), and the runtime
+still holds the evidence. Auto is a route through the same graph, not a second implementation of
+it.
+</context>
+
+## Auto research host obligation (MUST)
+
+<required>
+
+On `ultragentic auto research`, the host agent still runs every node. It must **not** stop after
+literature and ask the human what to do next. Walk the graph through `hypothesis`,
+`experiment_design`, `experiment_run`, `findings`, and `writeup`, calling `ultragentic checkpoint`
+after each artifact and `ultragentic verify` at verifiers.
+
+Stop only when:
+
+- run status is terminal (`done`, `failed`, `budget_exceeded`), or
+- a gate document leaves open markers (Open questions, TBD, or missing Applicability / Refine /
+  Mermaid on RESEARCH, or missing Mermaid, Evaluation protocol, or Data and terms on an experiment PLAN), or
+- `results_eval` fails with a summary starting `INTEGRITY:` that correcting the record cannot fix
+  (a spent held-out split, or a gap that points at leakage). Report it to the person
+  and end the turn without recording a blocker; re-running to make it pass is the failure it exists
+  to stop. See [`experiment.md`](experiment.md) "Integrity (MUST)".
+
+A missed metrics threshold at `results_eval` is neither of those - it is a verifier fail the graph
+already retries automatically (an `INTEGRITY:` failure is the exception above). Never record it as
+`checkpoint --blocker`; see [`AGENTS.md`](../../AGENTS.md) "Blocker vs. retry". Unclear dataset
+licence or terms are a separate stop; see [`research-integrity`](../references/research-integrity.md)
+"When to stop and ask a person".
+
+**One honest check is not the same as a terminal status.** The Stop hook will let a turn end at
+`experiment_monitor` once a single `ultragentic verify` has come back, even when it came back
+`running` - that stands down a narrower, separate guard against being abandoned with nothing
+recorded at all, and it is not this section's bar. "Stop only when run status is terminal" above
+still applies while the experiment runs: see [`experiment.md`](experiment.md) "Watch it to completion
+(MUST)" for what that means in practice.
+
+When RESEARCH and PLAN are settled, `ultragentic checkpoint` and `ultragentic auto gate` both skip
+the approval gates and advance the run. Report results when the loop finishes; do not poll the
+human mid-pipeline.
+
+**The same obligation applies to `goal-delivery`'s embedded retry cycle.** A `/auto` product
+delivery whose SPEC includes an experiment walks `experiment_run -> experiment_monitor ->
+results_eval -> auto_research -> approve_spec -> ... -> build` on a missed threshold, the same shape
+as `researcher-delivery`'s loop, inside the same run. Continue through it the same way - `checkpoint`
+after each artifact, `verify` at each verifier - and stop only at a terminal status or an open
+marker, never at a self-judged "this seems infeasible." This holds whether the run was started with
+`ultragentic auto` or `ultragentic run start` (the `/goal` command surface): once a run has the `auto`
+flag set, this obligation applies to it, regardless of which command started it.
+</required>
+
+## Routing & discovery
+
+<routing>
+
+- Master: [`ROUTER.md`](../ROUTER.md) → [`commands/ROUTER.md`](ROUTER.md).
+- Use when the objective is routine enough to run unattended and the workspace has opted in.
+- Use `ultragentic auto research "<topic>"` for literature → experiment → findings loops.
+- Use [`goal.md`](goal.md) when you want the approval gates, when the workspace has not opted in,
+  or when the objective is exploratory.
+- Do **not** use for anything on the danger list. It will stop, and stopping late costs more than
+  not starting.
+</routing>

@@ -1,0 +1,70 @@
+---
+type: ${type}
+category: ${category}
+slug: ${slug}
+title: ${title_yaml}
+description: "FILL: one sentence saying what this document answers"
+status: draft
+created: ${date}
+updated: ${date}
+---
+
+# ${title}
+
+Hypothesis: a falsifiable claim, the test that could refute it, and when to stop.
+
+<abstract>
+
+<!-- FILL: two to four sentences. The claim, the metric that decides it, and the result that would refute it. -->
+
+</abstract>
+
+<context>
+
+## Background
+
+<!-- FILL: why this claim is worth testing; link the RESEARCH that motivates it. -->
+
+</context>
+
+<hypothesis>
+
+## Claim
+
+<!-- FILL: one sentence in the form "If X, then Y, measured by Z". -->
+
+## Prediction
+
+| Metric | Baseline | Predicted | Refuted if |
+|--------|----------|-----------|------------|
+| FILL: metric and unit | FILL: value and source | FILL: value | FILL: threshold |
+
+</hypothesis>
+
+<method>
+
+## Method
+
+<!-- FILL: the data, the procedure, the controls, and the number of runs. Enough for someone else to repeat it. -->
+
+</method>
+
+<verification>
+
+## Kill criteria
+
+<!-- FILL: the results that end this line of work, decided before any run. -->
+
+</verification>
+
+<revisions>
+
+## Revisions
+
+Appended by `ultragentic docs revise <this file> "<what changed>"`. Do not edit dates by hand.
+
+| Date | Change |
+|------|--------|
+| ${date} | Created. |
+
+</revisions>

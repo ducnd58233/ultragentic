@@ -1,0 +1,33 @@
+# Copy these [[hooks]] blocks into ~/.kimi-code/config.toml ($KIMI_CODE_HOME/config.toml).
+# Kimi Code reads hooks from user config only; [[hooks]] accepts exactly
+# event, matcher, command, and timeout. No matcher: ultragentic filters tools itself.
+
+[[hooks]]
+event = "SessionStart"
+command = "ultragentic hook session-start --client kimi"
+timeout = 30
+
+[[hooks]]
+event = "UserPromptSubmit"
+command = "ultragentic hook user-prompt-submit --client kimi"
+timeout = 30
+
+[[hooks]]
+event = "PreToolUse"
+command = "ultragentic hook pre-tool-use --client kimi"
+timeout = 30
+
+[[hooks]]
+event = "PostToolUse"
+command = "ultragentic hook post-tool-use --client kimi"
+timeout = 30
+
+[[hooks]]
+event = "PostToolUseFailure"
+command = "ultragentic hook post-tool-use-failure --client kimi"
+timeout = 30
+
+[[hooks]]
+event = "Stop"
+command = "ultragentic hook stop --client kimi"
+timeout = 30

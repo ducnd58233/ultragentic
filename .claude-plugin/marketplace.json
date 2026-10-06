@@ -1,0 +1,13 @@
+{
+  "name": "ultragentic",
+  "owner": {
+    "name": "ultragentic"
+  },
+  "plugins": [
+    {
+      "name": "ultragentic",
+      "source": "./",
+      "description": "Spec-to-PR workflow for Claude Code: skills, slash commands, hooks, and evidence-gated delivery graphs. Canonical assets live under .ai-agents/."
+    }
+  ]
+}

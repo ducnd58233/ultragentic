@@ -1,0 +1,233 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/ducnd58233/ultragentic/schemas/run-state.schema.json",
+  "title": "RunState",
+  "description": "Machine-readable state for one goal run. Written to tmp/<date>/<slug>/<version>/manifest.json beside the human-readable RECORD.md. Gitignored.",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "runId",
+    "graphId",
+    "slug",
+    "goal",
+    "currentNode",
+    "status",
+    "iteration",
+    "maxTransitions",
+    "createdAt",
+    "updatedAt"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "runId": {
+      "type": "string",
+      "pattern": "^run_[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}-[0-9]{2}-[0-9]{2}Z_[a-z0-9-]+$",
+      "description": "run_<UTC timestamp>_<slug>. Sortable and human-readable."
+    },
+    "graphId": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_-]*$",
+      "description": "Graph under .ai-agents/graphs that drives this run."
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "description": "Matches docs/<category>/<slug>/ and .agent-state/runs/<date>/<slug>/<version>/ for the same goal."
+    },
+    "date": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+      "description": "Calendar day of this revision directory. Required for new runs."
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Global revision number for the slug. Required for new runs."
+    },
+    "goal": {
+      "type": "string",
+      "minLength": 1
+    },
+    "currentNode": {
+      "type": "string",
+      "pattern": "^$|^[a-z][a-z0-9_]*$",
+      "description": "Node the run sits at. Empty between `run start` and the first transition, when the run exists but has not entered its graph yet."
+    },
+    "status": {
+      "enum": [
+        "running",
+        "awaiting_human",
+        "done",
+        "failed",
+        "cancelled",
+        "budget_exceeded"
+      ]
+    },
+    "iteration": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Transitions taken so far. Compared against maxTransitions."
+    },
+    "maxTransitions": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Copied from the graph at run start so the budget is auditable from state alone."
+    },
+    "tokenBudget": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Host-reported tokens this run may cost before it stops. Zero is no limit, so adding the field does not retroactively bound runs nobody set one for."
+    },
+    "wallclockSeconds": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "How long after createdAt the run may keep going. Zero is no limit."
+    },
+    "tokensUsed": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Tokens the session log has reported so far. Filled by the surface that reads the log; the runner owns no source of tokens."
+    },
+    "stoppedBy": {
+      "enum": ["transitions", "tokens", "wallclock"],
+      "description": "Which limit ended the run. Three budgets share the budget_exceeded status, and that status alone does not say which one was hit."
+    },
+    "branch": {
+      "type": ["string", "null"],
+      "description": "Task branch for the current task. One planned task, one branch, one PR."
+    },
+    "pr": {
+      "type": ["string", "null"],
+      "format": "uri"
+    },
+    "taskIndex": {
+      "type": ["integer", "null"],
+      "minimum": 0
+    },
+    "taskCount": {
+      "type": ["integer", "null"],
+      "minimum": 0
+    },
+    "flags": {
+      "type": "object",
+      "description": "Named booleans resolved by graph guards with source flag.",
+      "propertyNames": {
+        "pattern": "^[a-z][a-z0-9_]*$"
+      },
+      "additionalProperties": {
+        "type": "boolean"
+      }
+    },
+    "checks": {
+      "type": "object",
+      "description": "Verification results keyed by check name. A check is only present once real evidence produced it.",
+      "propertyNames": {
+        "pattern": "^[a-z][a-z0-9_]*$"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/check"
+      }
+    },
+    "blockers": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/blocker"
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "node"],
+        "additionalProperties": false,
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "node": {
+            "type": "string"
+          },
+          "at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "stopNoticeAt": {
+      "description": "updatedAt as of the last time the Stop hook refused to end a turn for this run at a research/experiment loop node. Hook bookkeeping, not checkpoint evidence.",
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "$defs": {
+    "check": {
+      "type": "object",
+      "required": ["passed", "source", "at"],
+      "additionalProperties": false,
+      "properties": {
+        "passed": {
+          "type": "boolean"
+        },
+        "skipped": {
+          "type": "boolean",
+          "default": false,
+          "description": "A skipped check is not a passed check. Guards must distinguish them."
+        },
+        "source": {
+          "enum": ["exit_code", "file_assert", "ci_api", "human_event"],
+          "description": "Evidence provenance. 'model' is deliberately absent: model output can never mark a check passed."
+        },
+        "ref": {
+          "type": "string",
+          "description": "Pointer into events.ndjson or a file under tmp/<slug>/, for example 'events.ndjson#41'."
+        },
+        "exitCode": {
+          "type": ["integer", "null"]
+        },
+        "at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "blocker": {
+      "type": "object",
+      "required": ["node", "reason", "attempts", "at"],
+      "additionalProperties": false,
+      "properties": {
+        "node": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "class": {
+          "enum": ["context", "tool", "permission", "test", "ambiguity", "model"],
+          "description": "What kind of failure this was, from the set the harness responsibility checklist uses. Optional: a blocker recorded before the field existed has none, and refusing those would strand the runs it was added to help."
+        },
+        "attempts": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Three attempts on the same blocker stops the run and reports root cause."
+        },
+        "at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "hooks": {
+    "SessionStart": [
+      { "hooks": [ { "type": "command", "command": "ultragentic hook session-start --client muse" } ] }
+    ],
+    "UserPromptSubmit": [
+      { "hooks": [ { "type": "command", "command": "ultragentic hook user-prompt-submit --client muse" } ] }
+    ],
+    "PreToolUse": [
+      { "hooks": [ { "type": "command", "command": "ultragentic hook pre-tool-use --client muse" } ] }
+    ],
+    "PostToolUse": [
+      { "hooks": [ { "type": "command", "command": "ultragentic hook post-tool-use --client muse" } ] }
+    ],
+    "PostToolUseFailure": [
+      { "hooks": [ { "type": "command", "command": "ultragentic hook post-tool-use-failure --client muse" } ] }
+    ],
+    "Stop": [
+      { "hooks": [ { "type": "command", "command": "ultragentic hook stop --client muse" } ] }
+    ]
+  }
+}

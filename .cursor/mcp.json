@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "ultragentic": {
+      "command": "ultragentic",
+      "args": ["mcp", "serve"]
+    }
+  }
+}

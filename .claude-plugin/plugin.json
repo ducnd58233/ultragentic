@@ -1,0 +1,10 @@
+{
+  "name": "ultragentic",
+  "description": "Spec-to-PR workflow for Claude Code: agent skills, slash commands, hooks, and evidence-gated delivery graphs. Install the runtime binary separately for /goal, /build, /test, /review, and /ship.",
+  "version": "0.1.0",
+  "author": { "name": "ducnd58233" },
+  "license": "MIT",
+  "homepage": "https://github.com/ducnd58233/ultragentic",
+  "repository": "https://github.com/ducnd58233/ultragentic",
+  "keywords": ["claude-code", "codex", "cursor", "opencode", "agent-skills", "slash-commands", "hooks", "spec-driven-development", "ai-coding-agent", "agents-md", "vibe-coding"]
+}

@@ -1,0 +1,9 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "ultragentic",
+  "description": "Everything you need in the agentic era. Spec-to-PR agent harness for Claude Code, Codex, Cursor, and opencode: agent skills, slash commands, hooks, and an evidence-gated delivery runtime.",
+  "version": "0.1.0",
+  "author": { "name": "ducnd58233" },
+  "license": "MIT",
+  "homepage": "https://github.com/ducnd58233/ultragentic"
+}
