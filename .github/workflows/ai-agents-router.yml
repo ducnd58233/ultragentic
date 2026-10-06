@@ -120,3 +120,10 @@ jobs:
           export PATH="$UA_INSTALL_DIR:$PATH"
           ultragentic version
           ultragentic doctor
+          # Docs that name a command which does not exist mislead the next reader.
+          # Skipped only for a release that predates the check.
+          if ultragentic help docs 2>/dev/null | grep -q 'docs check-commands'; then
+            ultragentic docs check-commands
+          else
+            echo "::notice::the published runtime predates docs check-commands; skipped"
+          fi
