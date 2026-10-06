@@ -40,6 +40,8 @@ Lookup table for shared checklists and pattern docs under this folder. These fil
 | Proving a mobile app rendered: crash buffer, view hierarchy, blank-frame check | [`mobile-ui-verification.md`](mobile-ui-verification.md) | `qa-testing-strategy`, `test-driven-development`, `qa-tester`, mobile stack profiles |
 | Routing fixtures: intent → expected asset, checked by `/doctor` | [`routing-evals.md`](routing-evals.md) | `agent-systems-auditor`, `using-agent-skills` |
 | Graph path fixtures: outcomes → expected node path, checked by `/doctor` and `ultragentic eval graph` | [`graph-path-evals.yaml`](graph-path-evals.yaml) | `agent-systems-auditor`, graph authors |
+| Size budgets and concise-writing rules for every asset and charter | [`concise-docs.md`](concise-docs.md) | write or update any asset; `ultragentic docs budget` |
+| Charter rules moved out of the always-loaded file: sources and builds, docs and naming, paths and platforms | [`charter-detail.md`](charter-detail.md) | AGENTS.md triggers; all host agents |
 | Workspace mistakes diary (`.agent-state/MISTAKES.md`), graduation into AGENTS.md, vs memory.db | [`mistakes-log.md`](mistakes-log.md) | always-on charter; all host agents |
 | Failed graph node provenance: TRACE fields, assumption ids, required FailureClass on blockers | [`failure-trace.md`](failure-trace.md) | `/goal`, `/auto`, `agent-harness-engineering`, host agents diagnosing runs |
 | Claude Code features → ultragentic owners (reuse / reject / gap), conditional `if`, bare-like CI recipe | [`claude-code-feature-map.md`](claude-code-feature-map.md) | `agent-harness-engineering`, hook authors, `/auto` operators |

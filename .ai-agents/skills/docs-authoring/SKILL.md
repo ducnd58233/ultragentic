@@ -115,7 +115,7 @@ Choose by what the slug is mainly about, once. Its later documents of other type
 <references>
 
 - Templates: [`.ai-agents/templates/docs/`](../../templates/docs/)
-- Charter rule: "Generated docs location" in [`AGENTS.md`](../../../AGENTS.md)
+- Charter rule: "Docs and naming" in [`charter-detail.md`](../../references/charter-detail.md), named from [`AGENTS.md`](../../../AGENTS.md)
 - Tag set: "Document files" in [`AUTHORING.md`](../../AUTHORING.md)
 - Decision-record content guidance: [`documentation-and-adrs`](../documentation-and-adrs/SKILL.md)
 

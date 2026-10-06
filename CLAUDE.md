@@ -10,6 +10,8 @@ Sections are wrapped in XML tags so a model can address one block at a time; the
 documented in [`.ai-agents/AUTHORING.md`](.ai-agents/AUTHORING.md).
 
 <always_on>
+Rules graduated from past mistakes are in [`MISTAKES.md`](MISTAKES.md) and bind like `AGENTS.md`; read them at session start.
+
 The behavioral baseline is in [`AGENTS.md`](AGENTS.md) and applies here unchanged. In Claude sessions
 it resolves to four skills the model may load on its own:
 
