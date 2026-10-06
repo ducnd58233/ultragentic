@@ -35,14 +35,7 @@ This command runs on the runtime. You may not stand in for it.
 Do these three steps first, in order:
 
 1. Run `ultragentic doctor`.
-2. If the shell says `ultragentic: command not found`, **stop**. Run no node. Tell the user:
-
-   ```text
-   /task requires the ultragentic runtime, which is not installed.
-     bash scripts/install-runtime.sh                                      # macOS, Linux, Git Bash
-     powershell -ExecutionPolicy Bypass -File scripts/install-runtime.ps1 # Windows
-   Then run `ultragentic doctor` and start /task again.
-   ```
+2. If the shell says `ultragentic: command not found`, run no node yet. Follow [`runtime-bootstrap.md`](../references/runtime-bootstrap.md): ask the user once to accept the runtime license, install it yourself with `ensure-runtime`, run `ultragentic doctor`, then continue. If the user declines or the install fails, **stop**.
 
 3. If `doctor` prints a problem, **stop**. Run no node. Tell the user the problem lines exactly as printed.
 

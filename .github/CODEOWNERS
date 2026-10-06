@@ -4,3 +4,10 @@
 
 # Last matching pattern wins; keep CODEOWNERS itself owned explicitly.
 .github/CODEOWNERS @ducnd58233
+
+# The release key and the installers decide what code runs on users' machines.
+# Name them explicitly so a future broader rule cannot quietly take them over.
+/scripts/ultragentic-release.pub.pem @ducnd58233
+/scripts/install-runtime.sh @ducnd58233
+/scripts/install-runtime.ps1 @ducnd58233
+/RUNTIME-LICENSE.md @ducnd58233

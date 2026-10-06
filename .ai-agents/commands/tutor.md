@@ -31,14 +31,7 @@ Every command in a code block is exact. Copy it, and replace only the words in a
 This command runs on the runtime. You may not stand in for it.
 
 1. Run `ultragentic doctor`.
-2. If the shell says `ultragentic: command not found`, **stop**. Run no node. Tell the user:
-
-   ```text
-   /tutor requires the ultragentic runtime, which is not installed.
-     bash scripts/install-runtime.sh                                      # macOS, Linux, Git Bash
-     powershell -ExecutionPolicy Bypass -File scripts/install-runtime.ps1 # Windows
-   Then run `ultragentic doctor` and start /tutor again.
-   ```
+2. If the shell says `ultragentic: command not found`, run no node yet. Follow [`runtime-bootstrap.md`](../references/runtime-bootstrap.md): ask the user once to accept the runtime license, install it yourself with `ensure-runtime`, run `ultragentic doctor`, then continue. If the user declines or the install fails, **stop**.
 
 3. If `doctor` prints a problem, **stop**. Run no node. Tell the user the problem lines exactly as printed.
 4. Check that `ultragentic calc "1 + 1"` prints `2`. Dates and computed answers depend on it.

@@ -406,6 +406,14 @@ foreach ($file in (Get-ChildItem -File -Filter *.md -LiteralPath (Join-Path $Ass
 # is never shadowed. Kept in step with GlobalToolkitDir in runtime/cmd/common.go.
 Install-Entry $Assets (Join-Path $HomeDir '.ultragentic/.ai-agents')
 
+# The runtime bootstrap: an agent in any repository finds the installer here and
+# installs the runtime itself on first use. The installer reads the pinned key
+# from its own directory and the license from one level up.
+foreach ($f in 'ensure-runtime.sh', 'ensure-runtime.ps1', 'install-runtime.sh', 'install-runtime.ps1', 'ultragentic-release.pub.pem') {
+    Install-Entry (Join-Path $PSScriptRoot $f) (Join-Path $HomeDir ".ultragentic/scripts/$f")
+}
+Install-Entry (Join-Path $PSScriptRoot '..\RUNTIME-LICENSE.md') (Join-Path $HomeDir '.ultragentic/RUNTIME-LICENSE.md')
+
 Write-ManagedBlock (Join-Path $CodexHome 'AGENTS.md')
 Write-ManagedBlock (Join-Path $OpencodeHome 'AGENTS.md')
 Write-ManagedBlock (Join-Path $ClaudeHome 'CLAUDE.md')
