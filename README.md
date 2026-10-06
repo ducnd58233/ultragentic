@@ -326,6 +326,12 @@ ultragentic skills convert-report ~/.agents/skills/<name>
 Where files land, the Codex `~/.codex/skills` trap, and host-only keys:
 [Third-party Agent Skills in AUTHORING.md](.ai-agents/AUTHORING.md#third-party-agent-skills-not-this-toolkit).
 
+### Keep your other agent tooling fresh (FORGET-ME-NOT)
+
+`/ua-forget-me-not` takes an inventory of everything your agents use besides Ultragentic (Claude
+Code plugins, skills, agent CLIs such as `claude`, `codex` and `opencode`, and MCP servers by name
+only), says what is out of date, and asks which to update. It changes nothing without your yes.
+
 ## Watch a run
 
 ```bash

@@ -409,7 +409,7 @@ Install-Entry $Assets (Join-Path $HomeDir '.ultragentic/.ai-agents')
 # The runtime bootstrap: an agent in any repository finds the installer here and
 # installs the runtime itself on first use. The installer reads the pinned key
 # from its own directory and the license from one level up.
-foreach ($f in 'ensure-runtime.sh', 'ensure-runtime.ps1', 'install-runtime.sh', 'install-runtime.ps1', 'ultragentic-release.pub.pem') {
+foreach ($f in 'ensure-runtime.sh', 'ensure-runtime.ps1', 'install-runtime.sh', 'install-runtime.ps1', 'ultragentic-release.pub.pem', 'forget-me-not.py') {
     Install-Entry (Join-Path $PSScriptRoot $f) (Join-Path $HomeDir ".ultragentic/scripts/$f")
 }
 Install-Entry (Join-Path $PSScriptRoot '..\RUNTIME-LICENSE.md') (Join-Path $HomeDir '.ultragentic/RUNTIME-LICENSE.md')

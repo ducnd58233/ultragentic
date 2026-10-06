@@ -97,6 +97,9 @@ jobs:
       - name: Verify the graph checker rejects broken graphs
         run: python3 scripts/check-graphs-test.py
 
+      - name: Verify the FORGET-ME-NOT inventory
+        run: python3 scripts/check-forget-me-not.py
+
       # The runtime is closed source and is built in a private repository. This
       # installs the published build through the same installer users run, so
       # every CI run also exercises the signature and checksum verification, and

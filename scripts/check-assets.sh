@@ -16,4 +16,5 @@ python3 scripts/check-frontmatter.py
 python3 scripts/check-schemas.py
 python3 scripts/check-graphs.py
 python3 scripts/check-graphs-test.py
+python3 scripts/check-forget-me-not.py
 bash scripts/check-shell-syntax.sh
