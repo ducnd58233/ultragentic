@@ -61,7 +61,7 @@ reads the objective and prints the words that decided the graph; follow "Choosin
 [`goal.md`](goal.md). On `/auto` the runtime acts on a guess only when the signal is strong, and
 otherwise asks for the word, because nobody is at intake to correct it.
 
-`/auto` has two limits the other graphs do not. `ultragentic auto tutor` is refused, because a tutor
+`/auto` has two limits the other graphs do not. `auto tutor` is refused, because a tutor
 needs a learner present, so use `/goal tutor`. And `auto task` stops at `approve_delivery` every time:
 it reaches the work on its own, and a person opens the one gate that lets anything leave the
 workspace.
