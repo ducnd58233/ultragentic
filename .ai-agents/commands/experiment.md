@@ -106,46 +106,48 @@ Rules and reasons: [`research-integrity`](../references/research-integrity.md). 
 <procedure>
 
 1. Read PLAN Mermaid, Evaluation protocol, Data and terms, and TASKS acceptance criteria.
-2. Run the next host/CI step the plan names.
+2. Run the next host/CI step the plan names. Anything longer than a few seconds (training, an
+   evaluation sweep, a long suite) starts as a runtime job, never as a script you watch yourself:
+
+   ```sh
+   ultragentic job start --slug <slug> --host <client> -- <command> <args>...
+   ```
+
+   It returns at once, records the job under the run, and prints the one wait step for your host.
 3. Refresh STATUS.md before returning.
-4. Call `ua_verify` at `experiment_monitor`.
+4. Call `ua_verify` at `experiment_monitor`. It fails while a job the run started is still running,
+   whatever STATUS.md says, and names the wait command.
 </procedure>
 
 ## Watch it to completion (MUST)
 
 <required>
 
-One honest `ua_verify` that comes back `running` is a true reading of the experiment at that
-instant. It is not evidence that anything will check again, and on its own it is not grounds to end
-the turn - the same discipline as watching a model-training run, not glancing at it once and walking
-away. Before ending a turn with `experiment_monitor` reporting anything other than terminal
-(`done`/`failed`), arrange real continued monitoring: keep checking in the same turn at a cadence
-that fits the experiment, or, when the session must end, schedule a concrete resumption rather than
-ending the turn on the strength of a single check and hoping a person reopens the session. A host
-that cannot name how it will be checked again has not finished this step.
+Wait with the runtime, not with your turns. Do not write a sleep loop, a `watch`, a polling script, or
+a scheduled re-check: each check is a model turn that learns nothing, and the workspace research run
+`long-job-watch` measured the cost (FINDINGS R2).
 
-**This backstop is not the same on every host (MUST read before assuming it is).** ultragentic
-supports seven host clients; [`host-hook-contracts.md`](../references/host-hook-contracts.md) is the
-generated, measured record of what each one's `Stop`/end-of-turn hook actually does, and it is not
-uniform:
+```sh
+ultragentic job wait <id> --slug <slug>                   # blocks until the job ends, exits with its code
+ultragentic job wait <id> --slug <slug> --timeout 25m     # same, but returns 124 if still running
+ultragentic job status <id> --slug <slug>                 # one reading, no wait
+```
 
-| Host | Can refuse to end a turn mid-graph | Concrete resumption mechanism |
+How to wait depends on the host. `job start --host <client>` prints the right form; the runtime's host
+table records which hosts report a background command's end.
+
+| Host | How to wait | What happens |
 |---|---|---|
-| Claude Code | Yes, measured | `ScheduleWakeup`, or the `/loop` skill |
-| Cursor | Wired, unverified whether it fires from this config | Whatever Cursor's own scheduling/background-task surface is; unverified here |
-| Codex | Wired, unverified | Whatever Codex's own equivalent is; unverified here |
-| opencode | **No end-of-turn hook at all** - confirmed, not merely untested | None available from the runtime; this written MUST is the *only* thing holding, see below |
-| Antigravity | Wired, unverified | Unverified here |
-| Kimi | Wired, unverified | Unverified here |
-| Muse | Wired, unverified | Unverified here |
+| Claude Code | Run `ultragentic job wait` as a background command and end the turn | The host tells you once when the job ends; the Stop hook does not block a run whose job is running |
+| Every other host | Run `ultragentic job wait --timeout 25m` in the foreground | It returns when the job ends; on exit 124 run the same command again |
 
-On **opencode**, or any host where the resumption mechanism is unverified, do not assume a hook will
-catch an abandoned turn - `host-hook-contracts.md` already documents, per host, exactly what each one
-does and does not provide; read that host's section before deciding there is nothing more to do. Where
-no host-native scheduling exists, the only honest options are: keep polling synchronously within the
-same turn until terminal, or end the turn only after writing a STATUS.md note that says plainly the
-experiment is unattended and when a person should check back - never end it silently on the strength
-of one check.
+When the wait returns, read its exit code and log tail, update STATUS.md (`done` or `failed`, with a
+`judgement:` line), and call `ua_verify`. A job whose supervisor died without an exit record is
+reported as lost: start it again with `job start`, do not mark it done.
+
+On hosts without an end-of-turn hook (opencode; see
+[`host-hook-contracts.md`](../references/host-hook-contracts.md)), nothing catches an abandoned turn:
+run the bounded foreground wait until the job ends rather than ending the turn on one reading.
 
 This is the same obligation [`auto.md`](auto.md)'s "Auto research host obligation" states for the
 rest of the research/experiment loop; this is the one node in that loop where real wall-clock time,
