@@ -76,7 +76,8 @@ green PR for a person to merge.
 
 ### Dispatcher features hosts must use (MUST)
 
-`ultragentic auto` / `auto research` refuse when doctor would fail. Drive the run with
+Hosts run `ultragentic doctor` first; start also refuses on a broken control plane
+(graphs, docs layout, opt-in shape, memory, run state). Drive the run with
 `run status` / `run flag`, `checkpoint` after artifacts, `verify` at verifiers, hooks,
 memory, `calc`, and for long steps `job start` then `job wait` (never shell-bg,
 Wait-Process, or PID polling). No markdown-only walk; see [`goal.md`](goal.md)
