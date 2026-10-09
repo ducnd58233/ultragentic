@@ -32,7 +32,7 @@ Review or implement against:
 1. Task framing, baseline, metric, guardrail, and failure behavior.
 2. Dataset source, license, split, leakage, labeling, quality, and sensitive data risk.
 3. Model choice: heuristic/API/pretrained/fine-tune/custom training justified by evidence.
-4. Experiment reproducibility: code/data/config/seed/env/artifact/metric lineage.
+4. Experiment reproducibility: code/data/config/seed/env/artifact/metric lineage. Run a long training or evaluation job with `ultragentic job start --slug <slug> --host <client> -- <command>` and wait with `ultragentic job wait` ([`experiment.md`](../commands/experiment.md) "Watch it to completion"), never a sleep or polling loop.
 5. Evaluation: baseline comparison, held-out set, slice tests, qualitative errors.
 6. Serving: signature, preprocessing/postprocessing, latency, cost, fallback, rollback.
 7. Monitoring: drift, data quality, model quality, latency, errors, cost, owner, thresholds.

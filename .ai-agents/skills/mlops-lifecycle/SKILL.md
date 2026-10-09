@@ -50,6 +50,7 @@ Use for ML pipelines, model lifecycle, MLflow/Kubeflow work, inference services,
 - Tools: Read, Grep, Glob, Edit; Shell for repo-documented tests/evals.
 - Paths: ML source, configs, evals, pipelines, manifests, docs; no sensitive datasets or secrets unless authorized.
 - Ask before launching expensive training, cloud jobs, production deployment, or data-mutating pipelines.
+- Run a long training or evaluation job with `ultragentic job start --slug <slug> --host <client> -- <command>` and wait with `ultragentic job wait` ([`experiment.md`](../../commands/experiment.md) "Watch it to completion"), never a sleep or polling loop.
 </required>
 
 ## Verification

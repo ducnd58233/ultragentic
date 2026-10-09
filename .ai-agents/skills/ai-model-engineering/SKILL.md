@@ -26,6 +26,7 @@ disable-model-invocation: true
    - Establish simple heuristic/classical/pretrained baselines before custom complexity.
    - Log code version, data version, config, seed, environment, metrics, artifacts, and resource use.
    - Keep notebooks exploratory; move production training/eval into deterministic scripts.
+   - Run a long training or evaluation job with `ultragentic job start --slug <slug> --host <client> -- <command>` and wait with `ultragentic job wait` ([`experiment.md`](../../commands/experiment.md) "Watch it to completion"), never a sleep or polling loop.
 5. **Evaluate rigorously**
    - Select metrics for the task and domain.
    - Compare against baseline, add slice tests and failure examples, and keep a held-out test set that is scored once.
