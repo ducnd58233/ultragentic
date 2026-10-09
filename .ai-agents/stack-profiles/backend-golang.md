@@ -42,6 +42,11 @@ Applies to consumer repositories implementing Go services, APIs, and CLIs with i
 - `go vet ./...`
 - `go build ./...`
 
+Bug-hunt scans, declared in `ua-checks.yaml` so the `bughunt` verifier runs them
+([`bug-hunt.md`](../commands/bug-hunt.md)): `go vet ./...`; `gosec ./...` (security rules, including
+hardcoded credentials); `go test -race ./...`, which needs cgo and a C compiler, so declare
+`requires: [gcc]` for it.
+
 ## Scaffolding & command surface (CLI-first)
 
 Initialize and add deps via the official toolchain; do not hand-write `go.mod` or module layout from memory ([`source-driven-development`](../skills/source-driven-development/SKILL.md)):
@@ -70,4 +75,6 @@ Provide a root **`Makefile`** wiring these targets: `docker-up`/`docker-down` (c
 - https://cobra.dev
 - https://gin-gonic.com
 - https://go.dev/ref/mod
+- https://go.dev/doc/articles/race_detector
+- https://github.com/securego/gosec
 </references>
