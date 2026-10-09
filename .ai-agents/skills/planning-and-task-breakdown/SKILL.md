@@ -220,6 +220,14 @@ If a task is L or larger, it should be broken into smaller tasks. An agent perfo
 - You cannot describe the acceptance criteria in 3 or fewer bullet points
 - It touches two or more independent subsystems (e.g., auth and billing)
 - You find yourself writing "and" in the task title (a sign it is two tasks)
+- Its pull request would pass about 300 changed lines or 10 files
+
+**Milestones and pull requests (MUST):** group tasks into milestones, each a result a person can
+check, and give every task its milestone, its repository, and its expected size in TASKS.md. One task
+is one pull request with one scope. Do not rely on remembering this: when the workspace declares
+`spec.sizeBudget` in `ua-checks.yaml`, the `pre-tool-use` gate refuses a `git commit` or
+`gh pr create` over it. An exception needs the `size_override` run flag set with a note, and the pull
+request body must then carry a line starting `Size budget override:`.
 </rules>
 
 ## Plan Document Template

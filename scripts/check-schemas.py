@@ -143,6 +143,13 @@ def plan_with(entry: dict) -> dict:
     return instance
 
 
+def with_budget(budget: dict) -> dict:
+    """A minimal plan declaring the given sizeBudget."""
+    instance = base_plan()
+    instance["spec"]["sizeBudget"] = budget
+    return instance
+
+
 def cases(schemas: dict[str, dict]) -> list[tuple[dict, str, dict, bool]]:
     graph, run, memory = schemas["workflow-graph"], schemas["run-state"], schemas["memory-record"]
     plan = schemas["check-plan"]
@@ -199,6 +206,12 @@ def cases(schemas: dict[str, dict]) -> list[tuple[dict, str, dict, bool]]:
         (memory, "memory accepts the confirmed status", merged(base_memory(), status="confirmed"), True),
 
         (plan, "plan accepts a minimal valid document", base_plan(), True),
+        (plan, "plan accepts a size budget",
+         with_budget({"lines": 300, "files": 10}), True),
+        (plan, "plan rejects a size budget with no positive limit",
+         with_budget({"lines": 0}), False),
+        (plan, "plan rejects an unknown size budget field",
+         with_budget({"lines": 300, "bytes": 1}), False),
         # The load-bearing one. An entry that declares nothing would resolve to a
         # verifier with no command, and a caller ignoring the error would read
         # that as a check with no problems.
