@@ -35,7 +35,7 @@ Decompose work into small, verifiable tasks with explicit acceptance criteria. G
 
 Before writing any code, operate in read-only mode:
 
-- Read the spec and relevant codebase sections
+- Read the spec, then run `ultragentic repomap` (add `--focus <dir>` for the area the spec touches) and read the files it ranks before choosing others. It is a command so it works on every host; the `ua_repo_map` MCP tool returns the same map.
 - Identify existing patterns and conventions
 - Map dependencies between components
 - Note risks and unknowns
