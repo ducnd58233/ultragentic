@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/ducnd58233/ultragentic/schemas/idea-decomposition.schema.json",
+  "title": "Idea decomposition",
+  "description": "Tuple shape for memory propose or RECORD when storing a decomposed research idea. Pattern only; ultragentic does not host a multi-million-idea vault.",
+  "type": "object",
+  "required": ["schemaVersion", "problem", "challenge", "gap", "intuition", "proposal"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "problem": { "type": "string", "minLength": 1 },
+    "challenge": { "type": "string", "minLength": 1 },
+    "gap": { "type": "string", "minLength": 1 },
+    "intuition": { "type": "string", "minLength": 1 },
+    "proposal": { "type": "string", "minLength": 1 },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "description": "Optional workspace slug that owns this idea."
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

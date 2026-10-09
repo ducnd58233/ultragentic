@@ -33,6 +33,16 @@ Hypothesis: a falsifiable claim, the test that could refute it, and when to stop
 
 <!-- FILL: one sentence in the form "If X, then Y, measured by Z". -->
 
+## Proposal fields
+
+<!-- FILL when this hypothesis carries a research proposal (see schemas/idea-proposal.schema.json). -->
+
+| Field | Content |
+|-------|---------|
+| Central novelty | FILL: one sentence |
+| Closest prior | FILL: closest work and how this differs |
+| Falsifiable predictions | FILL: what an experiment could refute |
+
 ## Prediction
 
 | Metric | Baseline | Predicted | Refuted if |

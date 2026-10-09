@@ -17,7 +17,7 @@ disable-model-invocation: true
 
 1. **Literature** - citation-first digest. MUST include:
    - **Applicability** - how each source maps to *this* topic (reuse / reject / gap).
-   - **Refine** - what to change before experiments.
+   - **Refine** - what to change before experiments, including **Methodological gap** (Gap Finder) and **Cross-domain mechanisms** (Innovator) per [`scientific-ideation`](../scientific-ideation/SKILL.md).
    - A fenced `mermaid` literature or claim→method diagram.
 2. **Hypothesis** - testable questions derived from Refine.
 3. **Experiment design** - PLAN with Mermaid setup (data → protocol → metrics → stop), plus TASKS, plus **Evaluation protocol** and **Data and terms** sections that freeze splits, metric, thresholds, `maxGap`, trial budget, and data licence and terms before the run. Rules: [`research-integrity`](../../references/research-integrity.md).
