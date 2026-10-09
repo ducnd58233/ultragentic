@@ -28,6 +28,19 @@
       "required": ["checks"],
       "additionalProperties": false,
       "properties": {
+        "sizeBudget": {
+          "type": "object",
+          "description": "The most one commit or pull request may change before the pre-tool-use gate refuses it. Zero leaves that dimension unlimited; at least one must be positive.",
+          "additionalProperties": false,
+          "anyOf": [
+            {"properties": {"lines": {"minimum": 1}}, "required": ["lines"]},
+            {"properties": {"files": {"minimum": 1}}, "required": ["files"]}
+          ],
+          "properties": {
+            "lines": {"type": "integer", "minimum": 0},
+            "files": {"type": "integer", "minimum": 0}
+          }
+        },
         "checks": {
           "type": "object",
           "description": "Keyed by the check name a graph verifier node writes. A node whose check is absent here cannot advance, which is deliberate: an unconfigured workspace must not be the most permissive one.",
