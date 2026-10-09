@@ -70,7 +70,7 @@ UI (Bugbot, cloud agents) stays on the Cursor host.
 
 Cursor does not expose Claude-style Seatbelt/bubblewrap through ultragentic.
 ultragentic `sandbox.yaml` remains a **runner port** (local/docker), not Cursor isolation.
-See [`claude-code-feature-map.md`](claude-code-feature-map.md) section "Sandbox truth".
+Mutating workspace bind/snapshot/tool/leave (`ua_sandbox_*`) is the same MCP/CLI surface on Cursor as on every other inventory host — see [`claude-code-feature-map.md`](claude-code-feature-map.md) section "Sandbox truth".
 </rules>
 
 ## Routing & discovery

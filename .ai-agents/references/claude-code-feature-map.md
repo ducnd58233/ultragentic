@@ -49,6 +49,8 @@ ultragentic `sandbox` is **not** Claude Code’s OS Bash sandbox.
 
 Config: `.agent-state/sandbox.yaml`. CLI: `ultragentic sandbox`. Embedded container/GPU inside the Go process stays declined ([`AGENTS.md`](../../AGENTS.md)). Codex `sandbox_mode` in `.codex/config.toml` is **Codex host** isolation, not this port.
 
+**Mutating workspace session (Ferrum-class, native):** bind a use-case with `ultragentic sandbox up` (or MCP after a run exists), capture/restore trees with `sandbox snapshot` / `sandbox restore` (hash-only run events), run confined `fs` / allowlisted `shell` / `git status|diff` / `validate` via `sandbox tool` or MCP `ua_sandbox_tool` (each result carries a recovery class), and leave only when declared checks passed (`sandbox leave` / `ua_sandbox_leave`). Do not invent a `ferrum-*` skill or CLI. Same surface for every inventory host (Claude Code, Codex, Cursor, Kimi Code, Open Code, Muse, Antigravity).
+
 </rules>
 
 ## Conditional hooks (Claude host)
