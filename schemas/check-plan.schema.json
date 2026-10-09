@@ -274,6 +274,24 @@
         "screen": {
           "$ref": "#/$defs/screen"
         },
+        "scans": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/checkName"},
+          "description": "For the bughunt verifier: other checks in this plan it runs itself, each of which must exit 0. The runtime refuses a name that is not another check with a command."
+        },
+        "classes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "string", "minLength": 1},
+          "description": "For the bughunt verifier: defect classes (race, injection, secrets, leak, resources, ...) bug_hunt/FINDINGS.md must have a table row for."
+        },
+        "requires": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "string", "minLength": 1},
+          "description": "Programs the command needs besides itself, such as the C compiler go test -race links with. doctor fails while any is not on PATH."
+        },
         "timeoutSeconds": {
           "type": "integer",
           "minimum": 1,

@@ -206,6 +206,10 @@ def cases(schemas: dict[str, dict]) -> list[tuple[dict, str, dict, bool]]:
         (memory, "memory accepts the confirmed status", merged(base_memory(), status="confirmed"), True),
 
         (plan, "plan accepts a minimal valid document", base_plan(), True),
+        (plan, "plan accepts bug hunt scans, classes and requires",
+         plan_with({"verifier": "bughunt", "scans": ["vet"], "classes": ["race"], "requires": ["gcc"]}), True),
+        (plan, "plan rejects an empty scans list",
+         plan_with({"verifier": "bughunt", "scans": []}), False),
         (plan, "plan accepts a size budget",
          with_budget({"lines": 300, "files": 10}), True),
         (plan, "plan rejects a size budget with no positive limit",
