@@ -29,6 +29,7 @@ Lookup table for skills under this folder. **After you create, rename, or delete
 | Citation-first topic investigation and digest | [`research-with-citations`](research-with-citations) | Facts must be source-backed; web research needed; Applicability+Mermaid when feeding experiments |
 | Non-code task delivery: acceptance rows, verification recipes per task class, reliability measurement | [`general-task-delivery`](general-task-delivery) | `/task`; the deliverable is a report, analysis, document, data job, ops step, or message to other people |
 | Domain-agnostic research loop (lit → experiment STATUS → findings) | [`researcher-harness`](researcher-harness) | `researcher-delivery` graph; host/CI compute; not product `/goal` ship |
+| Gap Finder, cross-domain Innovator, Report Writer checklist for novel proposals | [`scientific-ideation`](scientific-ideation) | Before RESEARCH Refine closes; with researcher-harness; not product `idea-refine` |
 | AI/ML model engineering across CV/NLP/speech/multimodal | [`ai-model-engineering`](ai-model-engineering) | Model training, fine-tuning, inference, evals, model/data cards, monitoring, AI product/model quality |
 | AI/ML research methodology and paper-to-experiment handoff | [`ai-research-methodology`](ai-research-methodology) | Literature review, model/method comparison, benchmark analysis, reproduction plans, ablations |
 | Tradeoff analysis with confidence and evidence | [`evidence-based-analysis`](evidence-based-analysis) | Choosing options from gathered evidence |

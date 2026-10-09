@@ -49,6 +49,7 @@ For skill and agent behavioral evaluation more broadly, see
 | Plan lifecycle metrics, feature flags, deprecation | skill | [`product-lifecycle-management`](../skills/product-lifecycle-management/SKILL.md) |
 | Staged rollout and rollback for a risky release | skill | [`shipping-and-launch`](../skills/shipping-and-launch/SKILL.md) |
 | Shape a vague feature idea into scoped options | skill | [`idea-refine`](../skills/idea-refine/SKILL.md) |
+| Find methodological gaps and cross-domain mechanisms for a research proposal | skill | [`scientific-ideation`](../skills/scientific-ideation/SKILL.md) |
 | Optimize a slow SQL/NoSQL query or explain plan | skill | [`database-query-optimization`](../skills/database-query-optimization/SKILL.md) |
 | Latency regressed on an API path and the client feels janky | skill | [`performance-optimization`](../skills/performance-optimization/SKILL.md) |
 | Production errors spiked and the behavior is unexplained | skill | [`debugging-and-error-recovery`](../skills/debugging-and-error-recovery/SKILL.md) |

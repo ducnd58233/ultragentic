@@ -43,6 +43,14 @@ Research digest: a question answered from cited sources, with what they mean for
 
 <!-- FILL: what to change in method, data, or scope because of these findings. -->
 
+### Methodological gap
+
+<!-- FILL: Gap Finder pass. Limitations in close same-domain priors that block the challenge. -->
+
+### Cross-domain mechanisms
+
+<!-- FILL: Innovator pass. At least one mechanism from outside the topic domain and how it could transfer. -->
+
 ## Map
 
 ```mermaid

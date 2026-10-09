@@ -30,11 +30,13 @@ Diagrams: [`diagram-authoring`](../references/diagram-authoring.md). Cursor rule
 3. Conflicts across sources
 4. **Applicability (MUST)** - table or section mapping each source to this topic: reuse / reject / gap
 5. **Refine (MUST)** - what to change in method, data, or scope before experiments
-6. **Mermaid diagram (MUST)** - literature map or claim→method flow in a ` ```mermaid ` fence
-7. `UNVERIFIED` items
-8. Final digest section
+6. **Methodological gap (MUST)** - Gap Finder pass over close same-domain priors ([`scientific-ideation`](../skills/scientific-ideation/SKILL.md))
+7. **Cross-domain mechanisms (MUST)** - Innovator pass with at least one out-of-domain mechanism ([`scientific-ideation`](../skills/scientific-ideation/SKILL.md))
+8. **Mermaid diagram (MUST)** - literature map or claim→method flow in a ` ```mermaid ` fence
+9. `UNVERIFIED` items
+10. Final digest section
 
-Create the digest with `ultragentic docs new RESEARCH --slug <slug> --title "<question>"`; its template already has the Applicability, Refine, and mermaid sections the gates read. Pass `ultragentic docs check` on it ([`docs-authoring`](../skills/docs-authoring/SKILL.md)).
+Run Gap Finder before Innovator closes Refine. Create the digest with `ultragentic docs new RESEARCH --slug <slug> --title "<question>"`; its template already has the Applicability, Refine (with gap and cross-domain subsections), and mermaid sections the gates read. Pass `ultragentic docs check` on it ([`docs-authoring`](../skills/docs-authoring/SKILL.md)).
 
 **Every cited URL must resolve (MUST).** Run `ultragentic docs check-citations <RESEARCH file>`
 before checkpointing. `checkpoint` runs the same check at `auto_research` and `literature` and

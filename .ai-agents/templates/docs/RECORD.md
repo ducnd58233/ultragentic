@@ -25,6 +25,8 @@ Record: one dated event (an experiment run, an incident, a meeting, a release) w
 
 <!-- FILL: why this happened, and links to the HYPOTHESIS, SPEC, or ticket it belongs to. -->
 
+<!-- Optional idea-decomposition (schemas/idea-decomposition.schema.json): problem, challenge, gap, intuition, proposal. For memory propose or a durable idea RECORD only; not a vault. -->
+
 </context>
 
 <procedure>
