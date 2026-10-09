@@ -36,10 +36,8 @@ ultragentic doctor
 
 If the binary is not on `PATH`, run no phase yet. Follow [`runtime-bootstrap.md`](../references/runtime-bootstrap.md): ask the user once to accept the runtime license, install it yourself with `ensure-runtime`, run `ultragentic doctor`, then continue. If the user declines or the install fails, **stop**.
 
-If the binary runs but `doctor` reports problems, **stop. Run no phase.** Do **not**
-claim the runtime is missing. Report the doctor failures and fix that workspace
-first. Tracking phases by reading a markdown file is the failure mode this rule
-exists to remove: it is the model marking its own work complete.
+If `doctor` reports problems, **stop. Run no phase.** Do not claim the runtime is
+missing; fix the workspace first. A markdown-only walk is the failure this rule removes.
 
 ### The four parts, and what each one owns
 
@@ -58,12 +56,14 @@ ultragentic verify     --slug <slug>
 ultragentic checkpoint --slug <slug> --check <name> --source <source> --passed
 ```
 
-Host agents derive slug and graph from the command and the objective; do not ask the user for them.
-Use `ultragentic auto "<objective>"` once the workspace opted in. Same graph, with
-gates answered by evidence and extra quality stages; the node-by-node
-difference is the table at the top of [`auto.md`](auto.md).
-Use `ultragentic research "<topic>"` or `ultragentic auto research "<topic>"` for the
-researcher graph. The next section covers how `goal` and `auto` choose among all of them.
+### Dispatcher features hosts must use (MUST)
+
+Doctor gates start. Use status/flags, `checkpoint`, `verify`, hooks, memory, `calc`, and for
+long steps `job start` then `job wait` (never shell-bg or PID polling). No markdown-only walk.
+
+Host agents derive slug and graph from the objective; do not ask for them.
+Use `ultragentic auto "<objective>"` once opted in (same graph; see [`auto.md`](auto.md)).
+Use `ultragentic research` / `auto research` for the researcher graph. Choosing the graph is next.
 
 ### Choosing the graph (MUST)
 

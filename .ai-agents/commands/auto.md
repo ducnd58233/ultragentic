@@ -74,6 +74,14 @@ first (check plan, docs layout, leftover `tmp/`, hooks). `merge: false` in the
 auto opt-in is a note, not a doctor failure: auto may still run and stops at a
 green PR for a person to merge.
 
+### Dispatcher features hosts must use (MUST)
+
+`ultragentic auto` / `auto research` refuse when doctor would fail. Drive the run with
+`run status` / `run flag`, `checkpoint` after artifacts, `verify` at verifiers, hooks,
+memory, `calc`, and for long steps `job start` then `job wait` (never shell-bg,
+Wait-Process, or PID polling). No markdown-only walk; see [`goal.md`](goal.md)
+"Runtime is required".
+
 **Three things you must not do, in order of how much damage they cause:**
 
 1. **Do not simulate the mode.** Walking the phases yourself and reporting them as done is the
