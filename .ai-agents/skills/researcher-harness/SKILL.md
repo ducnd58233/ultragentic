@@ -21,8 +21,8 @@ disable-model-invocation: true
    - A fenced `mermaid` literature or claim→method diagram.
 2. **Hypothesis** - testable questions derived from Refine.
 3. **Experiment design** - PLAN with Mermaid setup (data → protocol → metrics → stop), plus TASKS, plus **Evaluation protocol** and **Data and terms** sections that freeze splits, metric, thresholds, `maxGap`, trial budget, and data licence and terms before the run. Rules: [`research-integrity`](../../references/research-integrity.md).
-4. **Run** - host or CI only. Keep `experiment/STATUS.md` (`running|done|failed`).
-5. **Monitor** - `ua_verify` / `ua_experiment_status` until terminal.
+4. **Run** - host or CI only. Start anything long with `ultragentic job start --slug <slug> --host <client> -- <command>`; keep `experiment/STATUS.md` (`running|done|failed`).
+5. **Monitor** - wait with `ultragentic job wait <id> --slug <slug>` (in the background where the host reports its end, else with `--timeout 25m`), never a polling loop; then `ua_verify`, which fails while a run's job is still running.
 6. **Findings + writeup** - cite STATUS and artifacts; no orphan claims; state trials, failed runs, seed spread, coverage, and the selection-versus-held-out gap.
 
 Anti-fabrication: no model assertion as check evidence. Gates use `file_assert` / `human_event` / `exit_code` / `ci_api` only.

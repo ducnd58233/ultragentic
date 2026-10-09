@@ -229,8 +229,9 @@ licence or terms are a separate stop; see [`research-integrity`](../references/r
 `experiment_monitor` once a single `ultragentic verify` has come back, even when it came back
 `running` - that stands down a narrower, separate guard against being abandoned with nothing
 recorded at all, and it is not this section's bar. "Stop only when run status is terminal" above
-still applies while the experiment runs: see [`experiment.md`](experiment.md) "Watch it to completion
-(MUST)" for what that means in practice.
+still applies while the experiment runs: start the long step with `ultragentic job start` and wait with
+`ultragentic job wait`, never a polling loop; see [`experiment.md`](experiment.md) "Watch it to
+completion (MUST)" for the per-host form.
 
 When RESEARCH and PLAN are settled, `ultragentic checkpoint` and `ultragentic auto gate` both skip
 the approval gates and advance the run. Report results when the loop finishes; do not poll the
