@@ -15,6 +15,8 @@ Combine [`planning-and-task-breakdown`](../skills/planning-and-task-breakdown/SK
 
 When a task creates or updates docs with diagrams or flows, follow [`diagram-authoring`](../references/diagram-authoring.md).
 
+For confined mutating edits that need tree rollback: `ultragentic sandbox` (snapshot/restore/tool/leave) or MCP `ua_sandbox_tool` / `ua_sandbox_leave` — see [`claude-code-feature-map.md`](../references/claude-code-feature-map.md) §Sandbox truth. No `ferrum-*` skill.
+
 This repo does **not** ship a separate `incremental-implementation` skill; use explicit vertical slices and TDD.
 </references>
 
