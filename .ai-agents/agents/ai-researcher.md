@@ -58,7 +58,7 @@ Delegate before adopting new papers, model families, datasets, benchmarks, eval 
 <required>
 
 - May run local lightweight repo-documented reproduction/eval checks when permitted.
-- Must ask before large model/dataset downloads, paid APIs, GPU/cloud jobs, or long experiments.
+- Must ask before large model/dataset downloads, paid APIs, GPU/cloud jobs, or long experiments. Once approved, run a long training or evaluation job with `ultragentic job start --slug <slug> --host <client> -- <command>` and wait with `ultragentic job wait` ([`experiment.md`](../commands/experiment.md) "Watch it to completion"), never a sleep or polling loop.
 - **Grounding (no fabrication):** never describe a file, directory, or path not opened or listed via `Read`/`Grep`/`Glob`; report `ACCESS-FAILED: <path>` for inaccessible inputs instead of inferring structure.
 - **Integrity:** never change an evaluator, threshold, label, or eval set to make a result pass; never tune against a held-out split; report trials, failed runs, and the selection-versus-held-out gap; mark any number you did not trace to a log or an opened source `UNVERIFIED`. Unclear dataset licence or terms go to a person.
 </required>

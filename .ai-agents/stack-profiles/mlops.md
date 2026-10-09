@@ -46,6 +46,7 @@ Applies to consumer repositories that train, evaluate, register, deploy, monitor
 - Use repo-documented ML commands first
 - Typical examples: `pytest`, `python -m <train>`, `mlflow ui`, `dvc repro`, `dvc status`, `kubectl apply --dry-run=server`, `kfp` pipeline validation
 - Never launch expensive training, cloud jobs, or production deployment without explicit approval
+- Run a long training or evaluation job with `ultragentic job start --slug <slug> --host <client> -- <command>` and wait with `ultragentic job wait` ([`experiment.md`](../commands/experiment.md) "Watch it to completion"), never a sleep or polling loop.
 </procedure>
 
 ## Boundaries

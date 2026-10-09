@@ -47,6 +47,7 @@ Applies to consumer repositories that build, adapt, train, evaluate, serve, or m
 - Use repo-documented commands first
 - Typical examples: `pytest`, `python -m <package>.train --dry-run`, `python -m <package>.evaluate`, `mlflow ui`, `dvc status`, `dvc repro`, `ruff check .`, `mypy .`
 - Never launch expensive training, large downloads, paid API evals, GPU/cloud jobs, or publication without explicit approval
+- Run a long training or evaluation job with `ultragentic job start --slug <slug> --host <client> -- <command>` and wait with `ultragentic job wait` ([`experiment.md`](../commands/experiment.md) "Watch it to completion"), never a sleep or polling loop.
 </procedure>
 
 ## Boundaries
