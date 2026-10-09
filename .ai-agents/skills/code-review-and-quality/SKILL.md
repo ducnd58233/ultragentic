@@ -159,7 +159,7 @@ Tests reveal intent and coverage:
 
 ### Step 3: Review the Implementation
 
-Take the files and blocks to read from `ultragentic review scan`, not from your own pick, and read each one with `ultragentic review block` ([`commands/review.md`](../../commands/review.md) has the procedure). Then walk through the code with the five axes in mind:
+Take the files and blocks to read from `ultragentic review scan`, not from your own pick, and read each one with `ultragentic review block` ([`commands/review.md`](../../commands/review.md) has the procedure). A scan that read no source file exits non-zero; that is a wrong root or path, never a clean review. For callers and context outside the diff, run `ultragentic repomap --focus <changed dir>` rather than the `ua_repo_map` MCP tool, which not every host has registered. Then walk through the code with the five axes in mind:
 
 ```
 For each file changed:

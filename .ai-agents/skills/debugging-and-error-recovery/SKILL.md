@@ -99,7 +99,14 @@ npm test -- --testPathPattern="specific-file" --runInBand
 
 ### Step 2: Localize
 
-Narrow down WHERE the failure happens:
+Narrow down WHERE the failure happens. Start from the runtime, not from a guess at which files matter:
+
+```bash
+ultragentic repomap --focus <dir of the failing code>   # most referenced definitions, that area ranked first
+ultragentic review scan <path>                          # bug shapes the syntax tree shows: swallowed errors, self-comparisons, dead branches
+```
+
+Both are commands so they work on every host; the `ua_repo_map` MCP tool returns the same map where that server is registered. A scan or map that read no source file exits non-zero: fix `--root` or the path rather than reading the empty result as clean.
 
 ```
 Which layer is failing?
