@@ -278,25 +278,17 @@ Follow links from those files only as the task requires.
   loop the graph was built to run automatically. Traced by reading
   `runtime/internal/loop/runner.go`'s `Advance()`. Spec for this delivery: workspace slug
   `research-experiment-persistence`.
-- **Evidence.** `/goal` records verification under `.agent-state/runs/<date>/<slug>/<version>/` when that path is gitignored in the
-  workspace, redacted before write. See
-  [`goal-verification-records`](.ai-agents/references/goal-verification-records.md).
-  A leftover workspace-root `tmp/` tree fails `ultragentic doctor`; run
-  `ultragentic migrate docs-tmp` once if an old tree remains.
-- **PR product evidence (MUST).** Capture with `ultragentic previdence` into the active run's
-  `.agent-state/runs/<date>/<slug>/<version>/pr-evidence/` only; attach via `gh --attach`; refresh
-  Head after every tip commit. Never commit media. See [`pr-evidence.md`](.ai-agents/references/pr-evidence.md).
-- **Commit attribution.** Never add AI/agent co-author trailers or "Generated with ..." lines.
-  Commits use the human's git identity. Details:
-  [`git-workflow-and-versioning`](.ai-agents/skills/git-workflow-and-versioning/SKILL.md)
-  "No Agent Attribution".
-- **Secrets.** Never commit credentials. Read secrets only through configured secure paths or
-  environment variables.
-- **Gitignore is a commit boundary (MUST).** Before staging, read the **workspace root**
-  `.gitignore`. Never commit paths it excludes. Each repo defines its own rules: many consumer repos
-  track `docs/`; this toolkit gitignores `/docs/` and `/.agent-state/` (and `/tmp/`
-  so a leftover tree is not offered for commit). Ignore rules do not untrack files
-  already in git; remove stray tracked paths with `git rm --cached` (keep the local copy). Do not use
-  `git add -f` to bypass ignore for workspace-local deliverables.
+- **Evidence.** `/goal` writes under `.agent-state/runs/<date>/<slug>/<version>/` when gitignored;
+  redact before write ([`goal-verification-records`](.ai-agents/references/goal-verification-records.md)).
+  Leftover root `tmp/` fails doctor (`ultragentic migrate docs-tmp`).
+- **PR product evidence (MUST).** `ultragentic previdence` into that run's `pr-evidence/` only;
+  `gh --attach`; refresh Head on tip commits; never commit media
+  ([`pr-evidence.md`](.ai-agents/references/pr-evidence.md)).
+- **Commit attribution.** No AI co-author trailers; human identity only
+  ([`git-workflow-and-versioning`](.ai-agents/skills/git-workflow-and-versioning/SKILL.md)).
+- **Secrets.** Never commit credentials; use secure paths or environment variables.
+- **Gitignore is a commit boundary (MUST).** Before staging, read workspace-root `.gitignore`.
+  Never commit excluded paths. Ignore rules do not untrack files already in git
+  (`git rm --cached` keeps the local copy). Do not `git add -f` to bypass ignore.
 </delivery_gates>
 
