@@ -25,6 +25,12 @@ do not invent host-only or ad-hoc capture paths.
 3. **Evidence must be real and in scope.** Capture or import proof that matches this PR's
    change; include step-by-step reproduction. Fabricated, off-scope, or invented captures
    are forbidden. Docs-only work may use `Kind: none` with a one-line reason.
+3a. **Sensitive product PRs MUST omit capture.** For credentials, PII, or
+   security-sensitive UI/API (or an explicit sensitive feature), MUST NOT record or
+   attach product evidence (no png/mp4/transcript dumps). MUST declare
+   `Kind: redacted` with a one-line `Reason` so reviewers see deliberate omission.
+   MUST NEVER dump secrets into pr-evidence staging or PR attachments. Do **not**
+   use `Kind: none` for sensitivity omit (`none` stays docs-only / non-product).
 4. **Store captures under the run tree only** (staging):
    `.agent-state/runs/<date>/<slug>/<version>/pr-evidence/` (gitignored with `.agent-state/`).
 5. **Never commit** png, jpg, jpeg, webp, gif, mp4, webm, mov, or HAR as tracked repo files.
@@ -81,8 +87,15 @@ Kind: none
 Reason: docs-only charter edit; no product path
 ```
 
+```text
+Kind: redacted
+Reason: PII in security-sensitive UI; omit product capture
+```
+
 - `api` / `ui` require `Summary` and at least one `Files` basename (no paths).
-- `none` requires `Reason` and must not list files.
+- `none` requires `Reason` and must not list files (docs-only / non-product).
+- `redacted` requires `Reason` and must not list files; skip capture and attach
+  none (no png/mp4). Fail closed if capture is attempted.
 
 ## Capture
 
@@ -90,6 +103,8 @@ Reason: docs-only charter edit; no product path
 |------|-----------------|
 | api | Redacted curl-style request and response for the fixed or new path (text file under pr-evidence/). Prefer text over raw HAR. |
 | ui | `ultragentic previdence snapshot` and/or `previdence record`. If a browser or device tool already wrote a PNG/recording, import with `--source`. |
+| none | No capture (docs-only / non-product). |
+| redacted | No capture and no attach. Sensitivity omit for credentials / PII / security-sensitive UI/API. |
 
 ## Attach (GitHub CLI)
 
@@ -118,5 +133,5 @@ Files:
 ## Graph and checks
 
 - `open_pr` still confirms a PR exists (`gh pr view`).
-- `pr_evidence` runs the `previdence` verifier (`file_assert` on MANIFEST + ATTACHED + Head freshness, or kind none).
+- `pr_evidence` runs the `previdence` verifier (`file_assert` on MANIFEST + ATTACHED + Head freshness, or kind none/redacted).
 - Hosts share the same `ultragentic hook pre-tool-use` gate; no per-host bypass.

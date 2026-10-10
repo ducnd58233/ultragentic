@@ -285,6 +285,9 @@ Follow links from those files only as the task requires.
   `ultragentic previdence` into run `pr-evidence/` staging only; `gh --attach` or inline
   transcript; refresh Head on tip commits; never commit media or PR-comment only
   `.agent-state/.../pr-evidence/` paths ([`pr-evidence.md`](.ai-agents/references/pr-evidence.md)).
+  For sensitive PRs (credentials, PII, security-sensitive UI/API): MUST NOT record or
+  attach product evidence; MUST declare `Kind: redacted` with Reason; MUST NEVER dump
+  secrets into pr-evidence or PR attachments (`none` is docs-only, not sensitivity omit).
 - **Commit attribution.** No AI co-author trailers; human identity only
   ([`git-workflow-and-versioning`](.ai-agents/skills/git-workflow-and-versioning/SKILL.md)).
 - **Secrets.** Never commit credentials; use secure paths or environment variables.
