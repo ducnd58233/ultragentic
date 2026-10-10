@@ -192,8 +192,7 @@ Check the author's verification story:
 - What tests were run?
 - Did the build pass?
 - Was the change tested manually?
-- For UI changes: was evidence captured with ultragentic previdence snapshot|record and attached
-  with Head matching the PR tip (see pr-evidence.md)?
+- UI: `ultragentic previdence` capture attached with Head at tip (pr-evidence.md)?
 - Is there a before/after comparison?
 ```
 </procedure>
