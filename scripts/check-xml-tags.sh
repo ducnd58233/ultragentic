@@ -27,7 +27,7 @@ KNOWN="scope precedence always_on delivery_gates claude_specific other_harnesses
 
 # Document tags: the sections of deliverables under docs/<category>/<slug>/,
 # valid only in the templates that produce them. The runtime registry
-# (runtime/internal/shared/docmeta/doctype.go) is the source; a Go test keeps
+# (runtime/internal/pkg/docmeta/doctype.go) is the source; a Go test keeps
 # each template equal to its type, and this list equal to their union.
 DOC_TAGS="abstract approach consequences context decision findings hypothesis method open_questions options procedure question references requirements results revisions risks scope tasks verification"
 

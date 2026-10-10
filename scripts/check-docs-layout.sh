@@ -14,4 +14,4 @@ if [ -z "${UA_RUNTIME_DIR:-}" ]; then
   exit 0
 fi
 cd "$UA_RUNTIME_DIR"
-ULTRAGENTIC_TOOLKIT="$root" go test ./internal/shared/docmeta/ ./internal/docauthor/ -count=1
+ULTRAGENTIC_TOOLKIT="$root" go test ./internal/pkg/docmeta/ ./internal/docauthor/ -count=1
