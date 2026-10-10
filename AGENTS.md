@@ -281,9 +281,10 @@ Follow links from those files only as the task requires.
 - **Evidence.** `/goal` writes under `.agent-state/runs/<date>/<slug>/<version>/` when gitignored;
   redact before write ([`goal-verification-records`](.ai-agents/references/goal-verification-records.md)).
   Leftover root `tmp/` fails doctor (`ultragentic migrate docs-tmp`).
-- **PR product evidence (MUST).** `ultragentic previdence` into that run's `pr-evidence/` only;
-  `gh --attach`; refresh Head on tip commits; never commit media
-  ([`pr-evidence.md`](.ai-agents/references/pr-evidence.md)).
+- **PR product evidence (MUST).** For reviewers on the PR (not a local-path tip):
+  `ultragentic previdence` into run `pr-evidence/` staging only; `gh --attach` or inline
+  transcript; refresh Head on tip commits; never commit media or PR-comment only
+  `.agent-state/.../pr-evidence/` paths ([`pr-evidence.md`](.ai-agents/references/pr-evidence.md)).
 - **Commit attribution.** No AI co-author trailers; human identity only
   ([`git-workflow-and-versioning`](.ai-agents/skills/git-workflow-and-versioning/SKILL.md)).
 - **Secrets.** Never commit credentials; use secure paths or environment variables.

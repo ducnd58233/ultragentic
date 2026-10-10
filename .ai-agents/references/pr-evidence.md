@@ -4,26 +4,44 @@ description: Capture and attach PR product evidence without committing binaries
 
 # PR product evidence
 
-When a delivery run opens a pull request for a product-affecting change, prove the change on the
-PR itself. Keep captures out of git. **Use the runtime `ultragentic previdence` command** for
-snapshot and screen-record captures; do not invent host-only or ad-hoc capture paths.
+Prove product-affecting changes **on the pull request for reviewers** (humans and AI agents):
+so they can understand the change in context. Local
+`.agent-state/runs/<date>/<slug>/<version>/pr-evidence/` is a **gitignored staging tree only**.
+It is not a tip to the PR owner about where a snapshot lives on disk. Keep captures out of git.
+**Use the runtime `ultragentic previdence` command** for snapshot and screen-record captures;
+do not invent host-only or ad-hoc capture paths.
 
 <required>
 
 ## Rules (MUST)
 
-1. **Store captures under the run tree only:**
+1. **Audience is reviewers on the PR.** Evidence exists so reviewers understand the change.
+   Do **not** PR-comment only to tell the owner that a file sits under
+   `.agent-state/.../pr-evidence/`. Reviewers cannot open that path.
+2. **Never PR-comment RECORD/ATTACHED path dumps.** Comments that only paste or link
+   `RECORD.md` / `ATTACHED.md` (or other files) under `.agent-state/runs/.../pr-evidence/`
+   are forbidden. Put the proof on the PR: `gh --attach` for media, or inline the API
+   transcript / reproduction steps in the PR body or comment.
+3. **Evidence must be real and in scope.** Capture or import proof that matches this PR's
+   change; include step-by-step reproduction. Fabricated, off-scope, or invented captures
+   are forbidden. Docs-only work may use `Kind: none` with a one-line reason.
+4. **Store captures under the run tree only** (staging):
    `.agent-state/runs/<date>/<slug>/<version>/pr-evidence/` (gitignored with `.agent-state/`).
-2. **Never commit** png, jpg, jpeg, webp, gif, mp4, webm, mov, or HAR as tracked repo files.
+5. **Never commit** png, jpg, jpeg, webp, gif, mp4, webm, mov, or HAR as tracked repo files.
    `pre-tool-use` refuses `git add` of those extensions outside `.agent-state/`.
-3. **Capture via runtime:** `ultragentic previdence snapshot` and `ultragentic previdence record`
+6. **Capture via runtime:** `ultragentic previdence snapshot` and `ultragentic previdence record`
    (or `--source` to import a file into pr-evidence/). Skills and commands that need UI evidence
    MUST call these; browser/device tools may produce a file, then import with `--source`.
-4. **Write `MANIFEST.md` before `gh pr create`** on an active run. Without it the hook refuses create.
-5. **Attach to the PR, then write `ATTACHED.md` with `Head:`** set to the commit the capture proves.
-6. **On every new commit to an open PR:** recapture if the product path changed, re-attach, then
-   `ultragentic previdence refresh --slug <slug>`. Stale `Head` vs current `git HEAD` fails
-   `previdence check` / the `pr_evidence` verifier, and `pre-tool-use` refuses `git push`.
+7. **Write `MANIFEST.md` before `gh pr create`** on an active run. Without it the hook refuses create.
+8. **Attach to the PR for reviewers, then write `ATTACHED.md` with `Head:`** set to the commit
+   the capture proves. Staging paths in ATTACHED/RECORD are for the runtime gate, not the
+   reviewer-facing comment body.
+9. **On every new commit to an open PR:** recapture if the product path changed, re-attach on
+   the PR, then `ultragentic previdence refresh --slug <slug>`. Stale `Head` vs current
+   `git HEAD` fails `previdence check` / the `pr_evidence` verifier, and `pre-tool-use`
+   refuses `git push`.
+10. **Scrub leaks.** If a PR already has comments that only point at local pr-evidence paths,
+    edit or minimize them and replace with reviewer-visible proof (attach or inlined transcript).
 
 </required>
 

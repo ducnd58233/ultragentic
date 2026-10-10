@@ -53,10 +53,11 @@ Treat these as **blockers**, not observations - they are deterministic, so a mis
 - `ui-slop-guard` and `design-token-guard` are clean, or each exception is marked inline with a stated reason.
 - An automated accessibility audit reports **zero** WCAG failures, or every remaining failure is explained and explicitly accepted.
 - Render evidence exists at the supported breakpoints.
-- The open PR has product evidence attached per [`pr-evidence.md`](../references/pr-evidence.md)
-  (`pr_evidence` check / `ATTACHED.md` with Head matching current HEAD via
-  `ultragentic previdence refresh`); screenshots and recordings come from
-  `ultragentic previdence snapshot|record` and stay out of the git tree.
+- The open PR has reviewer-visible product evidence per [`pr-evidence.md`](../references/pr-evidence.md)
+  (`gh --attach` or inlined transcript; not a comment that only names
+  `.agent-state/.../pr-evidence/` paths). `pr_evidence` / `ATTACHED.md` Head must match HEAD
+  via `ultragentic previdence refresh`; captures come from `ultragentic previdence
+  snapshot|record` and stay out of the git tree.
 
 Where a check could not run, it must be reported as `UNVERIFIED: <reason>` - never as a pass. Run [`/design`](design.md) in audit mode to produce the missing evidence before re-running `/ship`.
 
