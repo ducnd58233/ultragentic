@@ -283,6 +283,11 @@ Follow links from those files only as the task requires.
   [`goal-verification-records`](.ai-agents/references/goal-verification-records.md).
   A leftover workspace-root `tmp/` tree fails `ultragentic doctor`; run
   `ultragentic migrate docs-tmp` once if an old tree remains.
+- **PR product evidence (MUST).** Product-affecting PRs capture proof with
+  `ultragentic previdence snapshot|record` under `.agent-state/runs/.../pr-evidence/` (never
+  commit media). Attach via `gh --attach`, bind `ATTACHED.md` Head with
+  `ultragentic previdence refresh` on open and again after every commit that changes the tip.
+  Stale Head fails closed. Rules: [`pr-evidence.md`](.ai-agents/references/pr-evidence.md).
 - **Commit attribution.** Never add AI or agent co-author trailers, "Generated with ..." lines, or
   robot-emoji attribution to commits or PR bodies. Commits belong to the human contributor's git
   identity, on every harness and for manual commits. How that is enforced, and what not to remove:

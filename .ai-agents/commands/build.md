@@ -62,11 +62,14 @@ For **one** task only (then stop or ask before starting the next task on a new b
 6. Run full tests and typecheck/build per project (`npm`/`pnpm`/`uv` as documented).
 7. **Disclosure pass (MUST, before commit):** apply [`secure-by-default`](../skills/secure-by-default/SKILL.md) to the diff. For every sink the task added or changed (log call, response body, client storage, analytics event, error path, env var), name what goes into it. A clean runtime `sensitive-data-guard` finding set is a floor, not evidence. Channel detail: [`sensitive-data-exposure.md`](../references/sensitive-data-exposure.md).
 8. Commit with a human-friendly conventional message, `type(scope): subject`, that matches the branch. Use plain words, no AI-tell filler, no emojis/icons, no em-dash. **MUST NOT** add AI/agent co-author trailers (`Co-Authored-By: ...`) or "Generated with ..." lines; attribute commits solely to the human's git identity.
-9. **PR evidence before open (MUST).** Before `gh pr create`, capture product proof under
-   `.agent-state/runs/<date>/<slug>/<version>/pr-evidence/` and write `MANIFEST.md`. Backend: API
-   request/response transcript. Frontend: screenshot and/or recording. Docs-only: `Kind: none` with
-   a reason. Attach with `gh ... --attach` (or text for API); write `ATTACHED.md`. Never `git add`
-   evidence binaries. See [`pr-evidence.md`](../references/pr-evidence.md).
+9. **PR evidence before open and on every later commit (MUST).** Capture with
+   `ultragentic previdence snapshot` / `previdence record` (or `--source` import) into
+   `.agent-state/runs/<date>/<slug>/<version>/pr-evidence/`, write `MANIFEST.md`, attach with
+   `gh --attach`, then `ultragentic previdence refresh` so `ATTACHED.md` Head matches HEAD.
+   Backend: API transcript. Frontend: runtime snapshot/record only (no ad-hoc host capture path).
+   Docs-only: `Kind: none` with a reason. After new commits on an open PR, recapture/reattach/refresh
+   before push; stale Head fails closed. Never commit evidence binaries. See
+   [`pr-evidence.md`](../references/pr-evidence.md).
 10. **Set the task `done` in `TASKS.md` and `task_lists`, and tick its acceptance checkboxes.** Both
    places, same edit, before the next verifier runs: `task_complete` reads `task_lists` to decide
    whether work remains, so a status written after it ran sends the run back through a whole build

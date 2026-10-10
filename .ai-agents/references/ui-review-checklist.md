@@ -44,7 +44,7 @@ Mechanical review list for UI diffs. Use from [`/review`](../commands/review.md)
 
 ### Evidence
 
-- [ ] Render or screenshot evidence attached for visual changes
+- [ ] Render evidence from `ultragentic previdence snapshot|record`, attached to the PR with Head current
 - [ ] Deterministic gates run when the skill requires them (`ui-slop-guard`, a11y checks)
 
 </verification>

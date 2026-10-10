@@ -54,7 +54,9 @@ Treat these as **blockers**, not observations - they are deterministic, so a mis
 - An automated accessibility audit reports **zero** WCAG failures, or every remaining failure is explained and explicitly accepted.
 - Render evidence exists at the supported breakpoints.
 - The open PR has product evidence attached per [`pr-evidence.md`](../references/pr-evidence.md)
-  (`pr_evidence` check / `ATTACHED.md`); screenshots and recordings stay out of the git tree.
+  (`pr_evidence` check / `ATTACHED.md` with Head matching current HEAD via
+  `ultragentic previdence refresh`); screenshots and recordings come from
+  `ultragentic previdence snapshot|record` and stay out of the git tree.
 
 Where a check could not run, it must be reported as `UNVERIFIED: <reason>` - never as a pass. Run [`/design`](design.md) in audit mode to produce the missing evidence before re-running `/ship`.
 

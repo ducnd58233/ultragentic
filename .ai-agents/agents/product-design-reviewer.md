@@ -17,7 +17,8 @@ Apply [`product-design-systems`](../skills/product-design-systems/SKILL.md), [`u
 
 <context>
 
-- Inputs: changed UI files, screenshots/design links, tokens, component docs, Storybook, acceptance criteria.
+- Inputs: changed UI files, design links, tokens, component docs, Storybook, acceptance criteria, and
+  PR UI evidence from `ultragentic previdence snapshot|record` under pr-evidence/ (never git-tracked media).
 - Outputs: prioritized design/UX findings with concrete fixes and verification guidance.
 </context>
 
