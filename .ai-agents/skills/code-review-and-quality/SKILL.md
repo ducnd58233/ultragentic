@@ -189,11 +189,9 @@ This prevents authors from treating all feedback as mandatory and wasting time o
 Check the author's verification story:
 
 ```
-- What tests were run?
-- Did the build pass?
-- Was the change tested manually?
-- Are there screenshots for UI changes?
-- Is there a before/after comparison?
+- Tests / build / manual?
+- UI: ultragentic previdence at tip?
+- Before/after?
 ```
 </procedure>
 

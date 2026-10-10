@@ -15,7 +15,7 @@ Combine [`planning-and-task-breakdown`](../skills/planning-and-task-breakdown/SK
 
 When a task creates or updates docs with diagrams or flows, follow [`diagram-authoring`](../references/diagram-authoring.md).
 
-For confined mutating edits that need tree rollback: `ultragentic sandbox` (snapshot/restore/tool/leave) or MCP `ua_sandbox_tool` / `ua_sandbox_leave` — see [`claude-code-feature-map.md`](../references/claude-code-feature-map.md) §Sandbox truth. No `ferrum-*` skill.
+For confined mutating edits that need tree rollback: `ultragentic sandbox` (snapshot/restore/tool/leave) or MCP `ua_sandbox_tool` / `ua_sandbox_leave` — see [`claude-code-feature-map.md`](../references/claude-code-feature-map.md) §Sandbox truth.
 
 This repo does **not** ship a separate `incremental-implementation` skill; use explicit vertical slices and TDD.
 </references>
@@ -62,7 +62,16 @@ For **one** task only (then stop or ask before starting the next task on a new b
 6. Run full tests and typecheck/build per project (`npm`/`pnpm`/`uv` as documented).
 7. **Disclosure pass (MUST, before commit):** apply [`secure-by-default`](../skills/secure-by-default/SKILL.md) to the diff. For every sink the task added or changed (log call, response body, client storage, analytics event, error path, env var), name what goes into it. A clean runtime `sensitive-data-guard` finding set is a floor, not evidence. Channel detail: [`sensitive-data-exposure.md`](../references/sensitive-data-exposure.md).
 8. Commit with a human-friendly conventional message, `type(scope): subject`, that matches the branch. Use plain words, no AI-tell filler, no emojis/icons, no em-dash. **MUST NOT** add AI/agent co-author trailers (`Co-Authored-By: ...`) or "Generated with ..." lines; attribute commits solely to the human's git identity.
-9. **Set the task `done` in `TASKS.md` and `task_lists`, and tick its acceptance checkboxes.** Both
+9. **PR evidence before open and on every later commit (MUST).** For reviewers on the PR
+   (not a tip about local staging paths): capture with `ultragentic previdence snapshot` /
+   `previdence record` (or `--source`) into run `pr-evidence/` staging, write `MANIFEST.md`,
+   put proof on the PR via `gh --attach` or an inlined transcript, then
+   `ultragentic previdence refresh` so `ATTACHED.md` Head matches HEAD. Never PR-comment only
+   `.agent-state/.../pr-evidence/` paths. Backend: API transcript. Frontend: runtime
+   snapshot/record only. Docs-only: `Kind: none` with a reason. After tip commits,
+   recapture/reattach/refresh before push; stale Head fails closed. Never commit media. See
+   [`pr-evidence.md`](../references/pr-evidence.md).
+10. **Set the task `done` in `TASKS.md` and `task_lists`, and tick its acceptance checkboxes.** Both
    places, same edit, before the next verifier runs: `task_complete` reads `task_lists` to decide
    whether work remains, so a status written after it ran sends the run back through a whole build
    cycle for a task that was already finished. Report branch name and PR link if created.

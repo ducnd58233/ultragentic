@@ -22,7 +22,7 @@ Slash-style prompts live in this folder as `*.md`. **Claude Code** commonly reso
 | Analyze evidence into recommendation | [`analyze.md`](analyze.md) | Digest/evidence available |
 | Parallel evidence investigation with audit | [`investigate.md`](investigate.md) | Multi-faceted citation question; merge required; single-lane research uses `research.md` |
 | Plan tasks from spec | [`plan.md`](plan.md) | Spec exists |
-| Implement next task (TDD) | [`build.md`](build.md) | One branch/PR per planned task; same-task feedback on same branch; new task = new branch; never merge to `main`; confined mutating edits use `ultragentic sandbox` / `ua_sandbox_*` (not a ferrum skill) |
+| Implement next task (TDD) | [`build.md`](build.md) | One branch/PR per planned task; same-task feedback on same branch; new task = new branch; never merge to `main`; confined mutating edits use `ultragentic sandbox` / `ua_sandbox_*` |
 | Auto-path SPEC expectation review | [`expectation.md`](expectation.md) | Write `expectation/REVIEW.md`, then verify; fail reopens plan |
 | Auto-path bug hunt after e2e | [`bug-hunt.md`](bug-hunt.md) | Write `bug_hunt/FINDINGS.md`, then verify; fail reopens plan |
 | Auto-path release readiness after ship | [`release.md`](release.md) | Write `release/REVIEW.md`, then verify; fail routes to build |

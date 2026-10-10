@@ -53,8 +53,19 @@ Treat these as **blockers**, not observations - they are deterministic, so a mis
 - `ui-slop-guard` and `design-token-guard` are clean, or each exception is marked inline with a stated reason.
 - An automated accessibility audit reports **zero** WCAG failures, or every remaining failure is explained and explicitly accepted.
 - Render evidence exists at the supported breakpoints.
+- The open PR has reviewer-visible product evidence per [`pr-evidence.md`](../references/pr-evidence.md)
+  (`gh --attach` or inlined transcript; not a comment that only names
+  `.agent-state/.../pr-evidence/` paths). `pr_evidence` / `ATTACHED.md` Head must match HEAD
+  via `ultragentic previdence refresh`; captures come from `ultragentic previdence
+  snapshot|record` and stay out of the git tree.
 
 Where a check could not run, it must be reported as `UNVERIFIED: <reason>` - never as a pass. Run [`/design`](design.md) in audit mode to produce the missing evidence before re-running `/ship`.
+
+### API evidence gate (MUST, when the change touches a backend path)
+
+- A redacted request/response transcript for the fixed or new path is attached to the PR (body or
+  comment), declared in `pr-evidence/MANIFEST.md` with `Kind: api`, and recorded in `ATTACHED.md`.
+- Do not commit HAR dumps or other capture binaries into the repository.
 
 ## Phase C - Decision
 
@@ -74,6 +85,7 @@ a person re-deriving it from chat prose. One line per element, no other text:
 
 ```text
 Ship Decision: GO
+Evidence: PR <url> Head <sha> files: after.png
 Specialist: code-reviewer -> PASS
 Specialist: security-auditor -> PASS
 Specialist: test-engineer -> PASS
@@ -87,10 +99,21 @@ BLOCKER: <one line per blocking finding>
 Specialist: code-reviewer -> FAIL
 ```
 
-A GO line carries zero `BLOCKER:` lines; a NO-GO line carries at least one — the two must agree, or
-the file is not evidence of either state. Include a `Specialist:` line only for a lane that actually
-ran; skipping fan-out per this file's own triviality rule means zero `Specialist:` lines, not
-fabricated ones. Parsed by `runtime/internal/shipdecision`.
+When product evidence was required and the agent **cannot analyze** the capture (no vision, unreadable
+media, tool failure), do not invent GO. Record NO-GO with `need_human` instead of a fake Evidence cite:
+
+```text
+Ship Decision: NO-GO
+need_human: <one line reason the agent could not analyze the capture>
+```
+
+A GO line carries zero `BLOCKER:` lines and zero `need_human:` lines; a NO-GO line carries at least one
+`BLOCKER:` or one `need_human:` — those must agree with the verdict, or the file is not evidence of
+either state. For a product-evidence run, GO should include an `Evidence:` line citing the PR URL,
+Head, and/or file basenames the agent actually reviewed. `Evidence:` and `need_human:` are mutually
+exclusive. Include a `Specialist:` line only for a lane that actually ran; skipping fan-out per this
+file's own triviality rule means zero `Specialist:` lines, not fabricated ones. Parsed by
+`runtime/internal/shipdecision`.
 
 ### Merge gate (MUST)
 

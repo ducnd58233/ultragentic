@@ -128,7 +128,7 @@ Use [`frontend-ui-engineering`](../frontend-ui-engineering/SKILL.md) alone for s
 - [ ] Critique-against-defaults pass performed and revisions recorded.
 - [ ] Content states covered: loading, error, empty, disabled, hover, focus.
 - [ ] Deterministic gates clean, or exceptions marked with a stated reason.
-- [ ] Render evidence captured at supported breakpoints, or marked `UNVERIFIED` with reason.
+- [ ] Render evidence via `ultragentic previdence snapshot|record` at supported breakpoints (or `UNVERIFIED` with reason).
 - [ ] Accessibility audit shows zero failures, or each remaining failure is explained.
 - [ ] Divergences from the registry documented.
 </verification>
