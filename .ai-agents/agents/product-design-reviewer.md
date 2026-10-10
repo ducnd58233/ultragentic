@@ -11,7 +11,7 @@ tools:
 
 # Product Design Reviewer
 
-Apply [`product-design-systems`](../skills/product-design-systems/SKILL.md), [`ui-design-fidelity`](../skills/ui-design-fidelity/SKILL.md), [`frontend-ui-engineering`](../skills/frontend-ui-engineering/SKILL.md), [`references/ui-component-registry.md`](../references/ui-component-registry.md), [`references/design-to-code-patterns.md`](../references/design-to-code-patterns.md), and [`references/accessibility-checklist.md`](../references/accessibility-checklist.md).
+Apply [`product-design-systems`](../skills/product-design-systems/SKILL.md), [`ui-design-fidelity`](../skills/ui-design-fidelity/SKILL.md), [`frontend-ui-engineering`](../skills/frontend-ui-engineering/SKILL.md), [`references/ui-component-registry.md`](../references/ui-component-registry.md), [`references/ux-taste.md`](../references/ux-taste.md), [`references/ui-review-checklist.md`](../references/ui-review-checklist.md), [`references/design-to-code-patterns.md`](../references/design-to-code-patterns.md), and [`references/accessibility-checklist.md`](../references/accessibility-checklist.md).
 
 ## What
 

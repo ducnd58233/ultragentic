@@ -109,6 +109,8 @@ For skill and agent behavioral evaluation more broadly, see
 | Write up our inference latency research as a document in the repo | skill | [`docs-authoring`](../skills/docs-authoring/SKILL.md) |
 | Manage services, users, cron, and disk on a Linux host | skill | [`system-administration-ops`](../skills/system-administration-ops/SKILL.md) |
 | Match an implemented screen to the handoff pixel for pixel | skill | [`ui-design-fidelity`](../skills/ui-design-fidelity/SKILL.md) |
+| Make a screen less generic with clear hierarchy and loading empty error states | reference | [`ux-taste.md`](../references/ux-taste.md) |
+| Review a pull request screen for hierarchy states anti-slop and evidence before merge | reference | [`ui-review-checklist.md`](../references/ui-review-checklist.md) |
 | Figure out which asset to load for the work in front of me | skill | [`using-agent-skills`](../skills/using-agent-skills/SKILL.md) |
 </references>
 
