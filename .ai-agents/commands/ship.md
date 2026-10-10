@@ -84,6 +84,7 @@ a person re-deriving it from chat prose. One line per element, no other text:
 
 ```text
 Ship Decision: GO
+Evidence: PR <url> Head <sha> files: after.png
 Specialist: code-reviewer -> PASS
 Specialist: security-auditor -> PASS
 Specialist: test-engineer -> PASS
@@ -97,10 +98,21 @@ BLOCKER: <one line per blocking finding>
 Specialist: code-reviewer -> FAIL
 ```
 
-A GO line carries zero `BLOCKER:` lines; a NO-GO line carries at least one — the two must agree, or
-the file is not evidence of either state. Include a `Specialist:` line only for a lane that actually
-ran; skipping fan-out per this file's own triviality rule means zero `Specialist:` lines, not
-fabricated ones. Parsed by `runtime/internal/shipdecision`.
+When product evidence was required and the agent **cannot analyze** the capture (no vision, unreadable
+media, tool failure), do not invent GO. Record NO-GO with `need_human` instead of a fake Evidence cite:
+
+```text
+Ship Decision: NO-GO
+need_human: <one line reason the agent could not analyze the capture>
+```
+
+A GO line carries zero `BLOCKER:` lines and zero `need_human:` lines; a NO-GO line carries at least one
+`BLOCKER:` or one `need_human:` — those must agree with the verdict, or the file is not evidence of
+either state. For a product-evidence run, GO should include an `Evidence:` line citing the PR URL,
+Head, and/or file basenames the agent actually reviewed. `Evidence:` and `need_human:` are mutually
+exclusive. Include a `Specialist:` line only for a lane that actually ran; skipping fan-out per this
+file's own triviality rule means zero `Specialist:` lines, not fabricated ones. Parsed by
+`runtime/internal/shipdecision`.
 
 ### Merge gate (MUST)
 

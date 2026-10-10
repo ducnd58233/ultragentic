@@ -29,13 +29,16 @@ snapshot and screen-record captures; do not invent host-only or ad-hoc capture p
 
 ## Runtime commands
 
+Usage and flags live in the runtime registry. Print them with:
+
 ```sh
-ultragentic previdence snapshot --slug <slug> --name after.png
-ultragentic previdence snapshot --slug <slug> --name after.png --source /tmp/shot.png
-ultragentic previdence record   --slug <slug> --name demo.webm --seconds 8
-ultragentic previdence refresh  --slug <slug>
-ultragentic previdence check    --slug <slug>
+ultragentic help previdence
+# or: ultragentic previdence --help
 ```
+
+Typical forms: `previdence snapshot|record --slug <slug> --name <file>` (optional
+`--source` import), then `previdence refresh` / `previdence check`. Do not copy
+usage lines into other docs; change `cmd/registry.go` and regenerate help.
 
 `RECORD.md` under pr-evidence/ is append-only (Captured / Mode / Name / Head).
 
