@@ -53,8 +53,16 @@ Treat these as **blockers**, not observations - they are deterministic, so a mis
 - `ui-slop-guard` and `design-token-guard` are clean, or each exception is marked inline with a stated reason.
 - An automated accessibility audit reports **zero** WCAG failures, or every remaining failure is explained and explicitly accepted.
 - Render evidence exists at the supported breakpoints.
+- The open PR has product evidence attached per [`pr-evidence.md`](../references/pr-evidence.md)
+  (`pr_evidence` check / `ATTACHED.md`); screenshots and recordings stay out of the git tree.
 
 Where a check could not run, it must be reported as `UNVERIFIED: <reason>` - never as a pass. Run [`/design`](design.md) in audit mode to produce the missing evidence before re-running `/ship`.
+
+### API evidence gate (MUST, when the change touches a backend path)
+
+- A redacted request/response transcript for the fixed or new path is attached to the PR (body or
+  comment), declared in `pr-evidence/MANIFEST.md` with `Kind: api`, and recorded in `ATTACHED.md`.
+- Do not commit HAR dumps or other capture binaries into the repository.
 
 ## Phase C - Decision
 

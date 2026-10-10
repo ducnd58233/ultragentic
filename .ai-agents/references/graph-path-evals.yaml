@@ -37,6 +37,7 @@ spec:
         - check: {name: slop, passed: true, source: exit_code}
         - result: {changes_requested: false}
         - check: {name: pr_open, passed: true, source: exit_code}
+        - check: {name: pr_evidence, passed: true, source: file_assert}
         - check: {name: ci, passed: true, source: ci_api}
         - check: {name: reviews, passed: true, source: human_event}
         - check: {name: ship, passed: true, source: human_event}
@@ -58,6 +59,7 @@ spec:
           - slop
           - review
           - open_pr
+          - pr_evidence
           - pr_checks
           - external_reviews
           - ship
@@ -159,6 +161,7 @@ spec:
         - check: {name: slop, passed: true, source: exit_code}
         - result: {changes_requested: false}
         - check: {name: pr_open, passed: true, source: exit_code}
+        - check: {name: pr_evidence, passed: true, source: file_assert}
         - check: {name: ci, passed: true, source: ci_api}
         - check: {name: reviews, passed: true, source: human_event}
         - check: {name: ship, passed: true, source: human_event}
@@ -179,6 +182,7 @@ spec:
           - slop
           - review
           - open_pr
+          - pr_evidence
           - pr_checks
           - external_reviews
           - ship
@@ -225,6 +229,7 @@ spec:
         - check: {name: slop, passed: true, source: exit_code}
         - result: {changes_requested: false}
         - check: {name: pr_open, passed: true, source: exit_code}
+        - check: {name: pr_evidence, passed: true, source: file_assert}
         - check: {name: ci, passed: true, source: ci_api}
         - check: {name: reviews, passed: true, source: human_event}
         - check: {name: ship, passed: true, source: human_event}
@@ -237,6 +242,7 @@ spec:
         - check: {name: slop, passed: true, source: exit_code}
         - result: {changes_requested: false}
         - check: {name: pr_open, passed: true, source: exit_code}
+        - check: {name: pr_evidence, passed: true, source: file_assert}
         - check: {name: ci, passed: true, source: ci_api}
         - check: {name: reviews, passed: true, source: human_event}
         - check: {name: ship, passed: true, source: human_event}
@@ -255,6 +261,7 @@ spec:
           - slop
           - review
           - open_pr
+          - pr_evidence
           - pr_checks
           - external_reviews
           - ship
@@ -267,6 +274,7 @@ spec:
           - slop
           - review
           - open_pr
+          - pr_evidence
           - pr_checks
           - external_reviews
           - ship
@@ -605,6 +613,7 @@ spec:
         - check: {name: experiment_done, passed: true, source: file_assert}
         - check: {name: results_acceptable, passed: true, source: file_assert}
         - check: {name: pr_open, passed: true, source: exit_code}
+        - check: {name: pr_evidence, passed: true, source: file_assert}
         - check: {name: ci, passed: true, source: exit_code}
         - check: {name: reviews, passed: true, source: ci_api}
         - check: {name: ship, passed: true, source: file_assert}
@@ -634,6 +643,7 @@ spec:
           - experiment_monitor
           - results_eval
           - open_pr
+          - pr_evidence
           - pr_checks
           - external_reviews
           - ship
@@ -666,6 +676,7 @@ spec:
         - check: {name: experiment_done, passed: true, source: file_assert}
         - check: {name: results_acceptable, passed: true, source: file_assert}
         - check: {name: pr_open, passed: true, source: exit_code}
+        - check: {name: pr_evidence, passed: true, source: file_assert}
         - check: {name: ci, passed: true, source: exit_code}
         - check: {name: reviews, passed: true, source: ci_api}
         - check: {name: ship, passed: true, source: file_assert}
@@ -694,6 +705,7 @@ spec:
           - experiment_monitor
           - results_eval
           - open_pr
+          - pr_evidence
           - pr_checks
           - external_reviews
           - ship
@@ -946,6 +958,7 @@ spec:
         - check: {name: slop, passed: true, source: exit_code}
         - result: {changes_requested: false}
         - check: {name: pr_open, passed: true, source: exit_code}
+        - check: {name: pr_evidence, passed: true, source: file_assert}
         - check: {name: ci, passed: true, source: ci_api}
         - check: {name: reviews, passed: true, source: human_event}
         - check: {name: ship, passed: true, source: human_event}
@@ -970,6 +983,7 @@ spec:
           - slop
           - review
           - open_pr
+          - pr_evidence
           - pr_checks
           - external_reviews
           - ship
@@ -997,6 +1011,7 @@ spec:
         - check: {name: slop, passed: true, source: exit_code}
         - result: {changes_requested: false}
         - check: {name: pr_open, passed: true, source: exit_code}
+        - check: {name: pr_evidence, passed: true, source: file_assert}
         - check: {name: ci, passed: true, source: ci_api}
         - check: {name: reviews, passed: true, source: human_event}
         - check: {name: ship, passed: true, source: human_event}
@@ -1024,6 +1039,7 @@ spec:
           - slop
           - review
           - open_pr
+          - pr_evidence
           - pr_checks
           - external_reviews
           - ship
@@ -1054,6 +1070,7 @@ spec:
         - check: {name: slop, passed: true, source: exit_code}
         - result: {changes_requested: false}
         - check: {name: pr_open, passed: true, source: exit_code}
+        - check: {name: pr_evidence, passed: true, source: file_assert}
         - check: {name: ci, passed: true, source: ci_api}
         - check: {name: reviews, passed: true, source: human_event}
         - check: {name: ship, passed: true, source: human_event}
@@ -1081,6 +1098,7 @@ spec:
           - slop
           - review
           - open_pr
+          - pr_evidence
           - pr_checks
           - external_reviews
           - ship

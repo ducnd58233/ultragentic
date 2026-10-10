@@ -94,6 +94,14 @@ spec:
       args: [pr, view, --json, url]
       timeoutSeconds: 120
 
+    pr_evidence:
+      verifier: previdence
+      description: >-
+        Reads .agent-state/runs/<date>/<slug>/<version>/pr-evidence/MANIFEST.md
+        and ATTACHED.md. Passes for kind none with a reason, or for api/ui when
+        capture files exist and ATTACHED records the PR URL and attach method.
+        Evidence binaries must stay under .agent-state/, never in the git tree.
+
     ci:
       description: Required PR checks. Exits non-zero while any are failing or still pending.
       command: gh
