@@ -117,6 +117,22 @@ Rules moved out of the always-loaded charter ([`AGENTS.md`](../../AGENTS.md)) so
     `schemas/tasks.schema.json`'s own field names).
 </rules>
 
+## UI work
+
+<rules>
+
+- **Design loop (MUST):** when building, reshaping, or reviewing user-facing UI, run
+  [`/design`](../commands/design.md) and follow
+  [`ui-design-fidelity`](../skills/ui-design-fidelity/SKILL.md). Do not invent a parallel design
+  stack; extend the project registry and these assets.
+- **Taste and review (MUST):** load [`ux-taste.md`](ux-taste.md) for hierarchy, empty/loading/error
+  states, and anti-slop. Before calling a UI change done, run
+  [`ui-review-checklist.md`](ui-review-checklist.md). Structure and a11y still go through
+  [`frontend-ui-engineering`](../skills/frontend-ui-engineering/SKILL.md) and
+  [`accessibility-checklist.md`](accessibility-checklist.md).
+
+</rules>
+
 ## Paths and platforms
 
 <rules>
