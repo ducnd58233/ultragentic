@@ -138,12 +138,12 @@ ultragentic job status <id> --slug <slug>                 # one reading, no wait
 ```
 
 How to wait depends on the host. `job start --host <client>` prints the right form; the runtime's host
-table records which hosts report a background command's end.
+table (`BackgroundEndNotice`) records which hosts report a background command's end.
 
 | Host | How to wait | What happens |
 |---|---|---|
-| Claude Code | Run `ultragentic job wait` as a background command and end the turn | The host tells you once when the job ends; the Stop hook does not block a run whose job is running |
-| Every other host | Run `ultragentic job wait --timeout 25m` in the foreground | It returns when the job ends; on exit 124 run the same command again |
+| Claude Code, Cursor | Run `ultragentic job wait` as a background command and end the turn | The host tells you once when the job ends; on Claude Code the Stop hook does not block a run whose job is running |
+| Codex, Open Code, Muse, Kimi Code, Antigravity | Run `ultragentic job wait --timeout 25m` in the foreground | It returns when the job ends; on exit 124 run the same command again |
 
 When the wait returns, read its exit code and log tail, update STATUS.md (`done` or `failed`, with a
 `judgement:` line), and call `ua_verify`. A job whose supervisor died without an exit record is
