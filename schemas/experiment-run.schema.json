@@ -30,8 +30,8 @@
     },
     "metrics": {
       "type": "object",
-      "description": "metrics.json: the same {metrics, thresholds, integrity} shape experiment/METRICS.json uses, so one parser reads both. integrity is required: a metric with no record of which data it was chosen on cannot be told apart from a tuned one.",
-      "required": ["metrics", "thresholds", "integrity"],
+      "description": "metrics.json: the same {metrics, thresholds, evidence, integrity} shape experiment/METRICS.json uses, so one parser reads both. evidence and integrity are required: a metric with no backing file or no record of which data it was chosen on is self-claim.",
+      "required": ["metrics", "thresholds", "evidence", "integrity"],
       "additionalProperties": false,
       "properties": {
         "metrics": {
@@ -57,6 +57,14 @@
                 "type": "number"
               }
             }
+          }
+        },
+        "evidence": {
+          "type": "object",
+          "description": "Metric name to a relative path under the experiment folder that produced the value. Each threshold name must have an entry that resolves to an existing file.",
+          "additionalProperties": {
+            "type": "string",
+            "minLength": 1
           }
         },
         "integrity": {
