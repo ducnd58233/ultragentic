@@ -39,6 +39,7 @@ Lookup table for shared checklists and pattern docs under this folder. These fil
 | Hierarchy, empty/loading/error states, anti-slop taste | [`ux-taste.md`](ux-taste.md) | `ui-design-fidelity`, `/design`, `frontend-ui-engineering` |
 | UI PR review: registry, hierarchy, states, a11y, evidence | [`ui-review-checklist.md`](ui-review-checklist.md) | `/review`, `product-design-reviewer` |
 | PR product evidence: MANIFEST, attach without committing binaries | [`pr-evidence.md`](pr-evidence.md) | `/build`, `/ship`, `/goal`, `/auto` |
+| PR evidence forge command matrix (MUST before attach shells) | [`pr-evidence-forges.md`](pr-evidence-forges.md) | with [`pr-evidence.md`](pr-evidence.md); `/build`, `/ship`, `/goal`, `/auto` |
 | External repos agents may consult in place: source table, consumption rules, admission checklist | [`external-source-registry.md`](external-source-registry.md) | any skill citing an external repo; asset authors, `agent-systems-auditor` |
 | Diagram authoring with Mermaid, render checks, readability | [`diagram-authoring.md`](diagram-authoring.md) | docs-writing commands, `architect-planner`, `research-investigator`, `data-analyst` |
 | Proving a mobile app rendered: crash buffer, view hierarchy, blank-frame check | [`mobile-ui-verification.md`](mobile-ui-verification.md) | `qa-testing-strategy`, `test-driven-development`, `qa-tester`, mobile stack profiles |
