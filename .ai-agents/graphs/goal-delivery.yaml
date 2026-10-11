@@ -182,7 +182,10 @@ spec:
       reads: pr_open
 
     - name: pr_evidence
-      description: Product proof is attached to the open PR (API capture or UI media), or MANIFEST kind none with a reason. Never a git-tracked binary.
+      description: >-
+        Product proof is visible on the open PR body or comments (api/ui attach or
+        transcript; none/redacted Kind+Reason), not only in local ATTACHED.md.
+        Never a git-tracked binary.
       source: check
       reads: pr_evidence
 
@@ -458,8 +461,9 @@ spec:
     pr_evidence:
       type: verifier
       description: >-
-        Confirm PR product evidence is declared and attached (api/ui) or
-        explicitly waived (kind none). Captures live under
+        Confirm PR product evidence is forge-visible on the PR body or comments
+        (api/ui attach or transcript; none/redacted Kind+Reason via ci_api), after
+        local MANIFEST/ATTACHED file_assert. Captures live under
         .agent-state/runs/.../pr-evidence/; binaries must not be committed.
       verifier: previdence
       check: pr_evidence

@@ -39,14 +39,22 @@ do not invent host-only or ad-hoc capture paths.
    (or `--source` to import a file into pr-evidence/). Skills and commands that need UI evidence
    MUST call these; browser/device tools may produce a file, then import with `--source`.
 7. **Write `MANIFEST.md` before `gh pr create`** on an active run. Without it the hook refuses create.
-8. **Attach to the PR for reviewers, then write `ATTACHED.md` with `Head:`** set to the commit
+8. **Forge-visible proof is mandatory.** `ATTACHED.md` alone is not enough. For Kind `api`/`ui`,
+   the PR description or a comment MUST carry reviewer-visible proof (`gh --attach` /
+   `user-attachments`, or an inlined transcript that includes the MANIFEST Summary in a
+   fenced block). For Kind `none`/`redacted`, the PR description or a comment MUST declare
+   `Kind:` and `Reason:` so omit is visible. `pr_evidence` checks the forge via `ci_api`.
+9. **Create must declare forge-facing evidence for product kinds.** On an active run with
+   Kind `api`/`ui`, `gh pr create` MUST include `--attach` or a `Kind:` line in `--body` /
+   `--body-file`. `pre-tool-use` refuses create otherwise.
+10. **Attach to the PR for reviewers, then write `ATTACHED.md` with `Head:`** set to the commit
    the capture proves. Staging paths in ATTACHED/RECORD are for the runtime gate, not the
    reviewer-facing comment body.
-9. **On every new commit to an open PR:** recapture if the product path changed, re-attach on
+11. **On every new commit to an open PR:** recapture if the product path changed, re-attach on
    the PR, then `ultragentic previdence refresh --slug <slug>`. Stale `Head` vs current
    `git HEAD` fails `previdence check` / the `pr_evidence` verifier, and `pre-tool-use`
    refuses `git push`.
-10. **Scrub leaks.** If a PR already has comments that only point at local pr-evidence paths,
+12. **Scrub leaks.** If a PR already has comments that only point at local pr-evidence paths,
     edit or minimize them and replace with reviewer-visible proof (attach or inlined transcript).
 
 </required>
@@ -133,5 +141,7 @@ Files:
 ## Graph and checks
 
 - `open_pr` still confirms a PR exists (`gh pr view`).
-- `pr_evidence` runs the `previdence` verifier (`file_assert` on MANIFEST + ATTACHED + Head freshness, or kind none/redacted).
+- `pr_evidence` runs the `previdence` verifier: `file_assert` on MANIFEST + ATTACHED +
+  Head freshness, then `ci_api` on the PR body/comments for forge-visible proof
+  (api/ui attach or transcript; none/redacted Kind+Reason).
 - Hosts share the same `ultragentic hook pre-tool-use` gate; no per-host bypass.
