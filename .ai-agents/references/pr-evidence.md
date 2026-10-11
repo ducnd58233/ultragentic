@@ -20,8 +20,9 @@ do not invent host-only or ad-hoc capture paths.
    `.agent-state/.../pr-evidence/`. Reviewers cannot open that path.
 2. **Never PR-comment RECORD/ATTACHED path dumps.** Comments that only paste or link
    `RECORD.md` / `ATTACHED.md` (or other files) under `.agent-state/runs/.../pr-evidence/`
-   are forbidden. Put the proof on the PR: `gh --attach` for media, or inline the API
-   transcript / reproduction steps in the PR body or comment.
+   are forbidden. Put the proof on the PR: forge media attach per the
+   [command matrix](pr-evidence-forges.md), or inline the API transcript / reproduction
+   steps in the PR body or comment.
 3. **Evidence must be real and in scope.** Capture or import proof that matches this PR's
    change; include step-by-step reproduction. Fabricated, off-scope, or invented captures
    are forbidden. Docs-only work may use `Kind: none` with a one-line reason.
@@ -38,15 +39,19 @@ do not invent host-only or ad-hoc capture paths.
 6. **Capture via runtime:** `ultragentic previdence snapshot` and `ultragentic previdence record`
    (or `--source` to import a file into pr-evidence/). Skills and commands that need UI evidence
    MUST call these; browser/device tools may produce a file, then import with `--source`.
-7. **Write `MANIFEST.md` before `gh pr create`** on an active run. Without it the hook refuses create.
+7. **Write `MANIFEST.md` before opening the PR/MR** on an active run. Without it the hook
+   refuses create (GitHub `gh pr create` today; other forges follow the same MANIFEST gate
+   once their create shells are wired).
 8. **Forge-visible proof is mandatory.** `ATTACHED.md` alone is not enough. For Kind `api`/`ui`,
-   the PR description or a comment MUST carry reviewer-visible proof (`gh --attach` /
-   `user-attachments`, or an inlined transcript that includes the MANIFEST Summary in a
-   fenced block). For Kind `none`/`redacted`, the PR description or a comment MUST declare
-   `Kind:` and `Reason:` so omit is visible. `pr_evidence` checks the forge via `ci_api`.
+   the PR description or a comment MUST carry reviewer-visible proof (forge media attach per
+   the [command matrix](pr-evidence-forges.md), or an inlined transcript that includes the
+   MANIFEST Summary in a fenced block). For Kind `none`/`redacted`, the PR description or a
+   comment MUST declare `Kind:` and `Reason:` so omit is visible. `pr_evidence` checks the
+   forge via `ci_api`.
 9. **Create must declare forge-facing evidence for product kinds.** On an active run with
-   Kind `api`/`ui`, `gh pr create` MUST include `--attach` or a `Kind:` line in `--body` /
-   `--body-file`. `pre-tool-use` refuses create otherwise.
+   Kind `api`/`ui`, the create command MUST include media `--attach` (only when the matrix
+   row and doctor probe allow it) or a `Kind:` line in the body. `pre-tool-use` refuses
+   otherwise. **MUST open [`pr-evidence-forges.md`](pr-evidence-forges.md) before any attach shell.**
 10. **Attach to the PR for reviewers, then write `ATTACHED.md` with `Head:`** set to the commit
    the capture proves. Staging paths in ATTACHED/RECORD are for the runtime gate, not the
    reviewer-facing comment body.
@@ -114,28 +119,35 @@ Reason: PII in security-sensitive UI; omit product capture
 | none | No capture (docs-only / non-product). |
 | redacted | No capture and no attach. Sensitivity omit for credentials / PII / security-sensitive UI/API. |
 
-## Attach (GitHub CLI)
+## Attach (forge-dynamic)
 
-Requires GitHub CLI v2.99+ for `--attach` (images and video). **Probe before planning the flag:**
-run `ultragentic doctor` (attach capability line) or confirm `gh pr create --help` lists `--attach`.
-Do **not** plan `gh pr create|comment --attach` when the installed binary lacks the flag;
-`pre-tool-use` refuses that command and names the fallback. Kind `api` transcripts can go in
-`--body` / `--body-file` without `--attach` (include a `Kind: api` line and a fenced transcript
-that contains the MANIFEST Summary). Kind `ui` media needs `--attach` or a browser upload that
-produces forge-visible `user-attachments`; there is no honest agent `--attach` path on older `gh`.
+**MUST** open [`pr-evidence-forges.md`](pr-evidence-forges.md) before any attach shell.
+Detect the active forge (`ultragentic doctor` or `git remote get-url origin`), then use that
+row only. Do not default to `gh` on GitLab or Bitbucket remotes.
+
+- GitHub: `gh pr create|comment --attach` when doctor/help shows support (CLI v2.99+).
+- GitLab: `glab mr … --attach` is **experimental**; Kind `api` body is the safe default.
+- Bitbucket / unknown: **no** agent media attach; Kind `api` body/transcript, or browser
+  Kind `ui` only. Do not invent a Bitbucket `--attach` CLI.
+
+Kind `api` transcripts can always go in the PR/MR body without media attach (include a
+`Kind: api` line and a fenced transcript that contains the MANIFEST Summary). Kind `ui`
+media needs a supported forge attach row or a browser upload that produces forge-visible
+proof; there is no honest invent-a-CLI path.
+
+GitHub examples (only when doctor says forge is github and attach is supported):
 
 ```sh
-# After doctor/help shows --attach is available (Kind ui media):
 gh pr create --title "..." --body-file pr-body.md --attach .agent-state/runs/<date>/<slug>/<version>/pr-evidence/after.png
-# or, after the PR exists / after new commits:
 gh pr comment --body-file pr-body.md --attach .agent-state/runs/<date>/<slug>/<version>/pr-evidence/after.png
 ultragentic previdence refresh --slug <slug>
 ```
 
+Cross-forge Kind `api` body path (no media attach):
+
 ```sh
-# No-attach Kind api path (works when gh lacks --attach):
-gh pr create --title "..." --body-file pr-body.md
-# pr-body.md must include: Kind: api, Summary, and a fenced transcript
+# Use the forge row's create command with a body file that includes:
+# Kind: api, Summary, and a fenced transcript
 ultragentic previdence refresh --slug <slug>
 ```
 
@@ -153,8 +165,9 @@ Files:
 
 ## Graph and checks
 
-- `open_pr` still confirms a PR exists (`gh pr view`).
+- `open_pr` confirms a PR/MR exists (forge-aware resolve; GitHub via `gh pr view`).
 - `pr_evidence` runs the `previdence` verifier: `file_assert` on MANIFEST + ATTACHED +
   Head freshness, then `ci_api` on the PR body/comments for forge-visible proof
   (api/ui attach or transcript; none/redacted Kind+Reason).
-- Hosts share the same `ultragentic hook pre-tool-use` gate; no per-host bypass.
+- Hosts share the same `ultragentic hook pre-tool-use` gate across all seven inventory
+  hosts; no per-host bypass.
