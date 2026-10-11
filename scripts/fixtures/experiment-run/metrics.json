@@ -9,6 +9,9 @@
       "value": 0.8
     }
   },
+  "evidence": {
+    "accuracy": "logs/accuracy.txt"
+  },
   "integrity": {
     "kind": "held_out_eval",
     "selectionSplit": "validation",

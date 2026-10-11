@@ -37,11 +37,14 @@ note: <short progress>
 
 Allowed `status` values: `running`, `done`, `failed`.
 
-Update it whenever progress changes. The `experiment_monitor` verifier fails while `running` (or missing) and passes on `done` or `failed` **only when a `judgement:` line is also present and recognized** (added below `status:`):
+Update it whenever progress changes. The `experiment_monitor` verifier fails while `running` (or missing) and passes on `done` or `failed` **only when a `judgement:` line is also present and recognized** (added below `status:`), **and** the terminal file cites at least one existing evidence file under the experiment folder:
 
 ```markdown
 judgement: confirmed
+evidence: logs/checker-runs.log
 ```
+
+Repeat `evidence:` for each backing artifact. A terminal STATUS with no existing evidence path fails the same way a missing `judgement:` does: STATUS cannot pass on bare self-claim. Running status needs no evidence yet.
 
 Allowed `judgement` values, stated once the run is terminal:
 
@@ -63,11 +66,12 @@ When `status` becomes `done`, also write `experiment/METRICS.json`:
 ```json
 {
   "metrics": {"ndcg_at_10": 0.84},
-  "thresholds": {"ndcg_at_10": {"op": ">=", "value": 0.82}}
+  "thresholds": {"ndcg_at_10": {"op": ">=", "value": 0.82}},
+  "evidence": {"ndcg_at_10": "logs/ndcg.txt"}
 }
 ```
 
-The `results_eval` verifier compares metrics to thresholds. Values below the bar route the graph back to `hypothesis` without human approval.
+The `results_eval` verifier compares metrics to thresholds and requires an `evidence` map: each threshold name points at an existing file under the experiment folder. Values below the bar route the graph back to `hypothesis` without human approval. A metrics map without evidence paths fails as self-claim.
 
 `METRICS.json` also carries an `integrity` block, and the verifier fails a file that has none. A run that fits or tunes a model, a prompt, or a rule and reports a number from held-out data writes:
 

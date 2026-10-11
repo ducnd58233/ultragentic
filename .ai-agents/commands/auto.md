@@ -243,7 +243,10 @@ still applies while the experiment runs: start the long step with `ultragentic j
 completion (MUST)" for the per-host form.
 
 When RESEARCH and PLAN are settled, `ultragentic checkpoint` and `ultragentic auto gate` both skip
-the approval gates and advance the run. Report results when the loop finishes; do not poll the
+the approval gates and advance the run. A skipped gate records `skipped`, never `passed`. Structural
+skip is not claim fidelity: research digests still fail closed on `docs check-citations`,
+`check-dots`, and `check-claims`, and terminal STATUS/METRICS still need existing evidence paths.
+Model self-claim is never Passed evidence. Report results when the loop finishes; do not poll the
 human mid-pipeline.
 
 **The same obligation applies to `goal-delivery`'s embedded retry cycle.** A `/auto` product
