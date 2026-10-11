@@ -254,30 +254,18 @@ Follow links from those files only as the task requires.
   5. `/ship` returned **GO**.
   6. The diff touches nothing on the danger list: migrations, data destruction, production writes,
      credential changes, history rewrites, infrastructure destruction, or outward publication.
-     On Claude Code the list also refuses, on an auto run, an MCP tool call that sends, posts,
-     pays, shares, or schedules (`outward-action` in `danger-default.yaml`), except at the `deliver`
-     node after a person recorded `delivery_approved`. Other hosts do not yet refuse it; the gap is in [`host-hook-contracts.md`](.ai-agents/references/host-hook-contracts.md).
+     On Claude Code auto runs, MCP send/post/pay/share/schedule is also refused (`outward-action`),
+     except at `deliver` after `delivery_approved`. Other hosts: see `host-hook-contracts.md`.
 
-  This loosens a boundary this file used to state without exception. It is written here rather than
-  left to a mode flag because a reader of this rule has to be able to see what changed and when it
-  applies. Spec: `docs/harness-autonomy/SPEC.md`, decision D3.
+  Spec: `docs/harness-autonomy/SPEC.md`, decision D3.
 
-- **Auto `reviews` and `ship` (reversal).** On `/goal`, those verifier nodes stay `verifier: human`
-  and only pass through `human_event`. On `/auto` only, the same nodes resolve through existing
-  evidence sources already on the allow-list: `reviews` via `ci_api` (review-bot check-run buckets)
-  and `ship` via `file_assert` on `.agent-state/runs/<date>/<slug>/<version>/ship/DECISION.md` written by `/ship`.
-  No new checkpoint evidence source was added (`exit_code`, `file_assert`, `ci_api`, `human_event`
-  remain the set). `/goal` is unchanged. Spec for this delivery: workspace slug `auto-ship-reviews`.
-- **Blocker vs. retry (MUST).** `ultragentic checkpoint --blocker` is for a step with no fallback
-  edge at all: a missing tool, a permission wall, or a request with more than one reading
-  (`FailureClass` values `tool`, `permission`, `ambiguity`). A verifier failure the graph already
-  retries automatically - a missed experiment metrics threshold at `results_eval`, or any other
-  check the graph routes back from on failure - is `FailureTest` ("the work being wrong, reported by
-  a check") and must be left to fail and loop, never recorded as a blocker. Recording one anyway
-  moves the run to `StatusAwaitingHuman` on the very first call, which parks it outside the retry
-  loop the graph was built to run automatically. Traced by reading
-  `runtime/internal/loop/runner.go`'s `Advance()`. Spec for this delivery: workspace slug
-  `research-experiment-persistence`.
+- **Auto `reviews` and `ship` (reversal).** On `/goal`, those nodes stay `verifier: human` /
+  `human_event`. On `/auto` only: `reviews` via `ci_api` (review-bot buckets) and `ship` via
+  `file_assert` on run `ship/DECISION.md`. No fifth evidence source. Slug `auto-ship-reviews`.
+- **Blocker vs. retry (MUST).** `--blocker` is for no-fallback steps (`tool`, `permission`,
+  `ambiguity`). Graph-retried verifier fails (e.g. missed `results_eval` thresholds) are
+  `FailureTest` — leave them to fail and loop; a blocker parks the run outside that loop
+  (`runtime/internal/loop/runner.go` `Advance()`). Slug `research-experiment-persistence`.
 - **Evidence.** `/goal` writes under `.agent-state/runs/<date>/<slug>/<version>/` when gitignored;
   redact before write ([`goal-verification-records`](.ai-agents/references/goal-verification-records.md)).
   Leftover root `tmp/` fails doctor (`ultragentic migrate docs-tmp`).
