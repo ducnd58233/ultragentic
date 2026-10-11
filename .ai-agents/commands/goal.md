@@ -59,7 +59,7 @@ ultragentic checkpoint --slug <slug> --check <name> --source <source> --passed
 ### Dispatcher features hosts must use (MUST)
 
 Doctor gates start. Use status/flags, `checkpoint`, `verify`, hooks, memory, `calc`, and for
-long steps `job start` then `job wait` (never shell-bg or PID polling). No markdown-only walk.
+long steps `job start` then `job wait`, with `job list` / `job abort` for stuck jobs (never shell-bg or PID polling). No markdown-only walk.
 
 Host agents derive slug and graph from the objective; do not ask for them.
 Use `ultragentic auto "<objective>"` once opted in (same graph; see [`auto.md`](auto.md)).

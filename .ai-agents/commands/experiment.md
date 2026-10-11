@@ -135,6 +135,8 @@ a scheduled re-check: each check is a model turn that learns nothing, and the wo
 ultragentic job wait <id> --slug <slug>                   # blocks until the job ends, exits with its code
 ultragentic job wait <id> --slug <slug> --timeout 25m     # same, but returns 124 if still running
 ultragentic job status <id> --slug <slug>                 # one reading, no wait
+ultragentic job list                                      # every supervised job (running, exited, lost)
+ultragentic job abort <id> [--slug <slug>]                # stop a stuck job or terminalize a lost one
 ```
 
 How to wait depends on the host. `job start --host <client>` prints the right form; the runtime's host
@@ -147,7 +149,9 @@ table (`BackgroundEndNotice`) records which hosts report a background command's 
 
 When the wait returns, read its exit code and log tail, update STATUS.md (`done` or `failed`, with a
 `judgement:` line), and call `ua_verify`. A job whose supervisor died without an exit record is
-reported as lost: start it again with `job start`, do not mark it done.
+reported as lost: run `ultragentic job abort <id>` (or `job cancel`) to write a terminal exit, or
+start it again with `job start`; do not mark it done while it is still lost, and never clear it with
+shell-bg or PID polling.
 
 On hosts without an end-of-turn hook (opencode; see
 [`host-hook-contracts.md`](../references/host-hook-contracts.md)), nothing catches an abandoned turn:

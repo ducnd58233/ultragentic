@@ -79,7 +79,8 @@ green PR for a person to merge.
 Hosts run `ultragentic doctor` first; start also refuses on a broken control plane
 (graphs, docs layout, opt-in shape, memory, run state). Drive the run with
 `run status` / `run flag`, `checkpoint` after artifacts, `verify` at verifiers, hooks,
-memory, `calc`, and for long steps `job start` then `job wait` (never shell-bg,
+memory, `calc`, and for long steps `job start` then `job wait`, with `job list` /
+`job abort` for stuck or lost jobs (never shell-bg,
 Wait-Process, or PID polling). No markdown-only walk; see [`goal.md`](goal.md)
 "Runtime is required".
 
