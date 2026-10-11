@@ -65,7 +65,8 @@ For **one** task only (then stop or ask before starting the next task on a new b
 9. **PR evidence before open and on every later commit (MUST).** For reviewers on the PR
    (not a tip about local staging paths): capture with `ultragentic previdence snapshot` /
    `previdence record` (or `--source`) into run `pr-evidence/` staging, write `MANIFEST.md`,
-   put proof on the PR via `gh --attach` or an inlined transcript, then
+   put proof on the PR via `gh --attach` (only when `ultragentic doctor` / `gh pr create --help`
+   shows the flag) or an inlined Kind `api` transcript in `--body`/`--body-file`, then
    `ultragentic previdence refresh` so `ATTACHED.md` Head matches HEAD. Never PR-comment only
    `.agent-state/.../pr-evidence/` paths. Backend: API transcript. Frontend: runtime
    snapshot/record only. Docs-only: `Kind: none` with a reason. After tip commits,

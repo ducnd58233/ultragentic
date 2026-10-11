@@ -116,13 +116,26 @@ Reason: PII in security-sensitive UI; omit product capture
 
 ## Attach (GitHub CLI)
 
-Requires GitHub CLI v2.99+ for `--attach` (images and video). API transcripts can go in `--body` /
-`--body-file` without `--attach`.
+Requires GitHub CLI v2.99+ for `--attach` (images and video). **Probe before planning the flag:**
+run `ultragentic doctor` (attach capability line) or confirm `gh pr create --help` lists `--attach`.
+Do **not** plan `gh pr create|comment --attach` when the installed binary lacks the flag;
+`pre-tool-use` refuses that command and names the fallback. Kind `api` transcripts can go in
+`--body` / `--body-file` without `--attach` (include a `Kind: api` line and a fenced transcript
+that contains the MANIFEST Summary). Kind `ui` media needs `--attach` or a browser upload that
+produces forge-visible `user-attachments`; there is no honest agent `--attach` path on older `gh`.
 
 ```sh
+# After doctor/help shows --attach is available (Kind ui media):
 gh pr create --title "..." --body-file pr-body.md --attach .agent-state/runs/<date>/<slug>/<version>/pr-evidence/after.png
 # or, after the PR exists / after new commits:
 gh pr comment --body-file pr-body.md --attach .agent-state/runs/<date>/<slug>/<version>/pr-evidence/after.png
+ultragentic previdence refresh --slug <slug>
+```
+
+```sh
+# No-attach Kind api path (works when gh lacks --attach):
+gh pr create --title "..." --body-file pr-body.md
+# pr-body.md must include: Kind: api, Summary, and a fenced transcript
 ultragentic previdence refresh --slug <slug>
 ```
 
