@@ -57,7 +57,9 @@ Treat these as **blockers**, not observations - they are deterministic, so a mis
   (`gh --attach` or inlined transcript; not a comment that only names
   `.agent-state/.../pr-evidence/` paths). `pr_evidence` / `ATTACHED.md` Head must match HEAD
   via `ultragentic previdence refresh`; captures come from `ultragentic previdence
-  snapshot|record` and stay out of the git tree.
+  snapshot|record` only (no agent-authored Playwright/Puppeteer capture path) and stay out of
+  the git tree. Kind `ui` MUST include STEPS and an agent analyze-before-attach pass that
+  refuses blank/solid media; sketch-first UI authoring per [`ux-taste.md`](../references/ux-taste.md).
 
 Where a check could not run, it must be reported as `UNVERIFIED: <reason>` - never as a pass. Run [`/design`](design.md) in audit mode to produce the missing evidence before re-running `/ship`.
 
