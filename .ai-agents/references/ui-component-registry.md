@@ -55,6 +55,9 @@ Three tiers, because the tier tells the agent *why* a value exists, not only wha
 
 If the repo has only one tier, use it and note the gap - do not restructure a design system as a side effect of a UI task.
 
+**Context-dynamic tokens (MUST):** Prefer tokens scoped by theme, density, or host surface over dumping
+every value into one flat file. Discover context files before authoring new primitives.
+
 ### 3. Minimal component contract
 
 When authoring an inventory for a repo that lacks one, keep each entry to what an agent needs to *choose and call* the component:

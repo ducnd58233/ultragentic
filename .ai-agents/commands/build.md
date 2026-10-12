@@ -69,9 +69,12 @@ For **one** task only (then stop or ask before starting the next task on a new b
    shows the flag) or an inlined Kind `api` transcript in `--body`/`--body-file`, then
    `ultragentic previdence refresh` so `ATTACHED.md` Head matches HEAD. Never PR-comment only
    `.agent-state/.../pr-evidence/` paths. Backend: API transcript. Frontend: runtime
-   snapshot/record only. Docs-only: `Kind: none` with a reason. After tip commits,
-   recapture/reattach/refresh before push; stale Head fails closed. Never commit media. See
-   [`pr-evidence.md`](../references/pr-evidence.md).
+   snapshot/record only — **MUST NOT** invent Playwright/Puppeteer capture scripts as the
+   evidence path. Kind `ui` MUST include STEPS (MANIFEST `Steps:` or `STEPS.md`) and the agent
+   MUST analyze the capture before attach (refuse blank/solid media). UI authoring MUST follow
+   sketch-first rules in [`ux-taste.md`](../references/ux-taste.md). Docs-only: `Kind: none`
+   with a reason. After tip commits, recapture/reattach/refresh before push; stale Head fails
+   closed. Never commit media. See [`pr-evidence.md`](../references/pr-evidence.md).
 10. **Set the task `done` in `TASKS.md` and `task_lists`, and tick its acceptance checkboxes.** Both
    places, same edit, before the next verifier runs: `task_complete` reads `task_lists` to decide
    whether work remains, so a status written after it ran sends the run back through a whole build

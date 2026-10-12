@@ -63,6 +63,11 @@ Review current changes (staged diff, branch, or paths the user specifies) across
 4. **Security** - Deep pass references [`security-and-hardening`](../skills/security-and-hardening/SKILL.md); query/injection safety for your persistence layer. **Also review the sinks, not only the logic:** every log call, response body, client-storage write, error path, and build-time env var the diff touched, against [`sensitive-data-exposure.md`](../references/sensitive-data-exposure.md). Disclosure is the defect class review misses most often, because the code works.
 5. **Performance** - N+1, bundle, caching; see [`performance-optimization`](../skills/performance-optimization/SKILL.md).
 
+**UI / product evidence (MUST when the diff touches UI):** Confirm sketch-first and context-scoped
+tokens per [`ux-taste.md`](../references/ux-taste.md) / [`ui-review-checklist.md`](../references/ui-review-checklist.md);
+Kind `ui` evidence used `ultragentic previdence snapshot|record` only (no invented Playwright path),
+includes STEPS, and was analyzed before attach (blank/solid refused) per [`pr-evidence.md`](../references/pr-evidence.md).
+
 Categorize findings as **Critical**, **Important**, or **Suggestion**. Include `file:line` and concrete fixes.
 
 **Grounding, when the diff touches a `docs/**/*.md` deliverable (MUST):** run `ultragentic docs check-claims <path>` before writing findings for that file. It flags a backtick-quoted file path that does not resolve in the repo tree - the same repo-fact discipline `docs/ROUTER.md` generation and the slug-continuation lookup already require. A finding is a warning, not a `ua-checks.yaml` gate: decide whether it is a genuinely fabricated path or a reasonable shorthand worth tightening, the same way you already judge a `slop audit` finding. For a claim the checker cannot mechanically verify (a factual assertion about the codebase, not just a path), use the [`source-auditor`](../agents/source-auditor.md) agent - already built for RESEARCH's external citations - on SPEC/PLAN/RESEARCH claims about the codebase too, not RESEARCH alone.
