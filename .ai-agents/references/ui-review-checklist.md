@@ -12,15 +12,22 @@ Mechanical review list for UI diffs. Use from [`/review`](../commands/review.md)
 
 <verification>
 
+### Sketch first (MUST)
+
+- [ ] A sketch or skeleton exists and was reviewed by human and agent before UI implement
+- [ ] Sketch shows every intended section; no unintended overlaps
+
 ### Registry and tokens
 
 - [ ] Colors, spacing, type use project tokens or documented exceptions
+- [ ] Tokens are context-scoped (theme/density/surface); not dumped into one flat file
 - [ ] New primitives only when no registry component fits (stated in the PR)
 - [ ] No raw hex/rgb that should be a token (runtime `design-token-guard` when available)
 
 ### Hierarchy and layout
 
 - [ ] First viewport has one clear job; secondary content is below or behind
+- [ ] All intended sections are visible to the user (nothing clipped or covered by accident)
 - [ ] Headings form a single logical outline; no skipped levels for style
 - [ ] Primary CTA is obvious; competing actions are demoted
 
@@ -44,7 +51,9 @@ Mechanical review list for UI diffs. Use from [`/review`](../commands/review.md)
 
 ### Evidence
 
-- [ ] Render evidence from `ultragentic previdence snapshot|record`, attached to the PR with Head current
+- [ ] Render evidence from `ultragentic previdence snapshot|record` only (no agent-authored Playwright/capture scripts)
+- [ ] STEPS match the capture; agent reviewed media (not blank/white/solid) before attach
+- [ ] Attached to the PR with Head current
 - [ ] Deterministic gates run when the skill requires them (`ui-slop-guard`, a11y checks)
 
 </verification>

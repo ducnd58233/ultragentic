@@ -36,9 +36,17 @@ do not invent host-only or ad-hoc capture paths.
    `.agent-state/runs/<date>/<slug>/<version>/pr-evidence/` (gitignored with `.agent-state/`).
 5. **Never commit** png, jpg, jpeg, webp, gif, mp4, webm, mov, or HAR as tracked repo files.
    `pre-tool-use` refuses `git add` of those extensions outside `.agent-state/`.
-6. **Capture via runtime:** `ultragentic previdence snapshot` and `ultragentic previdence record`
+6. **Capture via runtime only:** `ultragentic previdence snapshot` and `ultragentic previdence record`
    (or `--source` to import a file into pr-evidence/). Skills and commands that need UI evidence
-   MUST call these; browser/device tools may produce a file, then import with `--source`.
+   MUST call these. **MUST NOT** invent agent-authored Playwright, Puppeteer, ffmpeg wrappers, or
+   other one-off capture scripts as the evidence path; the runtime owns capture. Browser/device
+   tools may produce a file only to import with `--source` after an honest host capture.
+6a. **STEPS for Kind ui (MUST).** Product Kind `ui` (and critical product `api` paths) MUST include
+   step-by-step reproduce steps that match the capture (STEPS.md under pr-evidence/ or a `Steps:`
+   block in MANIFEST). Satisfied fails when Steps are missing for Kind `ui`.
+6b. **Analyze before attach (MUST).** Before forge attach, the agent MUST open and review the
+   capture (image frames / video content) against those Steps. Blank, all-white, solid-fill, or
+   long empty recordings MUST be refused and recaptured; do not attach broken evidence.
 7. **Write `MANIFEST.md` before opening the PR/MR** on an active run. Without it the hook
    refuses create (GitHub `gh pr create` today; other forges follow the same MANIFEST gate
    once their create shells are wired).

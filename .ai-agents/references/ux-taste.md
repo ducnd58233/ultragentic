@@ -8,6 +8,17 @@ this file is what to check when the screen already compiles but still feels gene
 
 </context>
 
+## Sketch first (MUST)
+
+<required>
+
+Before implementing UI, draw a sketch or skeleton (any suitable tool, or a runtime visualize call when available).
+Human and agent MUST review that sketch so layout, section visibility, and intended overlaps are agreed
+before code. Do not dump every control into one place; keep modules separated. Every intended section
+MUST be visible to the user; no unintended overlaps.
+
+</required>
+
 ## Hierarchy
 
 <references>
