@@ -41,6 +41,13 @@ do not invent host-only or ad-hoc capture paths.
    MUST call these. **MUST NOT** invent agent-authored Playwright, Puppeteer, ffmpeg wrappers, or
    other one-off capture scripts as the evidence path; the runtime owns capture. Browser/device
    tools may produce a file only to import with `--source` after an honest host capture.
+6c. **ffmpeg soft dependency (MUST).** Kind ui stills via `previdence snapshot` need no ffmpeg
+   (OS-native capture). Importing an existing recording with `--source` also needs no host
+   ffmpeg for the write step. `previdence record` and video mid-frame validation require
+   ffmpeg on PATH and fail closed when it is missing. Prefer snapshot (or `--source`) when
+   `ultragentic doctor` notes ffmpeg is absent; do not tell consumers a manual ffmpeg install
+   is required for still Kind ui evidence. This rule is host-neutral for every supported
+   inventory host.
 6a. **STEPS for Kind ui (MUST).** Product Kind `ui` (and critical product `api` paths) MUST include
    step-by-step reproduce steps that match the capture (STEPS.md under pr-evidence/ or a `Steps:`
    block in MANIFEST). Satisfied fails when Steps are missing for Kind `ui`.
@@ -123,7 +130,7 @@ Reason: PII in security-sensitive UI; omit product capture
 | Kind | What to capture |
 |------|-----------------|
 | api | Redacted curl-style request and response for the fixed or new path (text file under pr-evidence/). Prefer text over raw HAR. |
-| ui | `ultragentic previdence snapshot` and/or `previdence record`. If a browser or device tool already wrote a PNG/recording, import with `--source`. |
+| ui | Prefer `ultragentic previdence snapshot` (no ffmpeg). Use `previdence record` only when ffmpeg is on PATH (`ultragentic doctor` ok line). If a browser or device tool already wrote a PNG/recording, import with `--source` (no host ffmpeg required for import). |
 | none | No capture (docs-only / non-product). |
 | redacted | No capture and no attach. Sensitivity omit for credentials / PII / security-sensitive UI/API. |
 
