@@ -15,6 +15,25 @@ do not invent host-only or ad-hoc capture paths.
 
 ## Rules (MUST)
 
+0. **Portable evidence contract (forge-agnostic).** Every in-scope product PR/MR body
+   MUST carry the same two fields regardless of forge (GitHub, GitLab, Bitbucket, or
+   unknown/self-hosted). Adapters choose CLI and template path only; they do not change
+   the fields. Instantiations: [forge templates](../templates/forge/PORTABLE_PR_BODY.md)
+   and the [forge matrix](pr-evidence-forges.md).
+
+   | Field | Required when | What reviewers need |
+   |-------|---------------|---------------------|
+   | **Visual evidence** | Kind `ui` (and product `api` when a transcript proves the path) | Forge-visible screenshot/video attach, or inlined Kind `api` transcript, or honest Kind `none`/`redacted` with Reason |
+   | **Reproduce / Verify** | Kind `ui` (and critical product `api`) | Numbered steps matching STEPS.md / MANIFEST `Steps:` |
+
+   Consumers inherit these sections via toolkit link/install templates. Do **not** rely on
+   per-repo AGENTS.md patches for this contract.
+
+0a. **Failure → research → retry (MUST).** If a forge CLI or API call fails, research the
+   equivalent syntax for **that** forge (`CLI --help`, vendor docs, doctor probe) and
+   retry, or use the matrix body/browser fallback. **MUST NOT** silently skip Visual
+   evidence or Reproduce / Verify. Applies on every inventory AI host.
+
 1. **Audience is reviewers on the PR.** Evidence exists so reviewers understand the change.
    Do **not** PR-comment only to tell the owner that a file sits under
    `.agent-state/.../pr-evidence/`. Reviewers cannot open that path.
@@ -138,17 +157,20 @@ Reason: PII in security-sensitive UI; omit product capture
 
 **MUST** open [`pr-evidence-forges.md`](pr-evidence-forges.md) before any attach shell.
 Detect the active forge (`ultragentic doctor` or `git remote get-url origin`), then use that
-row only. Do not default to `gh` on GitLab or Bitbucket remotes.
+row only. Do not default to `gh` on GitLab or Bitbucket remotes. Fill the portable
+**Visual evidence** and **Reproduce / Verify** sections on every forge.
 
 - GitHub: `gh pr create|comment --attach` when doctor/help shows support (CLI v2.99+).
 - GitLab: `glab mr … --attach` is **experimental**; Kind `api` body is the safe default.
 - Bitbucket / unknown: **no** agent media attach; Kind `api` body/transcript, or browser
-  Kind `ui` only. Do not invent a Bitbucket `--attach` CLI.
+  Kind `ui` only. Do not invent a Bitbucket `--attach` CLI. New forges: follow
+  [EXTENSION.md](../templates/forge/unknown/EXTENSION.md).
 
 Kind `api` transcripts can always go in the PR/MR body without media attach (include a
 `Kind: api` line and a fenced transcript that contains the MANIFEST Summary). Kind `ui`
 media needs a supported forge attach row or a browser upload that produces forge-visible
-proof; there is no honest invent-a-CLI path.
+proof; there is no honest invent-a-CLI path. On any CLI failure, research-retry per the
+forge matrix; never omit the portable contract silently.
 
 GitHub examples (only when doctor says forge is github and attach is supported):
 

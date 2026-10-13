@@ -863,9 +863,71 @@ EOF
   echo "Plugin manifests under $workspace: $written written, $kept left alone (already present)"
 }
 
+# Install forge PR/MR templates that prompt for Visual evidence and Reproduce / Verify.
+# Local-first: never overwrite a consumer-owned template at the destination path.
+install_forge_pr_templates() {
+  local assets="$1"
+  local workspace="$2"
+  local src_root="$assets/templates/forge"
+  if [[ ! -d "$src_root" ]]; then
+    echo "No forge PR templates under $src_root; skipped." >&2
+    return 0
+  fi
+
+  local installed=0
+  local kept=0
+
+  install_one() {
+    local src="$1"
+    local dest="$2"
+    if [[ ! -f "$src" ]]; then
+      return 0
+    fi
+    if [[ -e "$dest" ]]; then
+      echo "Forge template already present at $dest (left alone)"
+      kept=$((kept + 1))
+      return 0
+    fi
+    mkdir -p "$(dirname "$dest")"
+    cp "$src" "$dest"
+    echo "Installed forge PR template at $dest"
+    installed=$((installed + 1))
+  }
+
+  # GitHub: skip if any pull_request_template already exists under .github
+  if [[ -f "$workspace/.github/pull_request_template.md" ]] \
+    || [[ -f "$workspace/.github/PULL_REQUEST_TEMPLATE.md" ]] \
+    || [[ -d "$workspace/.github/PULL_REQUEST_TEMPLATE" ]] \
+    || [[ -d "$workspace/.github/pull_request_template" ]]; then
+    echo "Forge template already present under $workspace/.github (left alone)"
+    kept=$((kept + 1))
+  else
+    install_one "$src_root/github/pull_request_template.md" \
+      "$workspace/.github/pull_request_template.md"
+  fi
+
+  # GitLab: skip if Default.md or any merge_request_templates file exists
+  if [[ -d "$workspace/.gitlab/merge_request_templates" ]] \
+    && compgen -G "$workspace/.gitlab/merge_request_templates/*" >/dev/null 2>&1; then
+    echo "Forge template already present under $workspace/.gitlab/merge_request_templates (left alone)"
+    kept=$((kept + 1))
+  else
+    install_one "$src_root/gitlab/Default.md" \
+      "$workspace/.gitlab/merge_request_templates/Default.md"
+  fi
+
+  # Bitbucket (and some self-hosted): root pull_request_template.md when that path is absent.
+  # Coexists with .github / .gitlab templates (different paths, different forges).
+  install_one "$src_root/bitbucket/pull_request_template.md" \
+    "$workspace/pull_request_template.md"
+
+  echo "Forge PR templates: $installed installed, $kept left alone (already present or skipped)"
+}
+
 install_local_git_exclude "$WORKSPACE"
 install_commit_attribution_hook "$ASSETS" "$WORKSPACE"
 install_workspace_hook_configs
+install_forge_pr_templates "$ASSETS" "$WORKSPACE"
 emit_plugin_manifests "$WORKSPACE"
 install_runtime
 
