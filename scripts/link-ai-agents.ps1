@@ -763,9 +763,79 @@ function Emit-PluginManifests {
     Write-Host "Plugin manifests emitted under $WorkspaceFull"
 }
 
+function Install-ForgePrTemplates {
+    param(
+        [Parameter(Mandatory = $true)][string]$AssetsFull,
+        [Parameter(Mandatory = $true)][string]$WorkspaceFull
+    )
+    $srcRoot = Join-Path $AssetsFull 'templates\forge'
+    if (-not (Test-Path -LiteralPath $srcRoot -PathType Container)) {
+        Write-Host "No forge PR templates under $srcRoot; skipped."
+        return
+    }
+
+    $installed = 0
+    $kept = 0
+
+    function Install-OneTemplate {
+        param([string]$Src, [string]$Dest)
+        if (-not (Test-Path -LiteralPath $Src -PathType Leaf)) { return }
+        if (Test-Path -LiteralPath $Dest) {
+            Write-Host "Forge template already present at $Dest (left alone)"
+            $script:kept++
+            return
+        }
+        $destDir = Split-Path -Parent $Dest
+        if (-not (Test-Path -LiteralPath $destDir)) {
+            New-Item -ItemType Directory -Path $destDir -Force | Out-Null
+        }
+        Copy-Item -LiteralPath $Src -Destination $Dest
+        Write-Host "Installed forge PR template at $Dest"
+        $script:installed++
+    }
+
+    $githubDir = Join-Path $WorkspaceFull '.github'
+    $hasGithub = (
+        (Test-Path -LiteralPath (Join-Path $githubDir 'pull_request_template.md')) -or
+        (Test-Path -LiteralPath (Join-Path $githubDir 'PULL_REQUEST_TEMPLATE.md')) -or
+        (Test-Path -LiteralPath (Join-Path $githubDir 'PULL_REQUEST_TEMPLATE') -PathType Container) -or
+        (Test-Path -LiteralPath (Join-Path $githubDir 'pull_request_template') -PathType Container)
+    )
+    if ($hasGithub) {
+        Write-Host "Forge template already present under $githubDir (left alone)"
+        $kept++
+    } else {
+        Install-OneTemplate `
+            -Src (Join-Path $srcRoot 'github\pull_request_template.md') `
+            -Dest (Join-Path $githubDir 'pull_request_template.md')
+    }
+
+    $gitlabTplDir = Join-Path $WorkspaceFull '.gitlab\merge_request_templates'
+    $hasGitlab = $false
+    if (Test-Path -LiteralPath $gitlabTplDir -PathType Container) {
+        $hasGitlab = @(Get-ChildItem -LiteralPath $gitlabTplDir -File -ErrorAction SilentlyContinue).Count -gt 0
+    }
+    if ($hasGitlab) {
+        Write-Host "Forge template already present under $gitlabTplDir (left alone)"
+        $kept++
+    } else {
+        Install-OneTemplate `
+            -Src (Join-Path $srcRoot 'gitlab\Default.md') `
+            -Dest (Join-Path $gitlabTplDir 'Default.md')
+    }
+
+    # Bitbucket root template when absent; coexists with .github / .gitlab paths.
+    Install-OneTemplate `
+        -Src (Join-Path $srcRoot 'bitbucket\pull_request_template.md') `
+        -Dest (Join-Path $WorkspaceFull 'pull_request_template.md')
+
+    Write-Host "Forge PR templates: $installed installed, $kept left alone (already present or skipped)"
+}
+
 Install-LocalGitExclude -WorkspaceFull $workspaceFull
 Install-CommitAttributionHook -AssetsFull $assetsFull -WorkspaceFull $workspaceFull
 Install-WorkspaceHookConfigs
+Install-ForgePrTemplates -AssetsFull $assetsFull -WorkspaceFull $workspaceFull
 Emit-PluginManifests -WorkspaceFull $workspaceFull
 Install-Runtime
 

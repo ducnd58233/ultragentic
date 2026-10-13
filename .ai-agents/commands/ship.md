@@ -53,13 +53,16 @@ Treat these as **blockers**, not observations - they are deterministic, so a mis
 - `ui-slop-guard` and `design-token-guard` are clean, or each exception is marked inline with a stated reason.
 - An automated accessibility audit reports **zero** WCAG failures, or every remaining failure is explained and explicitly accepted.
 - Render evidence exists at the supported breakpoints.
-- The open PR has reviewer-visible product evidence per [`pr-evidence.md`](../references/pr-evidence.md)
-  (`gh --attach` or inlined transcript; not a comment that only names
-  `.agent-state/.../pr-evidence/` paths). `pr_evidence` / `ATTACHED.md` Head must match HEAD
-  via `ultragentic previdence refresh`; captures come from `ultragentic previdence
-  snapshot|record` only (no agent-authored Playwright/Puppeteer capture path) and stay out of
-  the git tree. Kind `ui` MUST include STEPS and an agent analyze-before-attach pass that
-  refuses blank/solid media; sketch-first UI authoring per [`ux-taste.md`](../references/ux-taste.md).
+- The open PR/MR has the **portable evidence contract** per [`pr-evidence.md`](../references/pr-evidence.md):
+  forge-visible **Visual evidence** (attach via the active forge row in
+  [`pr-evidence-forges.md`](../references/pr-evidence-forges.md), or inlined transcript, or honest
+  Kind `none`/`redacted` with Reason) and **Reproduce / Verify** steps. Not a comment that only
+  names `.agent-state/.../pr-evidence/` paths. On forge CLI failure, research-retry — do not
+  silently skip. `pr_evidence` / `ATTACHED.md` Head must match HEAD via `ultragentic previdence
+  refresh`; captures come from `ultragentic previdence snapshot|record` only (no agent-authored
+  Playwright/Puppeteer capture path) and stay out of the git tree. Kind `ui` MUST include STEPS
+  and an agent analyze-before-attach pass that refuses blank/solid media; sketch-first UI
+  authoring per [`ux-taste.md`](../references/ux-taste.md).
 
 Where a check could not run, it must be reported as `UNVERIFIED: <reason>` - never as a pass. Run [`/design`](design.md) in audit mode to produce the missing evidence before re-running `/ship`.
 

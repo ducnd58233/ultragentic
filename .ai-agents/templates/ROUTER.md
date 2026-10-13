@@ -22,4 +22,19 @@ hand; the command fills the path, file name, and front matter. Rules: [`docs-aut
 **Changing a template's sections** means changing the type's `Tags` in
 `runtime/internal/shared/docmeta/doctype.go` and `DOC_TAGS` in `scripts/check-xml-tags.sh` in the same
 change; `go test ./internal/docauthor` fails until all three agree. A new type needs a row here too.
+
+### Forge PR / MR templates (install via link script)
+
+Portable evidence body and per-forge instantiations. Link/install copies them into a consumer
+workspace only when that path is absent (local-first). Contract and research-retry:
+[`pr-evidence.md`](../references/pr-evidence.md), matrix [`pr-evidence-forges.md`](../references/pr-evidence-forges.md).
+
+| Template | Forge | Installs to (when absent) |
+|----------|-------|---------------------------|
+| [`forge/PORTABLE_PR_BODY.md`](forge/PORTABLE_PR_BODY.md) | all (fields only) | stays in toolkit; agents copy sections |
+| [`forge/github/pull_request_template.md`](forge/github/pull_request_template.md) | github | `.github/pull_request_template.md` |
+| [`forge/gitlab/Default.md`](forge/gitlab/Default.md) | gitlab | `.gitlab/merge_request_templates/Default.md` |
+| [`forge/bitbucket/pull_request_template.md`](forge/bitbucket/pull_request_template.md) | bitbucket | `pull_request_template.md` at repo root |
+| [`forge/unknown/EXTENSION.md`](forge/unknown/EXTENSION.md) | unknown / self-hosted | docs only; add a matrix row before inventing a CLI |
+
 </routing>
