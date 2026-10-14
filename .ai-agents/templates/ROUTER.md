@@ -18,9 +18,12 @@ hand; the command fills the path, file name, and front matter. Rules: [`docs-aut
 | [`docs/STUDY.md`](docs/STUDY.md) | STUDY | `STUDY.md`: a learner's goal, topics, sessions, question bank |
 | [`docs/DECISION.md`](docs/DECISION.md) | DECISION | `DECISION-<date>-<topic>.md`: one decision record |
 | [`docs/RECORD.md`](docs/RECORD.md) | RECORD | `RECORD-<date>-<topic>.md`: one dated event |
+| [`docs/WIREFRAME.md`](docs/WIREFRAME.md) | WIREFRAME | `WIREFRAME.md`: screen sketches before UI code |
+| [`docs/USERSTORY.md`](docs/USERSTORY.md) | USERSTORY | `USERSTORY.md`: user stories with acceptance criteria |
+| [`docs/ERD.md`](docs/ERD.md) | ERD | `ERD.md`: living Mermaid entity-relationship model |
 
 **Changing a template's sections** means changing the type's `Tags` in
-`runtime/internal/shared/docmeta/doctype.go` and `DOC_TAGS` in `scripts/check-xml-tags.sh` in the same
+`runtime/internal/pkg/docmeta/doctype.go` and `DOC_TAGS` in `scripts/check-xml-tags.sh` in the same
 change; `go test ./internal/docauthor` fails until all three agree. A new type needs a row here too.
 
 ### Forge PR / MR templates (install via link script)

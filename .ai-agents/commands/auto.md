@@ -54,12 +54,11 @@ ultragentic auto task "<non-code task from the user>"
 ultragentic auto gate --slug <slug from start output>
 ```
 
-Host agents pass the user's text as plain arguments, including a first word that names the kind of
-work (`delivery`, `research`, `experiment`, `task`). Slug and graph are derived; do not ask the user
-for `--goal`, `--graph`, or `--slug` unless resuming an existing run. With no first word the runtime
-reads the objective and prints the words that decided the graph; follow "Choosing the graph" in
-[`goal.md`](goal.md). On `/auto` the runtime acts on a guess only when the signal is strong, and
-otherwise asks for the word, because nobody is at intake to correct it.
+Host agents pass the user's text as plain arguments, including a first word from
+`ultragentic inventory`. Slug and graph are derived; do not ask for `--goal`, `--graph`, or `--slug`
+unless resuming. With no first word the runtime prints `chosen`; follow "Choosing the graph" in
+[`goal.md`](goal.md). On `/auto` a strong signal may choose the graph; otherwise ask, because nobody
+is at intake. Add kinds/workflows via DocTypes/Workflows registries only — not this file.
 
 `/auto` has two limits the other graphs do not. `auto tutor` is refused, because a tutor
 needs a learner present, so use `/goal tutor`. And `auto task` stops at `approve_delivery` every time:

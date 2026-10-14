@@ -80,6 +80,9 @@ Every document under `docs/` is made by a command, filled from a template, and c
 | A learner's study plan and record | `STUDY` | living |
 | One decision and the options weighed (an ADR) | `DECISION` | record |
 | One dated event: a run, an incident, a meeting, a release | `RECORD` | record |
+| Screen sketches before UI implementation (sketch-first) | `WIREFRAME` | living |
+| User stories with acceptance criteria | `USERSTORY` | living |
+| Entity-relationship model (Mermaid erDiagram) | `ERD` | living |
 
 Living: one file per slug, `<TYPE>.md`, revised in place. Record: a new file per event, `<TYPE>-<YYYY-MM-DD>-<topic>.md`, written once; the topic comes from `--title`.
 

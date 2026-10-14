@@ -67,24 +67,21 @@ Use `ultragentic research` / `auto research` for the researcher graph. Choosing 
 
 ### Choosing the graph (MUST)
 
-`ultragentic goal` and `ultragentic auto` start one of five graphs. Pass the user's words through
-unchanged: the runtime reads the first word and the objective, and you must not strip, reword, or
-reorder them.
+`ultragentic goal` and `ultragentic auto` start a workflow graph from the objective. Pass the user's
+words through unchanged: the runtime reads the first word and the objective, and you must not strip,
+reword, or reorder them.
 
-| First word | Graph | Use for |
-|---|---|---|
-| `delivery` | `goal-delivery` | Code: spec, plan, build, test, review, ship |
-| `research` or `experiment` | `researcher-delivery` | Literature, experiments, findings |
-| `task` | `task-delivery` | A report, document, data job, ops step, or message ([`task.md`](task.md)) |
-| `tutor` | `study-delivery` | A person learning a subject ([`tutor.md`](tutor.md)). `/goal` only, never `/auto` |
-| none | read from the objective | The runtime prints a `chosen` line with the words that decided it |
+**Inventory is the catalog, not this file.** List workflow first-words with `ultragentic inventory`
+(from `graphroute.Workflows`). List docs kinds with `ultragentic docs types` or the same inventory
+command (from `docmeta.DocTypes`). Do not add a workflow or docs kind by editing this table-shaped
+prose; update the registries and templates only. `/auto` follows the same rule ([`auto.md`](auto.md)).
 
 1. **Read the `chosen` line the start command printed.** When the runtime read the objective, say
    in one sentence which graph it picked and why, and ask the user whether that is right, at the
    intake gate before anything else.
 2. **If it is wrong, do not work around it.** End that run with
    `ultragentic run abort --slug <slug> --reason "wrong graph"`, then start again with the first word the
-   user meant, for example `ultragentic goal delivery "<objective>"`.
+   user meant, for example `ultragentic goal delivery "<objective>"` (first words come from inventory).
 3. **If the runtime asks which kind of work it is, ask the user the same question.** Do not pick for
    them.
 4. **A code change with a non-code deliverable** (a feature plus an announcement, a migration plus a
@@ -92,6 +89,7 @@ reorder them.
    said both or because you passed `--with-task`. The non-code part runs after the last code task.
    Its nodes are in [`task.md`](task.md), and the SPEC must list its deliverable, acceptance rows, and
    outward actions ([`spec.md`](spec.md)).
+5. **`tutor` needs a learner.** Use `/goal tutor` only; `/auto tutor` is refused.
 
 ### Numbers in a run (MUST)
 

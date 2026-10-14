@@ -116,11 +116,11 @@ are worse than none: they teach the model a partition that does not hold.
 | `<approach>`, `<risks>`, `<tasks>` | How the work is done, what may go wrong, the task list |
 | `<question>`, `<findings>`, `<hypothesis>`, `<method>`, `<results>` | Research and experiment content |
 | `<options>`, `<decision>`, `<consequences>` | A decision record |
-| `<procedure>` | What was done, in order (a RECORD) |
+| `<procedure>`, `<screens>`, `<stories>`, `<model>` | RECORD steps; WIREFRAME; USERSTORY; ERD |
 | `<open_questions>`, `<references>`, `<revisions>` | Unknowns, sources, the change log |
 
 Document tags are valid only in `templates/docs/`; `scripts/check-xml-tags.sh` scopes them there. The
-runtime registry (`runtime/internal/shared/docmeta/doctype.go`) is the source of truth, and a Go test
+runtime registry (`runtime/internal/pkg/docmeta/doctype.go`) is the source of truth, and a Go test
 fails when a template, the registry, or the checker's list disagree.
 
 **`<required>` versus `<rules>` is the distinction that earns the whole scheme.** A weak model
