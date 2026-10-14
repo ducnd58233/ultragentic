@@ -35,15 +35,14 @@ Read this file when you are: adding or changing an asset, wiring a harness, or m
 
 <required>
 
-- **Prose soft wrap (MUST).** Write prose as paragraph flow. Let the editor soft-wrap for display. Do not insert hard line breaks mid-sentence or mid-clause. Hard newlines are only for paragraph boundaries, headings, lists, fenced code, tables, YAML front matter, XML section tags on their own lines, and other intentional Markdown structure. Mid-sentence hard wraps break meaning and break Markdown preview renderers that treat soft breaks as hard breaks (CommonMark §6.8).
+- **Prose soft wrap (MUST).** Write prose as paragraph flow; let the editor soft-wrap. Do not hard-break mid-sentence or mid-clause. Hard newlines only for paragraph boundaries, headings, lists, fences, tables, front matter, XML tags on their own lines, and other Markdown structure.
+
 - **Follow the folder's `TEMPLATE.md`** where present when creating a skill, subagent, command, hook, reference, or stack profile.
 - **Update that folder's `ROUTER.md` in the same change** after creating, renaming, or deleting any asset under `skills/`, `agents/`, `commands/`, `hooks/`, `references/`, `stack-profiles/`, or `graphs/`.
 - **Do not restate a rule that already has a home.** Link to it. The stack-detection rule, the permissions defaults, the git gates, and the runtime requirement each live in exactly one place; copies drift and the copy is what a reader trusts.
-- **Tool naming and currency:** shared skills, references, and commands stay tool-agnostic and describe the capability, not a product. Concrete tools, packages, and libraries are named only in [`stack-profiles/`](stack-profiles), and even there as non-exhaustive examples the agent must verify against current official docs. Prefer detecting what the repo uses over any hardcoded list.
-  See [`stack-profiles/TEMPLATE.md`](stack-profiles/TEMPLATE.md).
+- **Tool naming and currency:** shared skills, references, and commands stay tool-agnostic and describe the capability, not a product. Concrete tools, packages, and libraries are named only in [`stack-profiles/`](stack-profiles), and even there as non-exhaustive examples the agent must verify against current official docs. Prefer detecting what the repo uses over any hardcoded list. See [`stack-profiles/TEMPLATE.md`](stack-profiles/TEMPLATE.md).
 - **Tool-specific rules:** Cursor rule files live in [`.cursor/rules/`](../.cursor/rules) and are not interchangeable with Claude rules without editing.
-- **Permissions:** after changing tool or path requirements, align
-  [`.claude/settings.json`](../.claude/settings.json) and [`PERMISSIONS.md`](PERMISSIONS.md). Deny overrides allow.
+- **Permissions:** after changing tool or path requirements, align [`.claude/settings.json`](../.claude/settings.json) and [`PERMISSIONS.md`](PERMISSIONS.md). Deny overrides allow.
 </required>
 
 ## XML section tags
@@ -101,27 +100,21 @@ Bounded on purpose. A vocabulary nobody can remember gets used inconsistently, a
 | `<procedure>`, `<screens>`, `<stories>`, `<model>` | RECORD steps; WIREFRAME; USERSTORY; ERD |
 | `<open_questions>`, `<references>`, `<revisions>` | Unknowns, sources, the change log |
 
-Document tags are valid only in `templates/docs/`; `scripts/check-xml-tags.sh` scopes them there. The runtime registry (`runtime/internal/pkg/docmeta/doctype.go`) is the source of truth, and a Go test fails when a template, the registry, or the checker's list disagree.
+Document tags are valid only in `templates/docs/` (`scripts/check-xml-tags.sh`). The runtime registry (`runtime/internal/pkg/docmeta/doctype.go`) is source of truth; a Go test fails on drift.
 
-**`<required>` versus `<rules>` is the distinction that earns the whole scheme.** A weak model flattens a document into one list of suggestions. Splitting the blocking rules from the advisory ones tells it which line it may trade away under pressure and which it may not. If a block would be correct to violate given a good reason, it is `<rules>`. If violating it is always a defect, it is `<required>`.
+**`<required>` versus `<rules>`:** if violating a block is always a defect, use `<required>`; if a good reason could justify trading it away, use `<rules>`. The split stops a weak model from flattening both into one suggestion list.
 
 ### Rules for using them
 
-- Tags go **after** YAML frontmatter, never before. Frontmatter must stay the first bytes of the file
-  or the skill and rule loaders will not parse it.
-- **One prose sentence goes above the first tag**, and no tag may be the first body line. This is the single exception to total tag coverage below, and it is not a section: it is the description, for the loaders that never read frontmatter. Cursor's `.cursor/commands` takes plain Markdown and advertises the first body line as-is, so thirteen commands here showed up in Cursor's `/` picker as the literal string `<references>` or `<context>` while their frontmatter was valid the whole time.
-  `commands/doctor.md` was the one that read correctly, because it happened to open on a sentence.
-  `scripts/check-frontmatter.py` check 4 now fails a tag-first body.
+- Tags go **after** YAML frontmatter, never before. Frontmatter must stay the first bytes of the file or the skill and rule loaders will not parse it.
+- **One prose sentence goes above the first tag**, and no tag may be the first body line. This is the single exception to total tag coverage below, and it is not a section: it is the description, for the loaders that never read frontmatter. Cursor's `.cursor/commands` takes plain Markdown and advertises the first body line as-is, so thirteen commands here showed up in Cursor's `/` picker as the literal string `<references>` or `<context>` while their frontmatter was valid the whole time. `commands/doctor.md` was the one that read correctly, because it happened to open on a sentence. `scripts/check-frontmatter.py` check 4 now fails a tag-first body.
 - Open and close on their own lines, so the Markdown around them still renders.
-- **Every section belongs to a block.** An untagged region between two tagged ones asks the model to guess what kind of instruction it is reading, which is the ambiguity the tags exist to remove.
-  Every asset under `.ai-agents/` is tagged, including short ones.
+- **Every section belongs to a block.** An untagged region between two tagged ones asks the model to guess what kind of instruction it is reading, which is the ambiguity the tags exist to remove. Every asset under `.ai-agents/` is tagged, including short ones.
 - **Stay within the size budget.** A file over its budget loses rules for short-context models. Limits and writing rules: [`concise-docs.md`](references/concise-docs.md); `docs budget` enforces them.
 - **Nest only for genuine containment, one level deep.** Anthropic's prompting guidance says to "nest tags when content has a natural hierarchy", and its example is a container holding items of the same kind. A long `<procedure>` whose phases each carry their own `<verification>` is that shape. Two categories side by side are not: `<required>` inside `<rules>` invents a question with no answer, namely whether the requirement stops applying outside that block.
-- **Pick the tag by what the block is, not by what it is called.** A heading reading "Quick
-  Reference" that holds code examples is `<rules>`, not `<references>`.
+- **Pick the tag by what the block is, not by what it is called.** A heading reading "Quick Reference" that holds code examples is `<rules>`, not `<references>`.
 - Use the smallest set that partitions the file. Most assets need three or four, not eleven.
-- A tag pair costs roughly six tokens. Measured here, tags cost about as much as the restated
-  boilerplate they replaced, so treat the partition as the return, not a smaller file.
+- A tag pair costs roughly six tokens. Measured here, tags cost about as much as the restated boilerplate they replaced, so treat the partition as the return, not a smaller file.
 
 `scripts/check-xml-tags.sh` fails on a mispaired tag, an unknown tag, a tag placed above frontmatter, a tag nested inside itself, or nesting past one level.
 </context>
@@ -161,13 +154,10 @@ Run `scripts/link-ai-agents.ps1` (Windows) or `scripts/link-ai-agents.sh` (macOS
 - Keep the consumer repo as its own repository and the source of product code.
 - Mount this toolkit as a submodule at a chosen path, for example `.ultragentic`.
 - Treat `<toolkit-root>/.ai-agents` as the canonical shared assets path.
-- Give the consumer repo its own root `AGENTS.md` with product and domain constraints. It wins over
-  this toolkit; see local-first precedence in [`AGENTS.md`](../AGENTS.md).
+- Give the consumer repo its own root `AGENTS.md` with product and domain constraints. It wins over this toolkit; see local-first precedence in [`AGENTS.md`](../AGENTS.md).
 - When an agent **writes** that charter (or `CURSOR.md`, `CLAUDE.md`, `.cursor/rules/*.mdc` for the product repo), follow **Consumer charter files** below. Hooks still inject toolkit context at session time; the committed file must not depend on it.
-- Run the link scripts from the submodule with `-WorkspaceRoot` / `--workspace` set to the consumer
-  root and `-AssetsRoot` / `--assets` set to `<toolkit-root>/.ai-agents`.
-- Treat tool permissions as repository-local policy: adapt `opencode.json`, `.claude/settings.json`,
-  and local rules to that repo's layout and risk profile.
+- Run the link scripts from the submodule with `-WorkspaceRoot` / `--workspace` set to the consumer root and `-AssetsRoot` / `--assets` set to `<toolkit-root>/.ai-agents`.
+- Treat tool permissions as repository-local policy: adapt `opencode.json`, `.claude/settings.json`, and local rules to that repo's layout and risk profile.
 </rules>
 
 ## Consumer charter files
@@ -182,8 +172,7 @@ When an agent creates or edits charter files **for a consumer/product repository
 
 **Write only:**
 
-- Product and domain rules, stack conventions, repo layout, test/lint commands, security boundaries
-  for that product.
+- Product and domain rules, stack conventions, repo layout, test/lint commands, security boundaries for that product.
 - Plain policy graduated from `.agent-state/MISTAKES.md` (no toolkit cross-links).
 
 **Do not write:**
@@ -240,9 +229,7 @@ Installs the assets into the user-level directories, so every project on the mac
 
 Both also install the runtime binary, downloading a signed release after a license prompt, so a fresh machine needs one command. Set `UA_SKIP_RUNTIME` to install only the markdown. A failed download never fails the install: the assets work without the binary, and the delivery commands that need the control plane say so.
 
-Both write the same layout and share one manifest, so either can uninstall what the other installed.
-The PowerShell port is not duplication for symmetry: Git Bash on Windows accepts `ln -s` and silently copies, so only PowerShell can produce live symlinks, and only with Developer Mode on.
-Each script attempts a link, verifies it, falls back to a copy, and reports which it did.
+Both write the same layout and share one manifest, so either can uninstall what the other installed. The PowerShell port exists because Git Bash on Windows accepts `ln -s` and silently copies; only PowerShell (with Developer Mode) can make live symlinks. Each script tries a link, verifies it, falls back to a copy, and reports which it did.
 
 Everything installs under a `ua-` prefix, and the prefix carries weight. Claude Code resolves a skill-name collision toward the personal level, so an unprefixed global install would make this toolkit override a repository's own skills instead of being the fallback that [`AGENTS.md`](../AGENTS.md) says it is. Prefixing means the collision never happens.
 
