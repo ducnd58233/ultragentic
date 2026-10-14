@@ -79,6 +79,7 @@ Do not use when:
 - Prefer the smallest design that satisfies requirements.
 - Avoid speculative abstractions and future-proofing not requested.
 - Rewrite overcomplicated drafts to simpler equivalents.
+- On non-trivial algorithm or data-structure work, still prefer better time/space complexity where it matters and reason about edge/worst-case behavior per [`complexity-and-edge-cases.md`](../../references/complexity-and-edge-cases.md) - simplicity is not an excuse for quadratic-by-default or happy-path-only logic.
 
 ### 3) Surgical changes
 
@@ -117,6 +118,7 @@ Do not use when:
 - [ ] Assumptions/tradeoffs were surfaced when needed.
 - [ ] No unnecessary abstractions or speculative logic added.
 - [ ] Diff is scoped to task intent.
+- [ ] Applicable diffs settled [`complexity-and-edge-cases.md`](../../references/complexity-and-edge-cases.md) (or marked not applicable).
 - [ ] Completion is backed by concrete verification evidence.
 - [ ] Every file/path/result described was actually observed; inaccessible inputs were reported as `ACCESS-FAILED`, not inferred.
 </verification>

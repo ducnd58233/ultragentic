@@ -124,6 +124,7 @@ After non-trivial implementation or refactor:
 - [`backend-engineering`](../backend-engineering/SKILL.md): layering, transactions, repository scope as applied SoC/DIP.
 - [`api-and-interface-design`](../api-and-interface-design/SKILL.md): contract design at module/service edges.
 - [`code-simplification`](../code-simplification/SKILL.md): reduce complexity once behavior is covered by tests.
+- [`complexity-and-edge-cases.md`](../../references/complexity-and-edge-cases.md): time/space Big-O and edge/worst-case MUST on non-trivial code changes and refactors.
 - [`source-driven-development`](../source-driven-development/SKILL.md): scaffold and use framework APIs from official docs/CLIs.
 </references>
 

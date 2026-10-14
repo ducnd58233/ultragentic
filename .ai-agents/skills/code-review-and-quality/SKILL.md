@@ -337,6 +337,7 @@ Part of code review is dependency review:
 - [ ] No N+1 patterns
 - [ ] No unbounded operations
 - [ ] Pagination on list endpoints
+- [ ] [`complexity-and-edge-cases.md`](../../references/complexity-and-edge-cases.md)
 
 ### Verification
 - [ ] Tests pass

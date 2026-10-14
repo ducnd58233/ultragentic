@@ -43,7 +43,7 @@ Simplify code by reducing complexity while preserving exact behavior. The goal i
 
 ### 1. Preserve Behavior Exactly
 
-Don't change what the code does - only how it expresses it. All inputs, outputs, side effects, error behavior, and edge cases must remain identical. If you're not sure a simplification preserves behavior, don't make it.
+Don't change what the code does - only how it expresses it. All inputs, outputs, side effects, error behavior, and edge cases must remain identical. If you're not sure a simplification preserves behavior, don't make it. On applicable refactors, follow [`complexity-and-edge-cases.md`](../../references/complexity-and-edge-cases.md): keep edge/worst-case behavior intact and do not worsen time/space class where it matters.
 
 ```
 ASK BEFORE EVERY CHANGE:
