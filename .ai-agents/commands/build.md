@@ -59,10 +59,11 @@ For **one** task only (then stop or ask before starting the next task on a new b
 3. Load context ([`context-engineering`](../skills/context-engineering/SKILL.md) as needed).
 4. RED - failing test for new behavior.
 5. GREEN - minimal implementation.
-6. Run full tests and typecheck/build per project (`npm`/`pnpm`/`uv` as documented).
-7. **Disclosure pass (MUST, before commit):** apply [`secure-by-default`](../skills/secure-by-default/SKILL.md) to the diff. For every sink the task added or changed (log call, response body, client storage, analytics event, error path, env var), name what goes into it. A clean runtime `sensitive-data-guard` finding set is a floor, not evidence. Channel detail: [`sensitive-data-exposure.md`](../references/sensitive-data-exposure.md).
-8. Commit with a human-friendly conventional message, `type(scope): subject`, that matches the branch. Use plain words, no AI-tell filler, no emojis/icons, no em-dash. **MUST NOT** add AI/agent co-author trailers (`Co-Authored-By: ...`) or "Generated with ..." lines; attribute commits solely to the human's git identity.
-9. **PR evidence before open and on every later commit (MUST).** For reviewers on the PR
+6. **Complexity and edge/worst-case (MUST on applicable diffs):** apply [`complexity-and-edge-cases.md`](../references/complexity-and-edge-cases.md). Prefer better time/space complexity where it matters; state brief Big-O/tradeoffs when non-trivial; reason about edge and worst-case behavior so logic does not fail under those cases. Skip ceremony on trivial one-line fixes.
+7. Run full tests and typecheck/build per project (`npm`/`pnpm`/`uv` as documented).
+8. **Disclosure pass (MUST, before commit):** apply [`secure-by-default`](../skills/secure-by-default/SKILL.md) to the diff. For every sink the task added or changed (log call, response body, client storage, analytics event, error path, env var), name what goes into it. A clean runtime `sensitive-data-guard` finding set is a floor, not evidence. Channel detail: [`sensitive-data-exposure.md`](../references/sensitive-data-exposure.md).
+9. Commit with a human-friendly conventional message, `type(scope): subject`, that matches the branch. Use plain words, no AI-tell filler, no emojis/icons, no em-dash. **MUST NOT** add AI/agent co-author trailers (`Co-Authored-By: ...`) or "Generated with ..." lines; attribute commits solely to the human's git identity.
+10. **PR evidence before open and on every later commit (MUST).** For reviewers on the PR
    (not a tip about local staging paths): capture with `ultragentic previdence snapshot` /
    `previdence record` (or `--source`) into run `pr-evidence/` staging, write `MANIFEST.md`,
    and put the **portable evidence contract** on the PR/MR for every forge: **Visual evidence**
@@ -79,7 +80,7 @@ For **one** task only (then stop or ask before starting the next task on a new b
    [`ux-taste.md`](../references/ux-taste.md). Docs-only: `Kind: none` with a reason. After tip
    commits, recapture/reattach/refresh before push; stale Head fails closed. Never commit media.
    See [`pr-evidence.md`](../references/pr-evidence.md).
-10. **Set the task `done` in `TASKS.md` and `task_lists`, and tick its acceptance checkboxes.** Both
+11. **Set the task `done` in `TASKS.md` and `task_lists`, and tick its acceptance checkboxes.** Both
    places, same edit, before the next verifier runs: `task_complete` reads `task_lists` to decide
    whether work remains, so a status written after it ran sends the run back through a whole build
    cycle for a task that was already finished. Report branch name and PR link if created.

@@ -114,6 +114,8 @@ For skill and agent behavioral evaluation more broadly, see
 | Match an implemented screen to the handoff pixel for pixel | skill | [`ui-design-fidelity`](../skills/ui-design-fidelity/SKILL.md) |
 | Make a screen less generic with clear hierarchy and loading empty error states | reference | [`ux-taste.md`](../references/ux-taste.md) |
 | Review a pull request screen for hierarchy states anti-slop and evidence before merge | reference | [`ui-review-checklist.md`](../references/ui-review-checklist.md) |
+| Prefer better time and space complexity and cover edge and worst-case behavior on a code change | reference | [`complexity-and-edge-cases.md`](../references/complexity-and-edge-cases.md) |
+| Review a pull request for Big-O tradeoffs and edge or worst-case failure modes | reference | [`complexity-and-edge-cases.md`](../references/complexity-and-edge-cases.md) |
 | Figure out which asset to load for the work in front of me | skill | [`using-agent-skills`](../skills/using-agent-skills/SKILL.md) |
 </references>
 

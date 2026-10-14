@@ -10,6 +10,7 @@ Lookup table for shared checklists and pattern docs under this folder. These fil
 |-------|------|----------------|
 | WCAG 2.1 AA, keyboard and screen readers | [`accessibility-checklist.md`](accessibility-checklist.md) | `frontend-ui-engineering` |
 | Core Web Vitals, frontend + API + DB | [`performance-checklist.md`](performance-checklist.md) | `performance-optimization` |
+| Time/space complexity and edge/worst-case on code-change paths | [`complexity-and-edge-cases.md`](complexity-and-edge-cases.md) | `/build`, `/review`, `/simplify`, `code-simplification`, `engineering-principles`, `karpathy-guardrails` |
 | Auth, validation, headers, CORS, OWASP | [`security-checklist.md`](security-checklist.md) | `security-and-hardening` |
 | Leak channels: bundle, client storage, console/device logs, UI/DOM, API response, server logs, CI artifacts | [`sensitive-data-exposure.md`](sensitive-data-exposure.md) | `secure-by-default`, `security-and-hardening` |
 | AAA, mocks, RTL, API, E2E | [`testing-patterns.md`](testing-patterns.md) | `test-driven-development` |

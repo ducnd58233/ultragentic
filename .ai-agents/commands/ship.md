@@ -44,7 +44,7 @@ Personas **must not** delegate to each other.
 
 ## Phase B - Merge
 
-Synthesize: quality blockers, security blockers, coverage gaps, design-system/visual QA risks, database/query risks, QA signoff gaps, accessibility ([`references/accessibility-checklist.md`](../references/accessibility-checklist.md) if UI changed), infra/env/feature flags, deploy/rollback/observability readiness.
+Synthesize: quality blockers, security blockers, coverage gaps, design-system/visual QA risks, database/query risks, QA signoff gaps, accessibility ([`references/accessibility-checklist.md`](../references/accessibility-checklist.md) if UI changed), complexity/edge/worst-case gaps on applicable code diffs ([`references/complexity-and-edge-cases.md`](../references/complexity-and-edge-cases.md)), infra/env/feature flags, deploy/rollback/observability readiness.
 
 ### UI evidence gate (MUST, when the change touches UI)
 
