@@ -19,8 +19,9 @@ Every document under `docs/` is made by a command, filled from a template, and c
 2. **One slug, one folder, one category.** A slug's documents all live in `docs/<category>/<slug>/`, whatever their type: a research slug's DECISION goes in `docs/research/<slug>/`. Pass `--category` only for a brand-new slug. If `docs new` refuses, do what its message says; never create the file or folder by hand to get past it.
 3. **Living documents are edited in place.** Never copy `SPEC.md` to a new folder or a new name to make a "version 2". Edit it, then run `ultragentic docs revise`.
 4. **Keep every XML section the template gave you,** in the same order, each tag alone on its line. Put your content between the tags. Write `None.` in a section with nothing to say; do not delete it.
-5. **A document is done only when `ultragentic docs check <file>` prints `ok`.**
-6. Documents hold content for people. Run state goes to the runtime, agent-only notes go to `ultragentic memory propose`, never into `docs/`.
+5. **Prose soft wrap (MUST).** Write filled sections as paragraph flow. Do not hard-wrap mid-sentence or mid-clause. Hard newlines only for paragraph boundaries, headings, lists, fences, tables, front matter, and XML tags on their own lines. Soft wrap in the editor; do not insert fill-column breaks. See [`AUTHORING.md`](../../AUTHORING.md) "Prose soft wrap".
+6. **A document is done only when `ultragentic docs check <file>` prints `ok`.**
+7. Documents hold content for people. Run state goes to the runtime, agent-only notes go to `ultragentic memory propose`, never into `docs/`.
 
 </required>
 

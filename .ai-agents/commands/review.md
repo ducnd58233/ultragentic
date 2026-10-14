@@ -14,8 +14,7 @@ Review the current change across five axes: correctness, readability, architectu
 Follow the [`code-review-and-quality`](../skills/code-review-and-quality/SKILL.md) skill.
 
 **Run the deterministic pass first (MUST).** These commands are the mechanical
-half of this review. Do not redo their work by eye, and do not choose for
-yourself which files or functions to read:
+half of this review. Do not redo their work by eye, and do not choose for yourself which files or functions to read:
 
 ```sh
 ultragentic review scan --changed        # a branch or PR: the change's findings, changed blocks marked *
@@ -25,21 +24,18 @@ ultragentic slop audit <path>            # AI-slop signals: unfinished markers, 
 
 Add `--json` to either for a record under `tmp/<slug>/`. `review scan` reads
 every source file (installed packages, build output, virtual environments,
-vendored and generated files are excluded), cuts each file into blocks that
-together cover every line, and reports:
+vendored and generated files are excluded), cuts each file into blocks that together cover every line, and reports:
 
 - **References:** unused imports; definitions nothing references; definitions
   this change left without a caller (`orphaned-by-change`); helpers only tests call.
 - **Bug shapes:** self-comparison, NaN comparison, identical branches, repeated
-  conditions, unreachable statements, duplicate keys, assignment in a
-  condition, swallowed errors, return in finally, defer in a loop, mutable
+  conditions, unreachable statements, duplicate keys, assignment in a condition, swallowed errors, return in finally, defer in a loop, mutable
   defaults, `is` with a literal, leftover debugger calls, redefinitions.
 
 **Then walk its BLOCKS list in order, one block at a time (MUST):**
 
 1. `ultragentic review block <path>:<line>` prints the block with line numbers,
-   its findings, and the files that reference it. Nested blocks are folded to
-   one line; print each one separately.
+   its findings, and the files that reference it. Nested blocks are folded to one line; print each one separately.
 2. Settle every finding in the block: fix it, or state in the review why it is
    wrong (a framework or reflection call, a deliberate idiom). Never drop one
    silently. Before deleting an unreferenced definition, check the listed
@@ -47,13 +43,9 @@ together cover every line, and reports:
 3. Review the block on the five axes below. Review a changed block (`*`) in
    full; read an unchanged block only for context a changed one needs.
 
-The scan resolves no types, so it cannot see a call through reflection, a
-framework, or another repository. Treat its findings as leads you verify, not
-verdicts. A deliberate exception is recorded in the code: a `review:ignore
+The scan resolves no types, so it cannot see a call through reflection, a framework, or another repository. Treat its findings as leads you verify, not verdicts. A deliberate exception is recorded in the code: a `review:ignore
 <reason>` comment, or the linter's own directive (`noqa`, `nolint`,
-`eslint-disable`), on or above the line silences it. A machine can say a
-condition repeats; it cannot say a boundary is wrong. Spend your attention on
-the half only a reviewer can do.
+`eslint-disable`), on or above the line silences it. A machine can say a condition repeats; it cannot say a boundary is wrong. Spend your attention on the half only a reviewer can do.
 
 Review current changes (staged diff, branch, or paths the user specifies) across:
 
@@ -84,9 +76,7 @@ Optional: spawn the **`code-reviewer`** subagent ([`agents/code-reviewer.md`](..
 On the auto path, `review_ok` in `goal-delivery.yaml` `file_assert`s this file before the run
 continues to `experiment_run`: a self-report accepted with no check at all is exactly the gap
 `docs/*/agent-code-quality-hardening` closed (self-report is weak evidence precisely
-because generator and evaluator share the same failure modes - `arXiv:2606.05976`). The check is
-mechanical presence of the five axis names, not a quality judgment: it cannot tell a real review from
-a perfunctory one, only that one was written down. Write:
+because generator and evaluator share the same failure modes - `arXiv:2606.05976`). The check is mechanical presence of the five axis names, not a quality judgment: it cannot tell a real review from a perfunctory one, only that one was written down. Write:
 
 `.agent-state/runs/<date>/<slug>/<version>/review/REVIEW.md`
 
@@ -109,10 +99,7 @@ a perfunctory one, only that one was written down. Write:
 ...
 ```
 
-Under **Correctness** and **Performance**, settle the checkable bullets in
-[`complexity-and-edge-cases.md`](../references/complexity-and-edge-cases.md) when the diff is
-applicable (or state why it is not). Every axis heading must appear even when a section has no
-findings - the check reads for the axis names, not for content under them. On `/goal` (no auto
+Under **Correctness** and **Performance**, settle the checkable bullets in [`complexity-and-edge-cases.md`](../references/complexity-and-edge-cases.md) when the diff is applicable (or state why it is not). Every axis heading must appear even when a section has no findings - the check reads for the axis names, not for content under them. On `/goal` (no auto
 flag), write the same file as a matter of discipline; nothing in the graph verifies it there today.
 </required>
 

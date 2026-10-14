@@ -2,14 +2,11 @@
 
 <context>
 
-Organized by **leak channel**, not by vulnerability class. The question a channel answers is the
-one an agent actually faces mid-edit: *this value is about to go somewhere, can the wrong person
+Organized by **leak channel**, not by vulnerability class. The question a channel answers is the one an agent actually faces mid-edit: *this value is about to go somewhere, can the wrong person
 read it there?*
 
 Companion to [`security-checklist.md`](security-checklist.md), which is organized by OWASP category
-and answers a different question. Use the always-on
-[`secure-by-default`](../skills/secure-by-default/SKILL.md) skill for the write-time rules, and
-[`security-and-hardening`](../skills/security-and-hardening/SKILL.md) for authn/authz and injection
+and answers a different question. Use the always-on [`secure-by-default`](../skills/secure-by-default/SKILL.md) skill for the write-time rules, and [`security-and-hardening`](../skills/security-and-hardening/SKILL.md) for authn/authz and injection
 depth.
 
 **Scope split:** this file names **channels and rules**, which generalize. Concrete mechanisms
@@ -43,8 +40,7 @@ who reaches any of these reaches all of them.
 
 <context>
 
-Anything the build inlines is public forever. Rotating it means a redeploy, and the old bundle is
-already cached.
+Anything the build inlines is public forever. Rotating it means a redeploy, and the old bundle is already cached.
 
 - Values behind a build-time public prefix are inlined verbatim. The prefix differs per tool
   (`NEXT_PUBLIC_`, `VITE_`, `EXPO_PUBLIC_`, `REACT_APP_`, `PUBLIC_`, and others). Detect the rule
@@ -58,8 +54,7 @@ already cached.
 - Server-only code must be provably unreachable from the client entry point, not merely
   conventionally separated.
 
-**Test:** build for production, then search the output directory for the value. If it appears, it
-is public.
+**Test:** build for production, then search the output directory for the value. If it appears, it is public.
 </context>
 
 ## Channel 2: client-side storage
@@ -67,8 +62,7 @@ is public.
 <rules>
 
 - Web: browser local and session storage are readable by any script on the origin. An XSS becomes
-  a token theft with no further work. Prefer an httpOnly, secure, sameSite cookie, or hold the
-  token in memory and accept re-auth on reload.
+  a token theft with no further work. Prefer an httpOnly, secure, sameSite cookie, or hold the token in memory and accept re-auth on reload.
 - Mobile: plaintext preference stores and unencrypted files are readable on a rooted or jailbroken
   device and often ride along in device backups. Use the platform secure store. Mark sensitive
   files as excluded from backup where the platform supports it.
@@ -136,8 +130,7 @@ is public.
 - Secrets passed as build arguments persist in image layers and build history, even when the final
   stage does not reference them.
 - CI logs are readable by everyone with pipeline access, and often by everyone with repository
-  access. Masking depends on the platform recognizing the value; a transformed secret is not
-  masked.
+  access. Masking depends on the platform recognizing the value; a transformed secret is not masked.
 - Committed history is permanent. A secret removed in a later commit is still in the history, and
   rotation is the only real fix.
 - Agent evidence under `tmp/` may contain PR comments, test output, and captured responses. Redact
@@ -161,10 +154,7 @@ Channel-by-channel, this is what an agent should actually run or check:
 - [ ] CI logs and image layers checked for secret values
 - [ ] `tmp/` evidence redacted before write
 
-The deterministic part of this list is enforced by
-runtime `sensitive-data-guard` on file writes. The guard is
-a floor; it cannot tell whether an object carries personal data, whether a response field is
-authorized for its audience, or whether a leak is assembled across two files.
+The deterministic part of this list is enforced by runtime `sensitive-data-guard` on file writes. The guard is a floor; it cannot tell whether an object carries personal data, whether a response field is authorized for its audience, or whether a leak is assembled across two files.
 </verification>
 
 ## Standards
@@ -188,9 +178,7 @@ while the rules above do not. When you bump a version, this table is the only th
 Two notes on currency, verified against the OWASP project pages:
 
 - The 2025 edition dropped "Vulnerable and Outdated Components" and "Server-Side Request Forgery"
-  as standalone categories, and added A03 Software Supply Chain Failures and A10 Mishandling of
-  Exceptional Conditions. The unlabeled table in
-  [`security-checklist.md`](security-checklist.md) still reflects the 2021 edition.
+  as standalone categories, and added A03 Software Supply Chain Failures and A10 Mishandling of Exceptional Conditions. The unlabeled table in [`security-checklist.md`](security-checklist.md) still reflects the 2021 edition.
 - Mobile-specific verification maps to OWASP MASVS, which is platform-scoped. Keep those mappings
   in the mobile [`stack-profiles/`](../stack-profiles/ROUTER.md) rather than here, so this file
   stays stack-neutral.

@@ -6,10 +6,8 @@ Drive one objective to a merged pull request without stopping for a person, exce
 
 <context>
 
-`/auto` and `/goal` run the same graph (`goal-delivery`), the same verifiers at every node they
-share, and the same refusals. Two things differ. The approval gates are answered by evidence instead
-of by you, and the `auto` flag routes through extra quality stages a person building by hand does
-not need a node for. Everything else, including `remember` and `improve`, is on both paths.
+`/auto` and `/goal` run the same graph (`goal-delivery`), the same verifiers at every node they share, and the same refusals. Two things differ. The approval gates are answered by evidence instead
+of by you, and the `auto` flag routes through extra quality stages a person building by hand does not need a node for. Everything else, including `remember` and `improve`, is on both paths.
 
 | | `/goal` | `/auto` |
 |---|---|---|
@@ -25,17 +23,13 @@ not need a node for. Everything else, including `remember` and `improve`, is on 
 | After `improve`, when `task_required` is set | `done` | `execute`, `task_check`, `ac_review`, then `approve_delivery`, which is a person on both paths ([`task.md`](task.md)) |
 | After the merge | `remember` | `merge_ci` (watch the default branch), then `remember` |
 
-The rows are the graph's `when: auto` / `when: "!auto"` edges and `skipWhen` gates; if they
-disagree with [`goal-delivery.yaml`](../graphs/goal-delivery.yaml), the graph is right and this table
+The rows are the graph's `when: auto` / `when: "!auto"` edges and `skipWhen` gates; if they disagree with [`goal-delivery.yaml`](../graphs/goal-delivery.yaml), the graph is right and this table
 is stale.
 
-Read [`goal.md`](goal.md) first. Everything it says about the runtime, evidence provenance, and the
-delivery gates applies here unchanged, and this file does not restate it.
+Read [`goal.md`](goal.md) first. Everything it says about the runtime, evidence provenance, and the delivery gates applies here unchanged, and this file does not restate it.
 
 Boundary this mode moves, and where that is recorded: [`AGENTS.md`](../../AGENTS.md) section
-"Delivery gates", bullets **Merge approval** and **Auto `reviews` and `ship` (reversal)**. On
-`/auto` only, `reviews` and `ship` pass from `ci_api` / `file_assert` evidence rather than from
-`human_event`; `/goal` stays human at those nodes, and no new checkpoint evidence source was added.
+"Delivery gates", bullets **Merge approval** and **Auto `reviews` and `ship` (reversal)**. On `/auto` only, `reviews` and `ship` pass from `ci_api` / `file_assert` evidence rather than from `human_event`; `/goal` stays human at those nodes, and no new checkpoint evidence source was added.
 </context>
 
 ## Runtime is required (MUST)
@@ -54,30 +48,24 @@ ultragentic auto task "<non-code task from the user>"
 ultragentic auto gate --slug <slug from start output>
 ```
 
-Host agents pass the user's text as plain arguments, including a first word from
-`ultragentic inventory`. Slug and graph are derived; do not ask for `--goal`, `--graph`, or `--slug`
-unless resuming. With no first word the runtime prints `chosen`; follow "Choosing the graph" in
-[`goal.md`](goal.md). On `/auto` a strong signal may choose the graph; otherwise ask, because nobody
+Host agents pass the user's text as plain arguments, including a first word from `ultragentic inventory`. Slug and graph are derived; do not ask for `--goal`, `--graph`, or `--slug`
+unless resuming. With no first word the runtime prints `chosen`; follow "Choosing the graph" in [`goal.md`](goal.md). On `/auto` a strong signal may choose the graph; otherwise ask, because nobody
 is at intake. Add kinds/workflows via DocTypes/Workflows registries only — not this file.
 
 `/auto` has two limits the other graphs do not. `auto tutor` is refused, because a tutor
 needs a learner present, so use `/goal tutor`. And `auto task` stops at `approve_delivery` every time:
-it reaches the work on its own, and a person opens the one gate that lets anything leave the
-workspace.
+it reaches the work on its own, and a person opens the one gate that lets anything leave the workspace.
 
 If the binary is not on `PATH`, run no phase yet. Follow [`runtime-bootstrap.md`](../references/runtime-bootstrap.md): ask the user once to accept the runtime license, install it yourself with `ensure-runtime`, run `ultragentic doctor`, then continue. If the user declines or the install fails, **stop**.
 
 If the binary runs but `doctor` reports problems, **stop. Run no phase.** Do **not**
 claim the runtime is missing. Report the doctor failures and fix that workspace
-first (check plan, docs layout, leftover `tmp/`, hooks). `merge: false` in the
-auto opt-in is a note, not a doctor failure: auto may still run and stops at a
-green PR for a person to merge.
+first (check plan, docs layout, leftover `tmp/`, hooks). `merge: false` in the auto opt-in is a note, not a doctor failure: auto may still run and stops at a green PR for a person to merge.
 
 ### Dispatcher features hosts must use (MUST)
 
 Hosts run `ultragentic doctor` first; start also refuses on a broken control plane
-(graphs, docs layout, opt-in shape, memory, run state). Drive the run with
-`run status` / `run flag`, `checkpoint` after artifacts, `verify` at verifiers, hooks,
+(graphs, docs layout, opt-in shape, memory, run state). Drive the run with `run status` / `run flag`, `checkpoint` after artifacts, `verify` at verifiers, hooks,
 memory, `calc`, and for long steps `job start` then `job wait`, with `job list` /
 `job abort` for stuck or lost jobs (never shell-bg,
 Wait-Process, or PID polling). No markdown-only walk; see [`goal.md`](goal.md)
@@ -89,8 +77,7 @@ Wait-Process, or PID polling). No markdown-only walk; see [`goal.md`](goal.md)
    failure this whole design exists to remove. The graph decides what runs next, from recorded
    evidence, and the only way to move it is `ultragentic verify` or `ultragentic checkpoint`.
 2. **Do not record `human_event` on a person's behalf.** Auto mode passes the approval gates by
-   graph edges guarded on a flag, never by writing evidence that claims someone approved. There is
-   no source for model assertion, and inventing one through the human source would remove the one
+   graph edges guarded on a flag, never by writing evidence that claims someone approved. There is no source for model assertion, and inventing one through the human source would remove the one
    property this control plane has that no surveyed harness has.
 3. **Do not merge without the opt-in.** A workspace with no `.agent-state/auto.yaml`, or one whose
    file still says `merge: false`, has not agreed to it. Absence is a no.
@@ -101,8 +88,7 @@ Wait-Process, or PID polling). No markdown-only walk; see [`goal.md`](goal.md)
 <required>
 
 Everything [`goal.md`](goal.md) says in its **The task list (MUST)** section applies here unchanged,
-and unattended running makes it matter more rather than less: nobody is watching to notice that a
-task was ticked late or not at all.
+and unattended running makes it matter more rather than less: nobody is watching to notice that a task was ticked late or not at all.
 
 Two consequences specific to this mode:
 
@@ -110,8 +96,7 @@ Two consequences specific to this mode:
   driving, a wrong answer there gets spotted; with auto driving, the run simply walks another build
   cycle for a task that is already finished, and keeps doing it.
 - **`auto gate` reads the plan document.** A task without acceptance criteria gives the spec and
-  plan gates nothing to test, and a plan that still says `TBD` keeps the gate closed - which is the
-  gate working, not a fault to route around.
+  plan gates nothing to test, and a plan that still says `TBD` keeps the gate closed - which is the gate working, not a fault to route around.
 
 Canonical rules: [`planning-and-task-breakdown`](../skills/planning-and-task-breakdown/SKILL.md),
 section **Task status (MUST)**.
@@ -121,12 +106,9 @@ section **Task status (MUST)**.
 
 <procedure>
 
-`ultragentic auto init` writes `.agent-state/auto.yaml`. The questions live in the file rather than
-in a terminal prompt: a file is answered in a diff somebody can review, and it is still there to
-re-read later.
+`ultragentic auto init` writes `.agent-state/auto.yaml`. The questions live in the file rather than in a terminal prompt: a file is answered in a diff somebody can review, and it is still there to re-read later.
 
-It writes `merge: false`. Someone changes it, or auto mode stops at a green pull request and a
-person merges.
+It writes `merge: false`. Someone changes it, or auto mode stops at a green pull request and a person merges.
 
 `ultragentic doctor` reports which of the three states a workspace is in: no file, file answered no,
 file answered yes.
@@ -136,8 +118,7 @@ file answered yes.
 
 <rules>
 
-Auto mode may pass `intake`, `approve_spec`, and `approve_plan` on its own when the objective is
-specific enough to spec without guessing. It may pass `approve_merge` only when **every** condition
+Auto mode may pass `intake`, `approve_spec`, and `approve_plan` on its own when the objective is specific enough to spec without guessing. It may pass `approve_merge` only when **every** condition
 below already holds. Any one of them missing means it stops and a person decides.
 
 | # | Condition | Where the evidence comes from |
@@ -151,8 +132,7 @@ below already holds. Any one of them missing means it stops and a person decides
 
 **The danger list stops auto mode every time**, whatever the other five say: schema and data
 migrations, data destruction, production writes, credential changes, history rewrites,
-infrastructure destruction, and outward publication. Those need a person, and the gate refuses with
-exit 2 rather than asking. On Claude Code that includes an MCP tool call that sends, posts, pays,
+infrastructure destruction, and outward publication. Those need a person, and the gate refuses with exit 2 rather than asking. On Claude Code that includes an MCP tool call that sends, posts, pays,
 shares, or schedules (the `outward-action` category, which applies to an auto run only).
 
 **Ambiguity is the other stop.** A goal that cannot be specified without inventing an acceptance
@@ -166,14 +146,12 @@ not a judgement call about the prompt.
 
 Being honest about the seam rather than describing a mode that does not exist yet.
 
-**Live today:** the opt-in file, `ultragentic auto init`, `doctor` reporting the opt-in state, the
-danger list refused before anything runs, every verifier `/goal` already runs, and the graph itself
+**Live today:** the opt-in file, `ultragentic auto init`, `doctor` reporting the opt-in state, the danger list refused before anything runs, every verifier `/goal` already runs, and the graph itself
 - the `auto` flag routes through `simplify`, `lint`, `commit`, `bug_hunt` (`bug_hunt/FINDINGS.md`),
 `expectation_review` (SPEC-tied `expectation/REVIEW.md`), `review_ok` (`review/REVIEW.md`, all five
 axis names), `release_review` (`release/REVIEW.md`) via `file_assert` (misses reopen `plan`, `build`,
 or `review`), and a watch on the default branch after the merge lands, and the `intake`,
-`approve_spec`, and `approve_plan` gates skip when the run's flags say a person is not needed. A
-skipped gate records `skipped`, never `passed`, so run state still says which gates a person
+`approve_spec`, and `approve_plan` gates skip when the run's flags say a person is not needed. A skipped gate records `skipped`, never `passed`, so run state still says which gates a person
 answered. Host docs: [`bug-hunt.md`](bug-hunt.md), [`expectation.md`](expectation.md),
 [`review.md`](review.md), [`release.md`](release.md),
 [`failure-trace.md`](failure-trace.md) (write TRACE on verifier fail or third-strike before replan).
@@ -195,18 +173,15 @@ can claim - which is why the gate it opens records `skipped` and never `passed`.
 
 On the auto path, `ultragentic checkpoint` runs the same document tests when a run
 lands on `approve_applicability` or `approve_design`, then walks past the gate.
-Auto research therefore continues from literature to hypothesis and from
-experiment design to `experiment_run` without a separate gate step. [`goal.md`](goal.md)
+Auto research therefore continues from literature to hypothesis and from experiment design to `experiment_run` without a separate gate step. [`goal.md`](goal.md)
 and `ultragentic research` still park at those gates until a person approves.
 
-A goal that arrives over MCP is fenced where it enters run state, with the warning before the
-content, and content cannot close its own fence. Whoever filed that ticket is not the person
+A goal that arrives over MCP is fenced where it enters run state, with the warning before the content, and content cannot close its own fence. Whoever filed that ticket is not the person
 running this.
 
 **Not yet:** nothing in this contract. What auto mode does **not** do is the work - the host coding
 agent still runs every agent node exactly as it does under [`goal.md`](goal.md), and the runtime
-still holds the evidence. Auto is a route through the same graph, not a second implementation of
-it.
+still holds the evidence. Auto is a route through the same graph, not a second implementation of it.
 </context>
 
 ## Auto research host obligation (MUST)
@@ -229,33 +204,27 @@ Stop only when:
   to stop. See [`experiment.md`](experiment.md) "Integrity (MUST)".
 
 A missed metrics threshold at `results_eval` is neither of those - it is a verifier fail the graph
-already retries automatically (an `INTEGRITY:` failure is the exception above). Never record it as
-`checkpoint --blocker`; see [`AGENTS.md`](../../AGENTS.md) "Blocker vs. retry". Unclear dataset
+already retries automatically (an `INTEGRITY:` failure is the exception above). Never record it as `checkpoint --blocker`; see [`AGENTS.md`](../../AGENTS.md) "Blocker vs. retry". Unclear dataset
 licence or terms are a separate stop; see [`research-integrity`](../references/research-integrity.md)
 "When to stop and ask a person".
 
-**One honest check is not the same as a terminal status.** The Stop hook will let a turn end at
-`experiment_monitor` once a single `ultragentic verify` has come back, even when it came back
+**One honest check is not the same as a terminal status.** The Stop hook will let a turn end at `experiment_monitor` once a single `ultragentic verify` has come back, even when it came back
 `running` - that stands down a narrower, separate guard against being abandoned with nothing
 recorded at all, and it is not this section's bar. "Stop only when run status is terminal" above
-still applies while the experiment runs: start the long step with `ultragentic job start` and wait with
-`ultragentic job wait`, never a polling loop; see [`experiment.md`](experiment.md) "Watch it to
-completion (MUST)" for the per-host form.
+still applies while the experiment runs: start the long step with `ultragentic job start` and wait with `ultragentic job wait`, never a polling loop; see [`experiment.md`](experiment.md) "Watch it to completion (MUST)" for the per-host form.
 
 When RESEARCH and PLAN are settled, `ultragentic checkpoint` and `ultragentic auto gate` both skip
 the approval gates and advance the run. A skipped gate records `skipped`, never `passed`. Structural
 skip is not claim fidelity: research digests still fail closed on `docs check-citations`,
 `check-dots`, and `check-claims`, and terminal STATUS/METRICS still need existing evidence paths.
-Model self-claim is never Passed evidence. Report results when the loop finishes; do not poll the
-human mid-pipeline.
+Model self-claim is never Passed evidence. Report results when the loop finishes; do not poll the human mid-pipeline.
 
 **The same obligation applies to `goal-delivery`'s embedded retry cycle.** A `/auto` product
 delivery whose SPEC includes an experiment walks `experiment_run -> experiment_monitor ->
 results_eval -> auto_research -> approve_spec -> ... -> build` on a missed threshold, the same shape
 as `researcher-delivery`'s loop, inside the same run. Continue through it the same way - `checkpoint`
 after each artifact, `verify` at each verifier - and stop only at a terminal status or an open
-marker, never at a self-judged "this seems infeasible." This holds whether the run was started with
-`ultragentic auto` or `ultragentic run start` (the `/goal` command surface): once a run has the `auto`
+marker, never at a self-judged "this seems infeasible." This holds whether the run was started with `ultragentic auto` or `ultragentic run start` (the `/goal` command surface): once a run has the `auto`
 flag set, this obligation applies to it, regardless of which command started it.
 </required>
 
