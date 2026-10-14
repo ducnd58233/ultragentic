@@ -39,10 +39,8 @@ On every change this file applies to:
 
 ### Time complexity
 
-- [ ] Prefer a better time class when it matters and tradeoffs allow (for example
-      O(n) over O(n^2) on unbounded or user-sized input).
-- [ ] When the dominant cost is non-trivial, state brief Big-O (or equivalent) and
-      the main tradeoff in the PR, review note, or commit body - not a treatise.
+- [ ] Prefer a better time class when it matters and tradeoffs allow (for example O(n) over O(n^2) on unbounded or user-sized input).
+- [ ] When the dominant cost is non-trivial, state brief Big-O (or equivalent) and the main tradeoff in the PR, review note, or commit body - not a treatise.
 
 ### Space complexity
 
