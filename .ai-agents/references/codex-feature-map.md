@@ -63,8 +63,7 @@ isolation inside the Codex process. It is not ultragentic `sandbox.yaml`.
 | OS sandbox vocabulary | Claude `/sandbox` | host | Codex `sandbox_mode` | env/plugin |
 | Skills under `.agents/skills` | yes | via link | yes | yes |
 
-Portable work: docs, hook adapters, shared `.agents/skills`. Codex sandbox and
-approval policies stay on the Codex host.
+Portable work: docs, hook adapters, shared `.agents/skills`. Codex sandbox and approval policies stay on the Codex host.
 </rules>
 
 ## Routing & discovery

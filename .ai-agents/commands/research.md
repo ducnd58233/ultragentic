@@ -39,20 +39,14 @@ Diagrams: [`diagram-authoring`](../references/diagram-authoring.md). Cursor rule
 Run Gap Finder before Innovator closes Refine. Create the digest with `ultragentic docs new RESEARCH --slug <slug> --title "<question>"`; its template already has the Applicability, Refine (with gap and cross-domain subsections), and mermaid sections the gates read. Pass `ultragentic docs check` on it ([`docs-authoring`](../skills/docs-authoring/SKILL.md)).
 
 **Every cited URL must resolve (MUST).** Run `ultragentic docs check-citations <RESEARCH file>`
-before checkpointing. `checkpoint` runs the same check at `auto_research` and `literature` and
-refuses to leave the node while any cited URL (outside fenced code) fails; it fails closed offline,
-and it refuses private and loopback addresses. A live link is necessary, not sufficient: open the
-primary source and check the claim beside it, because across 14 models link validity stayed above
-94% while factual accuracy against the cited source was 39-77% (arXiv:2605.06635), and 3-13% of
-citation URLs are fabricated outright (arXiv:2604.03173).
+before checkpointing. `checkpoint` runs the same check at `auto_research` and `literature` and refuses to leave the node while any cited URL (outside fenced code) fails; it fails closed offline,
+and it refuses private and loopback addresses. A live link is necessary, not sufficient: open the primary source and check the claim beside it, because across 14 models link validity stayed above
+94% while factual accuracy against the cited source was 39-77% (arXiv:2605.06635), and 3-13% of citation URLs are fabricated outright (arXiv:2604.03173).
 
 **Claims need existing paths and IDs (MUST).** Run `ultragentic docs check-dots` on the slug folder
-and `ultragentic docs check-claims` on the digest before checkpointing. `checkpoint` refuses to
-leave research digests while a cited finding ID is undefined, an abstract figure is unstated, or a
-backtick path does not resolve (`check-claims` / docgrounding at `literature`, `auto_research`,
+and `ultragentic docs check-claims` on the digest before checkpointing. `checkpoint` refuses to leave research digests while a cited finding ID is undefined, an abstract figure is unstated, or a backtick path does not resolve (`check-claims` / docgrounding at `literature`, `auto_research`,
 `findings`, and `writeup`). Model self-claim of truth or reliability is not Passed evidence; only
-`exit_code`, `file_assert`, `ci_api`, and `human_event` may record a pass. This holds under both
-`/auto` and `/goal`.
+`exit_code`, `file_assert`, `ci_api`, and `human_event` may record a pass. This holds under both `/auto` and `/goal`.
 </outputs>
 
 ```sh

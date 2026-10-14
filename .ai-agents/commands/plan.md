@@ -17,10 +17,8 @@ Read the spec (user-provided path) and relevant code. Prefer read-only planning 
 3. Checkpoints between phases.
 
 **Every task gets a status marker, a description, and its own acceptance criteria as checkboxes.**
-The status vocabulary and the rule that TASKS.md and `task_lists` are written together are in
-[`planning-and-task-breakdown`](../skills/planning-and-task-breakdown/SKILL.md), section
-**Task status (MUST)**, which is canonical. A task missing any of the three is not a task yet: a
-status-less task cannot be reported on, a description-less task gets reinterpreted by whoever picks
+The status vocabulary and the rule that TASKS.md and `task_lists` are written together are in [`planning-and-task-breakdown`](../skills/planning-and-task-breakdown/SKILL.md), section
+**Task status (MUST)**, which is canonical. A task missing any of the three is not a task yet: a status-less task cannot be reported on, a description-less task gets reinterpreted by whoever picks
 it up, and a criteria-less task is finished whenever somebody says so.
 
 Every figure in the plan and the task list is computed with `ultragentic calc` and logged in a fenced `calc` block, and `checkpoint` refuses to leave the node while a logged line does not recompute. Give each figure its unit, currency, as-of date, and source. Rules: [`quantitative-accuracy`](../skills/quantitative-accuracy/SKILL.md).

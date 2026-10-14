@@ -42,8 +42,7 @@ Applies to consumer repositories implementing Go services, APIs, and CLIs with i
 - `go vet ./...`
 - `go build ./...`
 
-Bug-hunt scans, declared in `ua-checks.yaml` so the `bughunt` verifier runs them
-([`bug-hunt.md`](../commands/bug-hunt.md)): `go vet ./...`; `gosec ./...` (security rules, including
+Bug-hunt scans, declared in `ua-checks.yaml` so the `bughunt` verifier runs them ([`bug-hunt.md`](../commands/bug-hunt.md)): `go vet ./...`; `gosec ./...` (security rules, including
 hardcoded credentials); `go test -race ./...`, which needs cgo and a C compiler, so declare
 `requires: [gcc]` for it.
 

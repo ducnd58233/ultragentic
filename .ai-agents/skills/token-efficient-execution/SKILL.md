@@ -112,6 +112,5 @@ behind it: [`runtime/README.md`](../../../runtime/README.md) section "Token effi
 - Do not use as a hard cap when the user requests deep reasoning detail.
 - This skill governs **output** economy; to curate **input** context (which files/retrieval load into the window), use [`context-engineering`](../context-engineering/SKILL.md).
 
-Invoke in high-volume or execution-focused workflows where concise outputs are
-beneficial and detail can remain on-demand.
+Invoke in high-volume or execution-focused workflows where concise outputs are beneficial and detail can remain on-demand.
 </routing>

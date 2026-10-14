@@ -2,8 +2,7 @@
 description: Write failure/TRACE.md on verifier fail or third-strike blocker, then choose refine_target and patch tasks before rebuild
 ---
 
-On fail, write a failure TRACE so the next step resumes from the origin, not from
-blind retry. Evidence stays files and existing checkpoint sources.
+On fail, write a failure TRACE so the next step resumes from the origin, not from blind retry. Evidence stays files and existing checkpoint sources.
 
 <references>
 

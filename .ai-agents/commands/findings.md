@@ -28,8 +28,7 @@ Create `docs/<category>/<slug>/FINDINGS.md` with `ultragentic docs new FINDINGS 
 When this work also writes a durable ledger entry under
 `experiments/<project-slug>/<run-id>/` ([`researcher-harness`](../skills/researcher-harness/SKILL.md)
 "Experiment ledger, across runs"), item 1 cites that run-id's `JUDGEMENT.md` rather than restating
-it - `JUDGEMENT.md` is the durable, cross-run record; `FINDINGS.md` is this delivery's synthesis of
-possibly several run-ids, and should point at each rather than duplicate its text.
+it - `JUDGEMENT.md` is the durable, cross-run record; `FINDINGS.md` is this delivery's synthesis of possibly several run-ids, and should point at each rather than duplicate its text.
 </outputs>
 
 ## Routing & discovery

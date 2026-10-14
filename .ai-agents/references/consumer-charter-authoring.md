@@ -2,8 +2,7 @@
 
 <context>
 
-Use when creating or editing workspace-root agent rules in a **consumer/product repository**. The
-hard rule lives in root [`AGENTS.md`](../../AGENTS.md) (**Consumer charter neutrality**); this file
+Use when creating or editing workspace-root agent rules in a **consumer/product repository**. The hard rule lives in root [`AGENTS.md`](../../AGENTS.md) (**Consumer charter neutrality**); this file
 shows shape, not policy.
 </context>
 

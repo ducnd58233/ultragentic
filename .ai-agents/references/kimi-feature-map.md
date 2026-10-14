@@ -35,12 +35,9 @@ See also [`host-contracts-researched.md`](host-contracts-researched.md).
 
 <rules>
 
-Kimi Code hook contracts are **UNVERIFIED** here: no hook has been watched firing from this
-config. The shapes come from the vendor's own documentation
+Kimi Code hook contracts are **UNVERIFIED** here: no hook has been watched firing from this config. The shapes come from the vendor's own documentation
 ([`MoonshotAI/kimi-code` docs/en/customization/hooks.md](https://github.com/MoonshotAI/kimi-code/blob/main/docs/en/customization/hooks.md)),
-read on 2026-10-03: user-level `~/.kimi-code/config.toml` only; six events wired (SessionStart is
-observation-only); UserPromptSubmit appends stdout text to context; exit 2 blocks with stderr as
-the reason; skills at `.kimi-code/skills` and `.agents/skills`.
+read on 2026-10-03: user-level `~/.kimi-code/config.toml` only; six events wired (SessionStart is observation-only); UserPromptSubmit appends stdout text to context; exit 2 blocks with stderr as the reason; skills at `.kimi-code/skills` and `.agents/skills`.
 </rules>
 
 ## Host portability matrix (Kimi adaptations)

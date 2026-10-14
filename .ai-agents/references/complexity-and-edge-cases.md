@@ -5,8 +5,7 @@
 One shared obligation for code-change paths: `/build`, `/review`, `/simplify`
 ([`code-simplify.md`](../commands/code-simplify.md)), and refactor work under
 [`code-simplification`](../skills/code-simplification/SKILL.md),
-[`engineering-principles`](../skills/engineering-principles/SKILL.md), and
-[`karpathy-guardrails`](../skills/karpathy-guardrails/SKILL.md).
+[`engineering-principles`](../skills/engineering-principles/SKILL.md), and [`karpathy-guardrails`](../skills/karpathy-guardrails/SKILL.md).
 
 Commands and skills **link here**. Do not copy this body into four places.
 
@@ -20,14 +19,12 @@ algorithm Big-O on code-change paths.
 
 <routing>
 
-**MUST apply** on non-trivial algorithm, data-structure, loop, collection, or
-concurrency changes (new or changed hot paths, indexing, caching, parsing,
+**MUST apply** on non-trivial algorithm, data-structure, loop, collection, or concurrency changes (new or changed hot paths, indexing, caching, parsing,
 graph/walk, search/sort, batching).
 
 **Do not** add Big-O ceremony for trivial one-line fixes, renames, comment-only
 edits, or pure wiring with no data-dependent cost. Prefer
-[`engineering-principles`](../skills/engineering-principles/SKILL.md) YAGNI and
-[`karpathy-guardrails`](../skills/karpathy-guardrails/SKILL.md) simplicity.
+[`engineering-principles`](../skills/engineering-principles/SKILL.md) YAGNI and [`karpathy-guardrails`](../skills/karpathy-guardrails/SKILL.md) simplicity.
 
 </routing>
 
@@ -46,23 +43,19 @@ On every change this file applies to:
 
 - [ ] Prefer a better space class when it matters (bounded buffers, streaming,
       avoid holding full datasets when a pass or index suffices).
-- [ ] When peak memory is non-trivial, state brief space cost and tradeoff the
-      same way as time.
+- [ ] When peak memory is non-trivial, state brief space cost and tradeoff the same way as time.
 
 ### Edge cases
 
 - [ ] Reason explicitly about empty input, absent/null values, boundaries
-      (0, 1, n-1, max), duplicates, unordered input, and other domain edges the
-      code claims to handle.
-- [ ] Logic and tests cover those edges so behavior does not fail only on the
-      happy path.
+      (0, 1, n-1, max), duplicates, unordered input, and other domain edges the code claims to handle.
+- [ ] Logic and tests cover those edges so behavior does not fail only on the happy path.
 
 ### Worst-case behavior
 
 - [ ] Reason about adversarial or maximum-size inputs that flip average-case
       assumptions (quadratic collapse, unbounded growth, pathological hash/order).
-- [ ] Fail closed or degrade safely under those cases; do not ship "works on
-      typical data" as correctness.
+- [ ] Fail closed or degrade safely under those cases; do not ship "works on typical data" as correctness.
 
 </required>
 
@@ -73,13 +66,11 @@ On every change this file applies to:
 Reviewers and `/review` MUST settle these on applicable diffs (Correctness and
 Performance axes, or this list by name):
 
-- [ ] Time/space tradeoffs stated when non-trivial; better class preferred where
-      it matters
+- [ ] Time/space tradeoffs stated when non-trivial; better class preferred where it matters
 - [ ] Edge cases named and covered (or explicitly out of scope with reason)
 - [ ] Worst-case behavior reasoned; no silent failure under those cases
 
-`/ship` treats unchecked items on an applicable code diff as a quality gap to
-call out in the decision (GO only when residual risk is acknowledged).
+`/ship` treats unchecked items on an applicable code diff as a quality gap to call out in the decision (GO only when residual risk is acknowledged).
 
 </verification>
 

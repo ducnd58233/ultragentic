@@ -38,12 +38,10 @@ GPU/sandbox: unsupported in-process. Document host/CI as the compute port.
 `.agent-state/runs/<date>/<slug>/<version>/` are scoped to **one graph
 traversal** - they answer "is this run's experiment done, and did it pass,"
 then the run finishes and that evidence stops mattering. Comparing many
-iterations of a method for a paper, report, or competition submission needs a
-record that outlives any one run.
+iterations of a method for a paper, report, or competition submission needs a record that outlives any one run.
 
 Use `experiments/<project-slug>/<run-id>/`, a separate top-level convention -
-not under `.agent-state/` (ephemeral, gitignored, local; wrong home for
-something meant to be compared later) and not under one run's
+not under `.agent-state/` (ephemeral, gitignored, local; wrong home for something meant to be compared later) and not under one run's
 `docs/<category>/<slug>/` (scoped to a single delivery, not a series):
 
 ```text
@@ -60,9 +58,7 @@ finishes.** An interrupted or abandoned run with nothing in its `run-id` directo
 that it was ever attempted; one with `config.json` already written at least records what was tried,
 even if `metrics.json`, `SUMMARY.md`, and `JUDGEMENT.md` never follow.
 
-**`JUDGEMENT.md` is required whenever this ledger entry exists, not optional prose.** It is the
-durable record of the same judgement the `experiment` verifier already forces into
-`experiment/STATUS.md`'s `judgement:` line (`confirmed` / `refuted` / `inconclusive` /
+**`JUDGEMENT.md` is required whenever this ledger entry exists, not optional prose.** It is the durable record of the same judgement the `experiment` verifier already forces into `experiment/STATUS.md`'s `judgement:` line (`confirmed` / `refuted` / `inconclusive` /
 `not_applicable`; see [`experiment.md`](../../commands/experiment.md) "STATUS.md contract"), written
 out in full rather than as one word:
 
@@ -79,17 +75,14 @@ Next: <what this implies for the next run-id, if anything>
 `config.json` and `metrics.json` each validate against
 [`schemas/experiment-run.schema.json`](../../../schemas/experiment-run.schema.json)
 (`$defs/config`, `$defs/metrics`) - the same `{metrics, thresholds}` shape
-`experiment/METRICS.json` already uses, so one parser reads both, and every
-run in a series shares the same fields to diff against. `metrics.json` carries the same `integrity`
+`experiment/METRICS.json` already uses, so one parser reads both, and every run in a series shares the same fields to diff against. `metrics.json` carries the same `integrity`
 block as `experiment/METRICS.json`, and the ledger is where `trials` and `reportedSplitEvaluations`
-are counted from, so a run that is not in the ledger is not allowed to claim a held-out split is
-unspent. `JUDGEMENT.md` is prose, like `SUMMARY.md`,
+are counted from, so a run that is not in the ledger is not allowed to claim a held-out split is unspent. `JUDGEMENT.md` is prose, like `SUMMARY.md`,
 and is not schema-validated. Worked
 fixtures: [`scripts/fixtures/experiment-run/`](../../../scripts/fixtures/experiment-run/).
 
 Whether `experiments/` is gitignored is this project's own `AGENTS.md`
-choice, the same as `docs/` already is - a research or competition repo will
-usually track it, since comparing runs later for a writeup is the point.
+choice, the same as `docs/` already is - a research or competition repo will usually track it, since comparing runs later for a writeup is the point.
 </required>
 
 ## Routing & discovery

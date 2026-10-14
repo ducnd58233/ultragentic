@@ -2,8 +2,7 @@
 
 <context>
 
-Compact taste checklist for agent-built UI. Use with [`/design`](../commands/design.md) and
-[`ui-design-fidelity`](../skills/ui-design-fidelity/SKILL.md). Registry and tokens win over this file;
+Compact taste checklist for agent-built UI. Use with [`/design`](../commands/design.md) and [`ui-design-fidelity`](../skills/ui-design-fidelity/SKILL.md). Registry and tokens win over this file;
 this file is what to check when the screen already compiles but still feels generic.
 
 </context>
@@ -58,8 +57,7 @@ Avoid the defaults models regress to unless the project registry already uses th
 - Pill clusters, multi-layer glow shadows, emoji as section markers
 - Card chrome (border, shadow, radius) when removing them does not hurt understanding
 
-Prefer project tokens, existing components, and evidence from
-[`ui-design-fidelity`](../skills/ui-design-fidelity/SKILL.md) gates over new aesthetic invention.
+Prefer project tokens, existing components, and evidence from [`ui-design-fidelity`](../skills/ui-design-fidelity/SKILL.md) gates over new aesthetic invention.
 
 </references>
 
