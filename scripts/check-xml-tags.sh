@@ -29,7 +29,7 @@ KNOWN="scope precedence always_on delivery_gates claude_specific other_harnesses
 # valid only in the templates that produce them. The runtime registry
 # (runtime/internal/pkg/docmeta/doctype.go) is the source; a Go test keeps
 # each template equal to its type, and this list equal to their union.
-DOC_TAGS="abstract approach consequences context decision findings hypothesis method open_questions options procedure question references requirements results revisions risks scope tasks verification"
+DOC_TAGS="abstract approach consequences context decision findings hypothesis method model open_questions options procedure question references requirements results revisions risks scope screens stories tasks verification"
 
 scan() {
   case "$1" in

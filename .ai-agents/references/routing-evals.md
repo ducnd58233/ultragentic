@@ -107,6 +107,9 @@ For skill and agent behavioral evaluation more broadly, see
 | Threat-model an existing surface and close authorization holes | skill | [`security-and-hardening`](../skills/security-and-hardening/SKILL.md) |
 | Why the written definition comes before code, and what it holds | skill | [`spec-driven-development`](../skills/spec-driven-development/SKILL.md) |
 | Write up our inference latency research as a document in the repo | skill | [`docs-authoring`](../skills/docs-authoring/SKILL.md) |
+| Sketch the screens for this feature before we write UI code | skill | [`docs-authoring`](../skills/docs-authoring/SKILL.md) |
+| Capture user stories and acceptance criteria as a living doc | skill | [`docs-authoring`](../skills/docs-authoring/SKILL.md) |
+| Document the entity relationship model for this domain | skill | [`docs-authoring`](../skills/docs-authoring/SKILL.md) |
 | Manage services, users, cron, and disk on a Linux host | skill | [`system-administration-ops`](../skills/system-administration-ops/SKILL.md) |
 | Match an implemented screen to the handoff pixel for pixel | skill | [`ui-design-fidelity`](../skills/ui-design-fidelity/SKILL.md) |
 | Make a screen less generic with clear hierarchy and loading empty error states | reference | [`ux-taste.md`](../references/ux-taste.md) |
