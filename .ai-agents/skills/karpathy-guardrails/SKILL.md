@@ -22,8 +22,7 @@ This skill operationalizes five guardrails:
 5. Grounded claims (no fabrication).
 
 It is designed to reduce costly assistant failure patterns:
-unchecked assumptions, overengineering, orthogonal edits, unverified claims, and
-fabricated files/paths/results.
+unchecked assumptions, overengineering, orthogonal edits, unverified claims, and fabricated files/paths/results.
 
 These guardrails are **harness-agnostic**: apply them identically across Claude, Codex,
 Cursor, opencode, and any other tool, and to both primary agents and subagents.

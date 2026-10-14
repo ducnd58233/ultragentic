@@ -2,29 +2,21 @@
 
 <context>
 
-Lightweight, deterministic fixtures for the toolkit's routing layer. Each row pairs a
-representative **user intent** with the asset the router should select.
+Lightweight, deterministic fixtures for the toolkit's routing layer. Each row pairs a representative **user intent** with the asset the router should select.
 
-`ultragentic doctor` validates this table (`runtime/cmd/routing_evals.go`, tested in the
-suite that gates the build). Five rules, each failing:
+`ultragentic doctor` validates this table (`runtime/cmd/routing_evals.go`, tested in the suite that gates the build). Five rules, each failing:
 
 1. Every row has three columns.
 2. The **Expected asset** cell holds exactly one link, and it resolves on disk.
 3. The **Expected family** matches the folder the target actually lives in. A row saying
-   `command` while pointing into `skills/` describes a route nobody can take, and the
-   link check alone cannot see it.
+   `command` while pointing into `skills/` describes a route nobody can take, and the link check alone cannot see it.
 4. No two rows claim the same intent, since the second would silently redefine the first.
 5. No intent contains its own asset's slug. A fixture that spells out its answer tests
-   string matching rather than routing. Only hyphenated slugs count as evidence - a
-   one-word slug like `review` is also the plain verb a person would use.
+   string matching rather than routing. Only hyphenated slugs count as evidence - a one-word slug like `review` is also the plain verb a person would use.
 
-Coverage is **reported, never enforced**: the maintenance rule below asks for a row when
-users will ask for an asset by intent, and that judgment is not something a check can
-make. `doctor` prints the ratio so it stays visible.
+Coverage is **reported, never enforced**: the maintenance rule below asks for a row when users will ask for an asset by intent, and that judgment is not something a check can make. `doctor` prints the ratio so it stays visible.
 
-Those checks are deterministic: they verify the target exists, is filed where it says, and
-stays named as documented. They cannot say whether the router *actually* selects the
-asset. `ultragentic eval routing` answers that separately - see **Model-graded run** below.
+Those checks are deterministic: they verify the target exists, is filed where it says, and stays named as documented. They cannot say whether the router *actually* selects the asset. `ultragentic eval routing` answers that separately - see **Model-graded run** below.
 For skill and agent behavioral evaluation more broadly, see
 [`agent-evaluation-patterns.md`](agent-evaluation-patterns.md).
 </context>
@@ -129,8 +121,7 @@ Run the fixtures against a live coding-agent runner when router wording changes:
 ultragentic eval routing --trials 1 --jobs 6 --timeout 90s
 ```
 
-The default runner is `codex`. Compare hosts by repeating `--runner` or by
-comma-separating presets:
+The default runner is `codex`. Compare hosts by repeating `--runner` or by comma-separating presets:
 
 ```bash
 ultragentic eval routing --runner codex --runner claude
@@ -169,8 +160,7 @@ OpenAI Docs: Codex non-interactive mode is `codex exec`; the CLI reference says
 <rules>
 
 - Add a row when you add a routable asset users will ask for by intent.
-- When you rename or move an asset, update its row in the same change; `doctor` fails on
-  a dangling **Expected asset** link and on a family that no longer matches its folder.
+- When you rename or move an asset, update its row in the same change; `doctor` fails on a dangling **Expected asset** link and on a family that no longer matches its folder.
 - Keep intents phrased as a user would ask, not as the asset name.
 - Boundary-sensitive pairs are intentionally pinned here (model-engineering vs MLOps,
   context-engineering vs token-efficient-execution, product-lifecycle vs shipping/idea)

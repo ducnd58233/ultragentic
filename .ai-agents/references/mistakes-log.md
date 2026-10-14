@@ -5,18 +5,12 @@
 A plain markdown diary of agent failures and human corrections for the **current workspace**.
 No tooling, no plugin, no vector store. Complements (does not replace) `.agent-state/memory.db`.
 
-Two files share the name. This document describes the **draft diary** at
-**`.agent-state/MISTAKES.md`**; the tracked **`MISTAKES.md`** at the repository root, next to
-`AGENTS.md`, holds only the reviewed rules graduated from it. Every charter names the root file, the
-runtime injects its rules at session start, and `ultragentic doctor` fails when a root file exists that
-no charter names. Graduate with `ultragentic mistakes graduate --class <class> --rule "<rule>"`.
+Two files share the name. This document describes the **draft diary** at **`.agent-state/MISTAKES.md`**; the tracked **`MISTAKES.md`** at the repository root, next to `AGENTS.md`, holds only the reviewed rules graduated from it. Every charter names the root file, the runtime injects its rules at session start, and `ultragentic doctor` fails when a root file exists that no charter names. Graduate with `ultragentic mistakes graduate --class <class> --rule "<rule>"`.
 
-Path: **`.agent-state/MISTAKES.md`** at the workspace root (gitignored with the rest of
-`.agent-state/`). Create the file on first append. Do not commit it.
+Path: **`.agent-state/MISTAKES.md`** at the workspace root (gitignored with the rest of `.agent-state/`). Create the file on first append. Do not commit it.
 
 Why the drafts are not tracked: consumer checkouts would accumulate agent noise in PRs, so the diary
-stays workspace-local the same way runs and `memory.db` do. Only a rule worth every checkout seeing is
-tracked, in the root `MISTAKES.md`, which every harness is pointed at.
+stays workspace-local the same way runs and `memory.db` do. Only a rule worth every checkout seeing is tracked, in the root `MISTAKES.md`, which every harness is pointed at.
 </context>
 
 ## When to write
@@ -31,8 +25,7 @@ Append an entry when any of these happen:
 
 The runtime writes a draft entry itself, with a `check-<name>` or `blocker-<class>` class, whenever
 `ultragentic checkpoint` or `ultragentic verify` records a failed check or a blocker, so those cases
-need no model memory. The draft says the cause is not yet diagnosed: replace its **Root cause** and
-**Prevention** lines in place instead of adding a second entry. Entries are de-duplicated per run, node
+need no model memory. The draft says the cause is not yet diagnosed: replace its **Root cause** and **Prevention** lines in place instead of adding a second entry. Entries are de-duplicated per run, node
 and class. Write an entry by hand only for what the runtime cannot see, such as a human correction.
 
 Do **not** log routine first-attempt failures that were fixed in the same turn with no lasting
@@ -93,6 +86,5 @@ of command outcomes. Do not copy every memory row into MISTAKES.
 <context>
 
 When this toolkit is mounted in a consumer workspace, the log path is still
-**`<workspace>/.agent-state/MISTAKES.md`**, not inside the toolkit checkout. Graduated rules go into
-the **consumer** `MISTAKES.md`, named from the consumer `AGENTS.md`, in plain policy text with no toolkit paths, under local-first precedence (root [`AGENTS.md`](../../AGENTS.md)).
+**`<workspace>/.agent-state/MISTAKES.md`**, not inside the toolkit checkout. Graduated rules go into the **consumer** `MISTAKES.md`, named from the consumer `AGENTS.md`, in plain policy text with no toolkit paths, under local-first precedence (root [`AGENTS.md`](../../AGENTS.md)).
 </context>

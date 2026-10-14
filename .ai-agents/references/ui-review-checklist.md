@@ -2,9 +2,7 @@
 
 <context>
 
-Mechanical review list for UI diffs. Use from [`/review`](../commands/review.md) or
-[`product-design-reviewer`](../agents/product-design-reviewer.md). Pair with
-[`ux-taste.md`](ux-taste.md) and [`accessibility-checklist.md`](accessibility-checklist.md).
+Mechanical review list for UI diffs. Use from [`/review`](../commands/review.md) or [`product-design-reviewer`](../agents/product-design-reviewer.md). Pair with [`ux-taste.md`](ux-taste.md) and [`accessibility-checklist.md`](accessibility-checklist.md).
 
 </context>
 

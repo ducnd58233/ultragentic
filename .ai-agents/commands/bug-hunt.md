@@ -43,8 +43,7 @@ attempt: 1
 | secrets | gosec G101 clean (scan gosec) | pass |
 ```
 
-One row per class the workspace declares (below), each citing a scan, a test, or why the class does
-not apply. "none new" is not a row for a class.
+One row per class the workspace declares (below), each citing a scan, a test, or why the class does not apply. "none new" is not a row for a class.
 
 Same pass/fail and soft-cap rules as [`expectation.md`](expectation.md).
 
@@ -88,9 +87,7 @@ spec:
   code decides; a failing scan fails `bug_hunt_ok` whatever the file says.
 - `ultragentic doctor` fails while a declared scan's command or `requires` program is missing.
   Install it, or ask a person to change the plan; do not drop the scan to get past it.
-- Scanners miss most of these classes (gosec and `go vet` missed string-built SQL, a map race, a
-  goroutine leak and an unbounded pool in the same run), so a clean scan is not a clean class: the
-  class row still cites a test or a reason.
+- Scanners miss most of these classes (gosec and `go vet` missed string-built SQL, a map race, a goroutine leak and an unbounded pool in the same run), so a clean scan is not a clean class: the class row still cites a test or a reason.
 - Pick scanners for the repository's languages from the stack profile, citing each tool's own
   documentation; [`backend-golang`](../stack-profiles/backend-golang.md) has the Go set above.
 </required>

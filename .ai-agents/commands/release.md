@@ -3,8 +3,7 @@ description: Write release/REVIEW.md on the auto path after ship, then verify re
 ---
 
 On the auto delivery path, after ship and before approve_merge, assert release
-readiness gates. Evidence is a markdown file under the run directory; the
-runtime only `file_assert`s it.
+readiness gates. Evidence is a markdown file under the run directory; the runtime only `file_assert`s it.
 
 <references>
 
@@ -44,8 +43,7 @@ attempt: 1
 
 Rules match [`expectation.md`](expectation.md): every result cell pass/fail; soft attempt cap **2**.
 
-The verifier reads the run's recorded `ship` check before this file, and fails when it is missing or
-not passed, whatever row R1 says. On the auto path a `/ship` NO-GO still reaches this node; the file
+The verifier reads the run's recorded `ship` check before this file, and fails when it is missing or not passed, whatever row R1 says. On the auto path a `/ship` NO-GO still reaches this node; the file
 records readiness, it cannot overrule a gate the run already failed.
 
 ```sh

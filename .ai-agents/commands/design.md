@@ -7,8 +7,7 @@ Build or audit UI against the component registry first, with anti-slop gates and
 <references>
 
 Follow [`ui-design-fidelity`](../skills/ui-design-fidelity/SKILL.md),
-[`references/ui-component-registry.md`](../references/ui-component-registry.md), and
-[`references/ux-taste.md`](../references/ux-taste.md).
+[`references/ui-component-registry.md`](../references/ui-component-registry.md), and [`references/ux-taste.md`](../references/ux-taste.md).
 
 When the output includes diagrams, flows, or decision maps, follow [`diagram-authoring`](../references/diagram-authoring.md).
 

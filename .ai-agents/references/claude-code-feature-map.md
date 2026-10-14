@@ -65,13 +65,9 @@ handler ([whats-new 2026-w13](https://code.claude.com/docs/en/whats-new/2026-w13
 1. **PreToolUse** that runs `ultragentic hook pre-tool-use` must keep a Bash-inclusive
    tool-name `matcher` and must **not** set `if`. Danger-list evaluation needs every
    Bash candidate.
-2. **PostToolUse** journaling may split: Edit/Write/NotebookEdit/WebFetch stay on
-   matcher alone; Bash may use `if: "Bash(git *)"` so non-git shell noise costs less.
-   Non-git Bash then loses post-journal rows; that is an accepted tradeoff, not a
-   security boundary.
-3. Other hosts follow [`host-hook-contracts.md`](host-hook-contracts.md); do not
-   assume Cursor/Codex parse Claude `if`. Runtime tests refuse Claude `"if"` keys in
-   shipped `.cursor/hooks.json` and `.codex/hooks.json`.
+2. **PostToolUse** journaling may split: Edit/Write/NotebookEdit/WebFetch stay on matcher alone; Bash may use `if: "Bash(git *)"` so non-git shell noise costs less.
+   Non-git Bash then loses post-journal rows; that is an accepted tradeoff, not a security boundary.
+3. Other hosts follow [`host-hook-contracts.md`](host-hook-contracts.md); do not assume Cursor/Codex parse Claude `if`. Runtime tests refuse Claude `"if"` keys in shipped `.cursor/hooks.json` and `.codex/hooks.json`.
 
 </procedure>
 
@@ -104,8 +100,7 @@ For ultragentic **consumers** running CI or graph-path evals:
 | Host UI plugins unrelated to delivery | `ultragentic doctor` before `/goal` or `/auto` |
 | Auto memory / unconfirmed memory noise | Closed evidence sources only (`exit_code`, `file_assert`, `ci_api`, `human_event`) |
 
-`dontAsk`-like host permission modes (pre-approved tools only) pair with this
-recipe. They are host settings, not a ultragentic graph flag. Never equate Claude
+`dontAsk`-like host permission modes (pre-approved tools only) pair with this recipe. They are host settings, not a ultragentic graph flag. Never equate Claude
 permission **auto** with ultragentic `/auto`.
 
 </procedure>

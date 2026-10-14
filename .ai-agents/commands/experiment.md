@@ -56,9 +56,7 @@ Allowed `judgement` values, stated once the run is terminal:
 | `not_applicable` | There was no hypothesis to score against (a reproduce-and-fix cycle, not a research experiment). |
 
 `not_applicable` is a legitimate answer, not a workaround: the point is stating whether a judgement
-was made, never inventing one against a hypothesis that was never there. A terminal status with no
-`judgement:` line, or one with a value outside this list, fails `experiment_monitor` the same way a
-missing `status:` line always has - this is not a new evidence source, it is the same STATUS.md
+was made, never inventing one against a hypothesis that was never there. A terminal status with no `judgement:` line, or one with a value outside this list, fails `experiment_monitor` the same way a missing `status:` line always has - this is not a new evidence source, it is the same STATUS.md
 contract the verifier already gates, asking one more honest question before it calls the file done.
 
 When `status` becomes `done`, also write `experiment/METRICS.json`:
@@ -110,8 +108,7 @@ Rules and reasons: [`research-integrity`](../references/research-integrity.md). 
 <procedure>
 
 1. Read PLAN Mermaid, Evaluation protocol, Data and terms, and TASKS acceptance criteria.
-2. Run the next host/CI step the plan names. Anything longer than a few seconds (training, an
-   evaluation sweep, a long suite) starts as a runtime job, never as a script you watch yourself:
+2. Run the next host/CI step the plan names. Anything longer than a few seconds (training, an evaluation sweep, a long suite) starts as a runtime job, never as a script you watch yourself:
 
    ```sh
    ultragentic job start --slug <slug> --host <client> -- <command> <args>...
@@ -127,8 +124,7 @@ Rules and reasons: [`research-integrity`](../references/research-integrity.md). 
 
 <required>
 
-Wait with the runtime, not with your turns. Do not write a sleep loop, a `watch`, a polling script, or
-a scheduled re-check: each check is a model turn that learns nothing, and the workspace research run
+Wait with the runtime, not with your turns. Do not write a sleep loop, a `watch`, a polling script, or a scheduled re-check: each check is a model turn that learns nothing, and the workspace research run
 `long-job-watch` measured the cost (FINDINGS R2).
 
 ```sh
@@ -147,18 +143,13 @@ table (`BackgroundEndNotice`) records which hosts report a background command's 
 | Claude Code, Cursor | Run `ultragentic job wait` as a background command and end the turn | The host tells you once when the job ends; on Claude Code the Stop hook does not block a run whose job is running |
 | Codex, Open Code, Muse, Kimi Code, Antigravity | Run `ultragentic job wait --timeout 25m` in the foreground | It returns when the job ends; on exit 124 run the same command again |
 
-When the wait returns, read its exit code and log tail, update STATUS.md (`done` or `failed`, with a
-`judgement:` line), and call `ua_verify`. A job whose supervisor died without an exit record is
-reported as lost: run `ultragentic job abort <id>` (or `job cancel`) to write a terminal exit, or
-start it again with `job start`; do not mark it done while it is still lost, and never clear it with
-shell-bg or PID polling.
+When the wait returns, read its exit code and log tail, update STATUS.md (`done` or `failed`, with a `judgement:` line), and call `ua_verify`. A job whose supervisor died without an exit record is reported as lost: run `ultragentic job abort <id>` (or `job cancel`) to write a terminal exit, or start it again with `job start`; do not mark it done while it is still lost, and never clear it with shell-bg or PID polling.
 
 On hosts without an end-of-turn hook (opencode; see
 [`host-hook-contracts.md`](../references/host-hook-contracts.md)), nothing catches an abandoned turn:
 run the bounded foreground wait until the job ends rather than ending the turn on one reading.
 
-This is the same obligation [`auto.md`](auto.md)'s "Auto research host obligation" states for the
-rest of the research/experiment loop; this is the one node in that loop where real wall-clock time,
+This is the same obligation [`auto.md`](auto.md)'s "Auto research host obligation" states for the rest of the research/experiment loop; this is the one node in that loop where real wall-clock time,
 not just another artifact, stands between here and terminal.
 </required>
 

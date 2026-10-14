@@ -3,8 +3,7 @@
 <context>
 
 Advisory scoring dimensions for research proposals before `experiment_run`.
-Inspired by IdeaScientist-style novelty axes. **Not** checkpoint evidence: do
-not record a judge score as `Passed`, and do not add an LLM-as-judge verifier.
+Inspired by IdeaScientist-style novelty axes. **Not** checkpoint evidence: do not record a judge score as `Passed`, and do not add an LLM-as-judge verifier.
 
 </context>
 

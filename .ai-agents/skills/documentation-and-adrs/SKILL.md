@@ -45,11 +45,7 @@ ADRs capture the reasoning behind significant technical decisions. They're the h
 
 ### ADR Template
 
-Create each ADR with `ultragentic docs new DECISION --slug <slug> --title "<decision>"`. It lands at
-`docs/<category>/<slug>/DECISION-<YYYY-MM-DD>-<topic>.md` (category `architecture` for a decision that
-spans features, otherwise the slug's own folder), with `<context>`, `<options>`, `<decision>`, and
-`<consequences>` sections laid out ([`docs-authoring`](../docs-authoring/SKILL.md)). The date in the
-name orders them; supersede by setting the old record's `status: superseded` and linking the new
+Create each ADR with `ultragentic docs new DECISION --slug <slug> --title "<decision>"`. It lands at `docs/<category>/<slug>/DECISION-<YYYY-MM-DD>-<topic>.md` (category `architecture` for a decision that spans features, otherwise the slug's own folder), with `<context>`, `<options>`, `<decision>`, and `<consequences>` sections laid out ([`docs-authoring`](../docs-authoring/SKILL.md)). The date in the name orders them; supersede by setting the old record's `status: superseded` and linking the new
 one. A workspace that already keeps ADRs elsewhere (`docs/adr/`, numbered) keeps its own convention,
 per local-first precedence in [`AGENTS.md`](../../../AGENTS.md). The example below shows the content an
 ADR needs, whichever layout holds it:

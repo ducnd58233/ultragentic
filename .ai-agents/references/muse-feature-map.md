@@ -35,11 +35,9 @@ See also [`host-contracts-researched.md`](host-contracts-researched.md).
 
 <rules>
 
-Muse hook contracts are **UNVERIFIED** here. Payload keys and the deny behaviour come from an
-independent live measurement ([pinta-ai/pinta-musecode](https://github.com/pinta-ai/pinta-musecode)):
+Muse hook contracts are **UNVERIFIED** here. Payload keys and the deny behaviour come from an independent live measurement ([pinta-ai/pinta-musecode](https://github.com/pinta-ai/pinta-musecode)):
 Claude-shaped stdin, PostToolUseFailure exists, and the host fails open on everything except
-exit 2, so ultragentic sends refusals as JSON and exit 2 together. Muse reads `AGENTS.md` and an
-existing `CLAUDE.md`; skills live at `.agents/skills`.
+exit 2, so ultragentic sends refusals as JSON and exit 2 together. Muse reads `AGENTS.md` and an existing `CLAUDE.md`; skills live at `.agents/skills`.
 </rules>
 
 ## Host portability matrix (Muse adaptations)

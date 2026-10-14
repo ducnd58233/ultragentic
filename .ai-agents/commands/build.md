@@ -67,21 +67,15 @@ For **one** task only (then stop or ask before starting the next task on a new b
    (not a tip about local staging paths): capture with `ultragentic previdence snapshot` /
    `previdence record` (or `--source`) into run `pr-evidence/` staging, write `MANIFEST.md`,
    and put the **portable evidence contract** on the PR/MR for every forge: **Visual evidence**
-   (forge media attach per [`pr-evidence-forges.md`](../references/pr-evidence-forges.md), or
-   inlined Kind `api` transcript, or Kind `none`/`redacted` with Reason) and **Reproduce /
-   Verify** steps. Detect the active forge (`ultragentic doctor`); do not default to `gh` on
-   non-GitHub remotes. On forge CLI/API failure, research equivalent syntax for that forge and
-   retry — **MUST NOT** silently skip evidence. Then `ultragentic previdence refresh` so
-   `ATTACHED.md` Head matches HEAD. Never PR-comment only `.agent-state/.../pr-evidence/` paths.
+   (forge media attach per [`pr-evidence-forges.md`](../references/pr-evidence-forges.md), or inlined Kind `api` transcript, or Kind `none`/`redacted` with Reason) and **Reproduce /
+   Verify** steps. Detect the active forge (`ultragentic doctor`); do not default to `gh` on non-GitHub remotes. On forge CLI/API failure, research equivalent syntax for that forge and retry — **MUST NOT** silently skip evidence. Then `ultragentic previdence refresh` so `ATTACHED.md` Head matches HEAD. Never PR-comment only `.agent-state/.../pr-evidence/` paths.
    Backend: API transcript. Frontend: runtime snapshot/record only — **MUST NOT** invent
    Playwright/Puppeteer capture scripts as the evidence path. Kind `ui` MUST include STEPS
    (MANIFEST `Steps:` or `STEPS.md`) and the agent MUST analyze the capture before attach
-   (refuse blank/solid media). UI authoring MUST follow sketch-first rules in
-   [`ux-taste.md`](../references/ux-taste.md). Docs-only: `Kind: none` with a reason. After tip
+   (refuse blank/solid media). UI authoring MUST follow sketch-first rules in [`ux-taste.md`](../references/ux-taste.md). Docs-only: `Kind: none` with a reason. After tip
    commits, recapture/reattach/refresh before push; stale Head fails closed. Never commit media.
    See [`pr-evidence.md`](../references/pr-evidence.md).
-11. **Set the task `done` in `TASKS.md` and `task_lists`, and tick its acceptance checkboxes.** Both
-   places, same edit, before the next verifier runs: `task_complete` reads `task_lists` to decide
+11. **Set the task `done` in `TASKS.md` and `task_lists`, and tick its acceptance checkboxes.** Both places, same edit, before the next verifier runs: `task_complete` reads `task_lists` to decide
    whether work remains, so a status written after it ran sends the run back through a whole build
    cycle for a task that was already finished. Report branch name and PR link if created.
    **Do not merge to `main`.**

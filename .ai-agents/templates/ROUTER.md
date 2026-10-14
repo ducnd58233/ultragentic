@@ -2,8 +2,7 @@
 
 <routing>
 
-Document templates that `ultragentic docs new` renders into `docs/<category>/<slug>/`. Do not copy one by
-hand; the command fills the path, file name, and front matter. Rules: [`docs-authoring`](../skills/docs-authoring/SKILL.md).
+Document templates that `ultragentic docs new` renders into `docs/<category>/<slug>/`. Do not copy one by hand; the command fills the path, file name, and front matter. Rules: [`docs-authoring`](../skills/docs-authoring/SKILL.md).
 
 | Template | Type | Writes |
 |----------|------|--------|
@@ -22,8 +21,7 @@ hand; the command fills the path, file name, and front matter. Rules: [`docs-aut
 | [`docs/USERSTORY.md`](docs/USERSTORY.md) | USERSTORY | `USERSTORY.md`: user stories with acceptance criteria |
 | [`docs/ERD.md`](docs/ERD.md) | ERD | `ERD.md`: living Mermaid entity-relationship model |
 
-**Changing a template's sections** means changing the type's `Tags` in
-`runtime/internal/pkg/docmeta/doctype.go` and `DOC_TAGS` in `scripts/check-xml-tags.sh` in the same
+**Changing a template's sections** means changing the type's `Tags` in `runtime/internal/pkg/docmeta/doctype.go` and `DOC_TAGS` in `scripts/check-xml-tags.sh` in the same
 change; `go test ./internal/docauthor` fails until all three agree. A new type needs a row here too.
 
 ### Forge PR / MR templates (install via link script)

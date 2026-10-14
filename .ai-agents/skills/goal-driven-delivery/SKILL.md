@@ -139,8 +139,7 @@ Follow [`/plan`](../../commands/plan.md) and [`planning-and-task-breakdown`](../
 
 Follow [`/build`](../../commands/build.md) for **one task per invocation**:
 
-Read `task_lists` first and take the first `queued` task whose dependencies are all `done`. Set it
-`in_progress` on start and `done` when its acceptance criteria pass, in both files, before the next
+Read `task_lists` first and take the first `queued` task whose dependencies are all `done`. Set it `in_progress` on start and `done` when its acceptance criteria pass, in both files, before the next
 verifier reads the list - `task_complete` decides on `task_lists`, so a late status costs a whole
 build cycle for work already finished.
 

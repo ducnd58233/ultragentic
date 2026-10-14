@@ -7,13 +7,11 @@ or another harness sharing this workspace, should recall. It goes to `memory.db`
 
 <references>
 
-Graph node: `remember` in [`goal-delivery.yaml`](../graphs/goal-delivery.yaml), on both `/goal` and
-`/auto`, after the merge and before `task_complete`.
+Graph node: `remember` in [`goal-delivery.yaml`](../graphs/goal-delivery.yaml), on both `/goal` and `/auto`, after the merge and before `task_complete`.
 
 Boundary and rules: [`runtime/AGENTS.md`](../../runtime/AGENTS.md) section "Agent memory boundary".
 
-Adapted from ECC's `remember` lifecycle step. Not adopted: ECC's model-assigned confidence and
-background extraction, because model assertion is not evidence here.
+Adapted from ECC's `remember` lifecycle step. Not adopted: ECC's model-assigned confidence and background extraction, because model assertion is not evidence here.
 </references>
 
 ## Procedure
@@ -35,8 +33,7 @@ background extraction, because model assertion is not evidence here.
 3. A rejection (no evidence, a hedge, a credential) is the policy working; fix the claim or drop it.
 4. Checkpoint the node: `ultragentic checkpoint -slug <slug>`.
 
-Nothing learned is a valid outcome. Do not invent a lesson to fill the step, and do not repeat what
-the hook journal already recorded for a failed command.
+Nothing learned is a valid outcome. Do not invent a lesson to fill the step, and do not repeat what the hook journal already recorded for a failed command.
 </procedure>
 
 ## Routing & discovery

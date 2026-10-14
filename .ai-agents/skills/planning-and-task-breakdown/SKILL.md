@@ -43,8 +43,7 @@ Before writing any code, operate in read-only mode:
 **Do NOT write code during planning.** The output is a plan document, not implementation.
 
 Carry forward any `A1..An` assumption ids from the SPEC into the PLAN when a task
-depends on them. If a later run invalidates an assumption, cite the id in
-[`failure-trace.md`](../../references/failure-trace.md) and replan; do not treat
+depends on them. If a later run invalidates an assumption, cite the id in [`failure-trace.md`](../../references/failure-trace.md) and replan; do not treat
 assumption truth as a Passed checkpoint.
 
 ### Step 2: Identify the Dependency Graph
@@ -93,8 +92,7 @@ Each vertical slice delivers working, testable functionality.
 
 ### Step 4: Write Tasks
 
-Every task carries a status, a description, and its own acceptance criteria. A task missing any of
-the three is not a task yet: a status-less task cannot be reported on, a description-less task gets
+Every task carries a status, a description, and its own acceptance criteria. A task missing any of the three is not a task yet: a status-less task cannot be reported on, a description-less task gets
 reinterpreted by whoever picks it up, and a criteria-less task is finished whenever somebody says
 so.
 
@@ -150,8 +148,7 @@ Add explicit checkpoints:
 <rules>
 
 **This section is canonical.** [`plan.md`](../../commands/plan.md), [`build.md`](../../commands/build.md),
-[`goal.md`](../../commands/goal.md), and [`auto.md`](../../commands/auto.md) point here rather than
-restating it, so the rule lives in one place instead of five that drift.
+[`goal.md`](../../commands/goal.md), and [`auto.md`](../../commands/auto.md) point here rather than restating it, so the rule lives in one place instead of five that drift.
 
 ### One list, two places, one vocabulary
 
@@ -169,15 +166,13 @@ defines, lowercase, in both places:
 
 `queued` · `in_progress` · `blocked` · `done` · `canceled`
 
-Lowercase and identical on both sides on purpose. A heading that says `[DONE]` beside a field that
-says `done` is two spellings of one fact, which is how a reader ends up trusting the wrong one.
+Lowercase and identical on both sides on purpose. A heading that says `[DONE]` beside a field that says `done` is two spellings of one fact, which is how a reader ends up trusting the wrong one.
 
 ### Check the list before starting
 
 Read the `task_lists` row (or `ultragentic` / MCP task helpers) before picking up work, every time:
 
-- A task already `done` is **not** restarted. If it needs more work, that is a new task or a fix on
-  its existing branch, not a status reversal.
+- A task already `done` is **not** restarted. If it needs more work, that is a new task or a fix on its existing branch, not a status reversal.
 - A task `blocked` needs its blocker named and resolved, or the task re-planned. Starting it anyway
   produces work that cannot land.
 - Take the first `queued` task whose dependencies are all `done`.
@@ -188,8 +183,7 @@ Set `in_progress` when work starts and `done` when the acceptance criteria pass,
 TASKS.md and `task_lists`, and tick the acceptance checkboxes as they are met.
 
 **Enforced:** a task with `status: done` in `task_lists` does **not** settle for `task_complete`
-(or for `ultragentic doctor`) while any checkbox under that task's **Acceptance criteria** section in
-`TASKS.md` is still `[ ]`, or while that section/prose is missing. Goal and auto share this verifier.
+(or for `ultragentic doctor`) while any checkbox under that task's **Acceptance criteria** section in `TASKS.md` is still `[ ]`, or while that section/prose is missing. Goal and auto share this verifier.
 Tick every AC box before marking `done`.
 
 Timing is load-bearing, not tidiness. The `task_complete` verifier reads `task_lists` (and TASKS
@@ -197,8 +191,7 @@ prose for acceptance boxes) to decide whether another task remains. Marking a ta
 that verifier has run means the graph saw a task that was already finished and sent the run back
 through a full build cycle for nothing. That has happened, and it costs a complete loop each time.
 
-A `canceled` task carries a note saying why. So does a `blocked` one. "The count reflects what is
-actually outstanding" is the whole reason the field exists.
+A `canceled` task carries a note saying why. So does a `blocked` one. "The count reflects what is actually outstanding" is the whole reason the field exists.
 </rules>
 
 ## Task Sizing Guidelines
@@ -222,11 +215,9 @@ If a task is L or larger, it should be broken into smaller tasks. An agent perfo
 - You find yourself writing "and" in the task title (a sign it is two tasks)
 - Its pull request would pass about 300 changed lines or 10 files
 
-**Milestones and pull requests (MUST):** group tasks into milestones, each a result a person can
-check, and give every task its milestone, its repository, and its expected size in TASKS.md. One task
+**Milestones and pull requests (MUST):** group tasks into milestones, each a result a person can check, and give every task its milestone, its repository, and its expected size in TASKS.md. One task
 is one pull request with one scope. Do not rely on remembering this: when the workspace declares
-`spec.sizeBudget` in `ua-checks.yaml`, the `pre-tool-use` gate refuses a `git commit` or
-`gh pr create` over it. An exception needs the `size_override` run flag set with a note, and the pull
+`spec.sizeBudget` in `ua-checks.yaml`, the `pre-tool-use` gate refuses a `git commit` or `gh pr create` over it. An exception needs the `size_override` run flag set with a note, and the pull
 request body must then carry a line starting `Size budget override:`.
 </rules>
 

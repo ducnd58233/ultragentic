@@ -7,11 +7,9 @@ can turn it into a durable, reviewed rule. This command proposes; it never edits
 
 <references>
 
-Graph node: `improve` in [`goal-delivery.yaml`](../graphs/goal-delivery.yaml), on both `/goal` and
-`/auto`, after the last `task_complete` and before `done`.
+Graph node: `improve` in [`goal-delivery.yaml`](../graphs/goal-delivery.yaml), on both `/goal` and `/auto`, after the last `task_complete` and before `done`.
 
-Promotion logic: `ProposePromotions` in `runtime/internal/memory/domain/policy.go` (confirmed and
-reused `PromotionThreshold` times). Adapted from ECC's `improve` step; not adopted: generating skills
+Promotion logic: `ProposePromotions` in `runtime/internal/memory/domain/policy.go` (confirmed and reused `PromotionThreshold` times). Adapted from ECC's `improve` step; not adopted: generating skills
 or rules automatically from memory.
 </references>
 
@@ -21,10 +19,8 @@ or rules automatically from memory.
 
 1. Run `ultragentic memory promotions`.
 2. For each promotion, report the memory, its target (for example `AGENTS.md` or a stack profile),
-   and the reason, in the run's final summary. If the rule belongs in this repository, it lands as its
-   own reviewed change, never as part of closing this run.
-3. `.agent-state/MISTAKES.md` graduation (two repeats of one class, listed by `ultragentic memory promotions`) is the other half of
-   improve; check it here too ([`mistakes-log.md`](../references/mistakes-log.md)).
+   and the reason, in the run's final summary. If the rule belongs in this repository, it lands as its own reviewed change, never as part of closing this run.
+3. `.agent-state/MISTAKES.md` graduation (two repeats of one class, listed by `ultragentic memory promotions`) is the other half of improve; check it here too ([`mistakes-log.md`](../references/mistakes-log.md)).
 4. Checkpoint the node: `ultragentic checkpoint -slug <slug>`.
 
 No promotions is a normal result.

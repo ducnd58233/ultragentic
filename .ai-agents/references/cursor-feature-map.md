@@ -41,8 +41,7 @@ Peer maps: [`claude-code-feature-map.md`](claude-code-feature-map.md),
 <rules>
 
 Cursor hooks in this repo are **UNVERIFIED** (no measured hook fire in CI).
-Observed risk: `cursor-agent` may read `.claude/settings.json` instead of
-`.cursor/hooks.json`. Before claiming Cursor hook parity, run an observation
+Observed risk: `cursor-agent` may read `.claude/settings.json` instead of `.cursor/hooks.json`. Before claiming Cursor hook parity, run an observation
 campaign and update [`host-hook-contracts.md`](host-hook-contracts.md).
 
 </rules>

@@ -41,8 +41,7 @@ Peer map for Claude Code: [`claude-code-feature-map.md`](claude-code-feature-map
 
 DeepSeek Harness documents a **subprocess OS sandbox** via `ctx.sandbox` /
 `dsh-bash-sandbox` (landlock / sandbox-exec) ([extension cookbook](https://deepseek-harness.github.io/deepseek-harness/en/reference/cookbook/extension-cookbook)).
-That is the same *class* of isolation as Claude Seatbelt/bubblewrap, and it is
-**not** ultragentic `sandbox.yaml`.
+That is the same *class* of isolation as Claude Seatbelt/bubblewrap, and it is **not** ultragentic `sandbox.yaml`.
 
 | Layer | What it is | Isolation |
 |-------|------------|-----------|
