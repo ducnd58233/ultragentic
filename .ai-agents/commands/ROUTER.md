@@ -17,6 +17,8 @@ Slash-style prompts live in this folder as `*.md`. **Claude Code** commonly reso
 | Ship decision, parallel personas | [`ship.md`](ship.md) | Non-trivial blast radius; only phase that may authorize merge to `main` after GO + human approval |
 | Write spec first | [`spec.md`](spec.md) | Agree spec path |
 | Citation-first research digest command | [`research.md`](research.md) | Topic + scope; MUST Applicability + Refine + Mermaid; reusable behavior is `research-with-citations`; multi-lane uses `investigate.md` |
+| Multi-angle deep research with claim voting | [`deep-research.md`](deep-research.md) | Prefer Claude native `/deep-research` when available; else skill fan-out; host matrix in `deep-work-host-matrix.md` |
+| Deep analysis with metacognition before recommend | [`deep-analyze.md`](deep-analyze.md) | Digest exists; deeper than `analyze.md`; confidence labels required |
 | Host/CI experiment + STATUS.md updates | [`experiment.md`](experiment.md) | `researcher-delivery` `experiment_run`; no in-process GPU sandbox |
 | Findings citing STATUS and run artifacts | [`findings.md`](findings.md) | After experiment terminal STATUS |
 | Analyze evidence into recommendation | [`analyze.md`](analyze.md) | Digest/evidence available |

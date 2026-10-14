@@ -48,6 +48,7 @@ Lookup table for shared checklists and pattern docs under this folder. These fil
 | Graph path fixtures: outcomes → expected node path, checked by `/doctor` and `ultragentic eval graph` | [`graph-path-evals.yaml`](graph-path-evals.yaml) | `agent-systems-auditor`, graph authors |
 | Runtime missing: the agent asks for the license once, then installs it itself | [`runtime-bootstrap.md`](runtime-bootstrap.md) | a delivery command finds no `ultragentic` binary |
 | Size budgets and concise-writing rules for every asset and charter | [`concise-docs.md`](concise-docs.md) | write or update any asset; `ultragentic docs budget` |
+| Deep research / deep analyze per-host native vs emulation paths (all seven inventory hosts) | [`deep-work-host-matrix.md`](deep-work-host-matrix.md) | `/deep-research`, `/deep-analyze`, `deep-research` skill; harness parity |
 | Charter rules moved out of the always-loaded file: sources and builds, docs and naming, paths and platforms | [`charter-detail.md`](charter-detail.md) | AGENTS.md triggers; all host agents |
 | Workspace mistakes diary (`.agent-state/MISTAKES.md`), graduation into AGENTS.md, vs memory.db | [`mistakes-log.md`](mistakes-log.md) | always-on charter; all host agents |
 | Human-owned laws and machine-checkable proofs (`laws.yaml`, `ultragentic laws check`) | [`laws-and-proofs.md`](laws-and-proofs.md) | always-on charter; `/auto` operators; hook authors |

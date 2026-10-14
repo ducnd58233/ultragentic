@@ -6,7 +6,7 @@ Research a scoped topic citation-first and return a digest of what the sources s
 
 <references>
 
-Follow [`research-with-citations`](../skills/research-with-citations/SKILL.md) and, for the full loop, [`researcher-harness`](../skills/researcher-harness/SKILL.md).
+Follow [`research-with-citations`](../skills/research-with-citations/SKILL.md) and, for the full loop, [`researcher-harness`](../skills/researcher-harness/SKILL.md). For multi-angle fan-out with claim voting, use [`deep-research.md`](deep-research.md) instead of a single pass.
 
 Primary persona: [`research-investigator`](../agents/research-investigator.md).
 
