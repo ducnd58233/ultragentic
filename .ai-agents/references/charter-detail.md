@@ -39,15 +39,13 @@ Rules moved out of the always-loaded charter ([`AGENTS.md`](../../AGENTS.md)) so
   - **Done means checked (MUST):** replace every `FILL:` line, then `ultragentic docs check <file>`
     must pass: front matter (`type`, `category`, `slug`, `title`, `description`, `status`,
     `created`, `updated`) matching the path, and the type's XML sections in order. The post-write hook reports the same problems after each edit.
-  - `<slug>` is short kebab-case for the work; two slugs differing only in case are refused as a
-    collision (case-preserving filesystems on Windows and macOS would alias their files). Confirm the slug with the user when it is not obvious. Older layouts move with `ultragentic migrate docs-tmp`.
+  - `<slug>` is short kebab-case for the work; two slugs differing only in case are refused as a collision (case-preserving filesystems on Windows and macOS would alias their files). Confirm the slug with the user when it is not obvious. Older layouts move with `ultragentic migrate docs-tmp`.
 - **Docs carry content, never run state (MUST):** a generated deliverable under `docs/` never
   contains graph or run state (`currentNode`, `checks`, `maxTransitions`, or any other
   `run-state.schema.json` field) outside a fenced code example that is explicitly documenting the schema. That state lives only in the `runs` table of `.agent-state/memory.db`
   (inspect with `ultragentic run status` / `run list`).
   `ultragentic doctor` fails on a violation; see `docmeta.checkNoGraphState`.
-- **A slug is English (MUST):** a slug is a short English gloss of the objective, chosen by the
-  agent, never a mechanical transliteration of non-English input. `auto.Slugify` keeps only
+- **A slug is English (MUST):** a slug is a short English gloss of the objective, chosen by the agent, never a mechanical transliteration of non-English input. `auto.Slugify` keeps only
   `[a-z0-9]`, so a diacritic in non-English text is treated as a word break and leaves bare consonant fragments (`l-m-th-n`, `m-r-ng-repo` are real slugs this produced before the rule existed) - a mistake that survives `validate.Slug`'s kebab-case check because the fragments are still valid kebab-case. `graphroute.Resolve` refuses to auto-derive a slug from an objective containing a non-ASCII letter; pass `--slug` explicitly for a non-English objective instead.
   `ultragentic doctor` also warns, non-blocking, on an explicitly-passed slug that `docmeta.LooksTransliterated` flags as a heuristic net, not the enforcement.
 - **A "no docs needed" decision still gets a slug (MUST):** when a task's scope is small enough

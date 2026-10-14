@@ -32,10 +32,8 @@ Add `--json` to either for a record under `tmp/<slug>/`. `review scan` reads eve
 
 1. `ultragentic review block <path>:<line>` prints the block with line numbers,
    its findings, and the files that reference it. Nested blocks are folded to one line; print each one separately.
-2. Settle every finding in the block: fix it, or state in the review why it is
-   wrong (a framework or reflection call, a deliberate idiom). Never drop one silently. Before deleting an unreferenced definition, check the listed callers and search for its name; ask before deleting public API.
-3. Review the block on the five axes below. Review a changed block (`*`) in
-   full; read an unchanged block only for context a changed one needs.
+2. Settle every finding in the block: fix it, or state in the review why it is wrong (a framework or reflection call, a deliberate idiom). Never drop one silently. Before deleting an unreferenced definition, check the listed callers and search for its name; ask before deleting public API.
+3. Review the block on the five axes below. Review a changed block (`*`) in full; read an unchanged block only for context a changed one needs.
 
 The scan resolves no types, so it cannot see a call through reflection, a framework, or another repository. Treat its findings as leads you verify, not verdicts. A deliberate exception is recorded in the code: a `review:ignore
 <reason>` comment, or the linter's own directive (`noqa`, `nolint`,

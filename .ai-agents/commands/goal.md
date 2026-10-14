@@ -71,12 +71,9 @@ Use `ultragentic research` / `auto research` for the researcher graph. Choosing 
 
 1. **Read the `chosen` line the start command printed.** When the runtime read the objective, say
    in one sentence which graph it picked and why, and ask the user whether that is right, at the intake gate before anything else.
-2. **If it is wrong, do not work around it.** End that run with
-   `ultragentic run abort --slug <slug> --reason "wrong graph"`, then start again with the first word the user meant, for example `ultragentic goal delivery "<objective>"` (first words come from inventory).
-3. **If the runtime asks which kind of work it is, ask the user the same question.** Do not pick for
-   them.
-4. **A code change with a non-code deliverable** (a feature plus an announcement, a migration plus a
-   report) starts `goal-delivery` with the `task_required` flag set, either because the objective said both or because you passed `--with-task`. The non-code part runs after the last code task.
+2. **If it is wrong, do not work around it.** End that run with `ultragentic run abort --slug <slug> --reason "wrong graph"`, then start again with the first word the user meant, for example `ultragentic goal delivery "<objective>"` (first words come from inventory).
+3. **If the runtime asks which kind of work it is, ask the user the same question.** Do not pick for them.
+4. **A code change with a non-code deliverable** (a feature plus an announcement, a migration plus a report) starts `goal-delivery` with the `task_required` flag set, either because the objective said both or because you passed `--with-task`. The non-code part runs after the last code task.
    Its nodes are in [`task.md`](task.md), and the SPEC must list its deliverable, acceptance rows, and outward actions ([`spec.md`](spec.md)).
 5. **`tutor` needs a learner.** Use `/goal tutor` only; `/auto tutor` is refused.
 
@@ -87,8 +84,7 @@ Every figure in a document this run writes (RESEARCH, SPEC, PLAN, TASKS, FINDING
 
 ### Rules in this mode (MUST)
 
-- **Follow the node the runtime reports.** Never infer the phase, never advance manually. There is
-  no `run advance`: nodes move because `verify` or `checkpoint` recorded evidence.
+- **Follow the node the runtime reports.** Never infer the phase, never advance manually. There is no `run advance`: nodes move because `verify` or `checkpoint` recorded evidence.
 - **Evidence has provenance.** `--source` is one of `exit_code`, `file_assert`, `ci_api`,
   `human_event`. There is no source for model assertion. A verifier node's check can only be written by a verifier, enforced by the compiler, not by convention.
 - **The command is not yours to choose.** `verify` runs what [`ua-checks.yaml`](../../ua-checks.yaml)
@@ -133,13 +129,10 @@ Canonical rules, including the status vocabulary:
 
 - **Read every phase.** `user-prompt-submit` injects matching memories automatically on Claude Code
   and Codex; on Cursor they arrive at session start only, because its prompt hook cannot inject. Do not re-derive what a previous run already established; check what arrived before searching.
-- **Write on failure.** `post-tool-use` proposes a memory when a command exits non-zero, and
-  confirms it from that exit code. Failure memories carry an expiry, because "this command fails"
+- **Write on failure.** `post-tool-use` proposes a memory when a command exits non-zero, and confirms it from that exit code. Failure memories carry an expiry, because "this command fails"
   is true about a moment.
-- **Retrieval returns confirmed memories only.** A person confirms with
-  `ultragentic memory confirm --id <id>`; the model cannot confirm its own.
-- **Never store a credential.** The policy filter rejects credential-shaped candidates before they
-  reach disk. Do not work around it.
+- **Retrieval returns confirmed memories only.** A person confirms with `ultragentic memory confirm --id <id>`; the model cannot confirm its own.
+- **Never store a credential.** The policy filter rejects credential-shaped candidates before they reach disk. Do not work around it.
 </required>
 
 ## Completion condition
@@ -174,8 +167,7 @@ Merge to `main` only after **GO** and **explicit human approval** ([`build.md`](
    When that slug's latest run is finished (`done`, `failed`, `cancelled`, `budget_exceeded`), start its next run with `ultragentic run start --continue --slug <slug> "<objective>"` (MCP:
    `ua_run_start` with `slug` and `continue: true`); the run gets a new version under
    `.agent-state/runs/`, and the documents stay in the slug's one folder. It refuses while the latest run is still `running` or `awaiting_human`; resume that run with `ultragentic run status --slug <slug>` instead.
-4. Choose the slug; its documents will live in `docs/<category>/<slug>/` (the run picks the
-   category from the workflow, or pass `--category`). Confirm `<slug>` with the human when not obvious. The slug is a short English gloss of the objective, never a mechanical transliteration of non-English input (`charter-detail.md` "Docs and naming", moved out of `AGENTS.md`). When the task is small enough that no SPEC/PLAN is warranted, still start the run with `--slug no-docs-<short-name>` rather than skip slug creation (`AGENTS.md` "A 'no docs needed' decision still gets a slug").
+4. Choose the slug; its documents will live in `docs/<category>/<slug>/` (the run picks the category from the workflow, or pass `--category`). Confirm `<slug>` with the human when not obvious. The slug is a short English gloss of the objective, never a mechanical transliteration of non-English input (`charter-detail.md` "Docs and naming", moved out of `AGENTS.md`). When the task is small enough that no SPEC/PLAN is warranted, still start the run with `--slug no-docs-<short-name>` rather than skip slug creation (`AGENTS.md` "A 'no docs needed' decision still gets a slug").
 5. State **ASSUMPTIONS** and the measurable **done** line.
 
 Skip to Phase 4 only if a **human-approved** `TASKS.md` already exists and the user asked to continue implementation.
@@ -231,8 +223,7 @@ For each **incomplete** task in `TASKS.md`:
 - **NO-GO**, test/E2E failure, **pending PR checks/reviews**, or **same-task** human feedback → fix on **same branch** → re-verify → update `.agent-state/runs/<date>/<slug>/<version>/` → wait for CI/reviews again → `/ship`.
 - **Next planned task** → new branch from `main` → `/build`.
 - **Three** failed ship cycles on the same blocker → stop; report root cause; ask human.
-- **A verifier fail the graph already retries automatically** (a missed experiment threshold at
-  `results_eval`, or any other check with a fallback edge) is never `checkpoint --blocker` - let it fail and loop. See [`AGENTS.md`](../../AGENTS.md) "Blocker vs. retry".
+- **A verifier fail the graph already retries automatically** (a missed experiment threshold at `results_eval`, or any other check with a fallback edge) is never `checkpoint --blocker` - let it fail and loop. See [`AGENTS.md`](../../AGENTS.md) "Blocker vs. retry".
 
 Optional personas (user or phase invokes; no persona-to-persona chains): [`architect-planner`](../agents/architect-planner.md), [`test-engineer`](../agents/test-engineer.md), [`code-reviewer`](../agents/code-reviewer.md), plus conditional specialists in [`ship.md`](ship.md).
 </procedure>

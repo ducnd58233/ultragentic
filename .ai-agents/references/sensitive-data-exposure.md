@@ -39,8 +39,7 @@ Anything the build inlines is public forever. Rotating it means a redeploy, and 
 
 - Values behind a build-time public prefix are inlined verbatim. The prefix differs per tool
   (`NEXT_PUBLIC_`, `VITE_`, `EXPO_PUBLIC_`, `REACT_APP_`, `PUBLIC_`, and others). Detect the rule from the build tool the repo actually uses; do not assume.
-- A "publishable" or "anon" key from a vendor is designed for this. A "secret", "service", or
-  "admin" key from the same vendor is not, and the two often differ by one word.
+- A "publishable" or "anon" key from a vendor is designed for this. A "secret", "service", or "admin" key from the same vendor is not, and the two often differ by one word.
 - Source maps expose original source, comments, and sometimes inlined config. Decide deliberately
   whether they ship, and if they do, whether they are restricted to an error-reporting vendor.
 - Mobile and embedded binaries are extractable. A key compiled into an app is a published key;
@@ -66,12 +65,9 @@ Anything the build inlines is public forever. Rotating it means a redeploy, and 
 
 ## Channel 3: consoles and device logs
 
-- A debug statement that reaches production is a disclosure. Strip it in the production build, or
-  route it through a logger that is silent there.
-- Whole-object logging is the recurring failure. `console.log(user)` publishes every field the
-  object has now and every field a teammate adds next quarter. Name the fields.
-- Device logs are shared surfaces: Android logcat, iOS unified logging, and a serial console on
-  embedded hardware. Treat them as user-visible.
+- A debug statement that reaches production is a disclosure. Strip it in the production build, or route it through a logger that is silent there.
+- Whole-object logging is the recurring failure. `console.log(user)` publishes every field the object has now and every field a teammate adds next quarter. Name the fields.
+- Device logs are shared surfaces: Android logcat, iOS unified logging, and a serial console on embedded hardware. Treat them as user-visible.
 - Framework and driver errors often carry the query, the payload, or the connection string. Catch
   and re-shape them before they reach any log you do not control.
 
@@ -85,20 +81,17 @@ Anything the build inlines is public forever. Rotating it means a redeploy, and 
   partial contact details, no full government IDs.
 - Screenshots, screen recordings, and session-replay tools capture whatever is on screen.
   Mark sensitive fields excluded, and verify the exclusion actually applies rather than trusting the setting.
-- Autofill, spellcheck, and third-party keyboards can forward field contents. Disable them on
-  credential and high-sensitivity fields.
+- Autofill, spellcheck, and third-party keyboards can forward field contents. Disable them on credential and high-sensitivity fields.
 
 ## Channel 5: API response shape
 
-- Build responses from an explicit output type, never by serializing the storage record. An
-  allowlist stays correct when a column is added; a denylist does not.
+- Build responses from an explicit output type, never by serializing the storage record. An allowlist stays correct when a column is added; a denylist does not.
 - Errors get two shapes: a stable code and a safe message for the caller, full detail server-side,
   joined by an opaque request ID the user can quote to support.
 - Do not vary an error between "no such account" and "wrong password"; the difference enumerates
   accounts. The same applies to timing on authentication paths.
 - Identifiers in responses should not reveal volume or allow traversal to another tenant's row.
-- Verify authorization per record, not per endpoint. A list endpoint that filters by a
-  client-supplied tenant ID is an access-control bug wearing a filter.
+- Verify authorization per record, not per endpoint. A list endpoint that filters by a client-supplied tenant ID is an access-control bug wearing a filter.
 
 ## Channel 6: server logs and telemetry
 
@@ -106,12 +99,9 @@ Anything the build inlines is public forever. Rotating it means a redeploy, and 
   site only; a new caller added later inherits nothing.
 - Never log authentication material, even inside a caught exception. Exception objects routinely
   carry the arguments that caused them.
-- Log an opaque user identifier, and correlate to personal data out of band through a system with
-  its own access control.
-- Request and response body logging is the most common accidental dump. If it must exist, make it
-  field-allowlisted and off by default.
-- Trace attributes, span names, metric labels, and error-reporting context are all logs with a
-  different name. The same rules apply.
+- Log an opaque user identifier, and correlate to personal data out of band through a system with its own access control.
+- Request and response body logging is the most common accidental dump. If it must exist, make it field-allowlisted and off by default.
+- Trace attributes, span names, metric labels, and error-reporting context are all logs with a different name. The same rules apply.
 - Set retention deliberately. Data you no longer hold cannot leak.
 </rules>
 
@@ -123,8 +113,7 @@ Anything the build inlines is public forever. Rotating it means a redeploy, and 
   stage does not reference them.
 - CI logs are readable by everyone with pipeline access, and often by everyone with repository
   access. Masking depends on the platform recognizing the value; a transformed secret is not masked.
-- Committed history is permanent. A secret removed in a later commit is still in the history, and
-  rotation is the only real fix.
+- Committed history is permanent. A secret removed in a later commit is still in the history, and rotation is the only real fix.
 - Agent evidence under `tmp/` may contain PR comments, test output, and captured responses. Redact
   before writing, per [`goal-verification-records.md`](goal-verification-records.md).
 </context>

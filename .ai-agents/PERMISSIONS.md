@@ -32,8 +32,7 @@ Current project posture:
   `rebase`/`worktree`), `gh`, `go`/`gofmt`/`golangci-lint`, `make`, script runners, common CLI utilities, `WebFetch`.
 - Asks for almost nothing: `NotebookEdit`, `chmod`, `chown`, `kill`, `killall`, `pkill` only. Nothing
   else is in `ask`, deliberately — see the note above.
-- Runs the `pre-tool-use` hook on MCP tool calls too (matcher `mcp__.*` on Claude Code), so the
-  `outward-action` danger category can refuse a message send, a payment, a share, or a calendar write on an auto run. On an interactive run an MCP tool no allow rule covers still prompts the person. Other hosts are not known to gate MCP calls; see
+- Runs the `pre-tool-use` hook on MCP tool calls too (matcher `mcp__.*` on Claude Code), so the `outward-action` danger category can refuse a message send, a payment, a share, or a calendar write on an auto run. On an interactive run an MCP tool no allow rule covers still prompts the person. Other hosts are not known to gate MCP calls; see
   [`references/host-hook-contracts.md`](references/host-hook-contracts.md).
 - Denies credential-shaped file reads, `git push --force`, `git clean`, `git push --mirror`,
   `git filter-branch`, and hand-writes to a run's own `manifest.json`/`events.ndjson`.
@@ -145,8 +144,7 @@ This is the **single home** for the defaults that used to be repeated as a `## P
 
 Unless an asset says otherwise in its own body or its YAML `tools:` map:
 
-- **Tools:** `Read`, `Grep`, `Glob`, `Edit`. Shell only for running repo-documented lint, test, and
-  build commands when validating a recommendation.
+- **Tools:** `Read`, `Grep`, `Glob`, `Edit`. Shell only for running repo-documented lint, test, and build commands when validating a recommendation.
 - **Paths:** follow the allow/ask/deny rules in this file. Never read credential or secret material;
   the deny list is the boundary, not a suggestion.
 - **Browser and DevTools:** for browser-centric work prefer a browser MCP or human-driven DevTools.

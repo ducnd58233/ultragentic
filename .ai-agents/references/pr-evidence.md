@@ -53,12 +53,10 @@ do not invent host-only or ad-hoc capture paths.
    refuses create (GitHub `gh pr create` today; other forges follow the same MANIFEST gate once their create shells are wired).
 8. **Forge-visible proof is mandatory.** `ATTACHED.md` alone is not enough. For Kind `api`/`ui`,
    the PR description or a comment MUST carry reviewer-visible proof (forge media attach per the [command matrix](pr-evidence-forges.md), or an inlined transcript that includes the MANIFEST Summary in a fenced block). For Kind `none`/`redacted`, the PR description or a comment MUST declare `Kind:` and `Reason:` so omit is visible. `pr_evidence` checks the forge via `ci_api`.
-9. **Create must declare forge-facing evidence for product kinds.** On an active run with
-   Kind `api`/`ui`, the create command MUST include media `--attach` (only when the matrix row and doctor probe allow it) or a `Kind:` line in the body. `pre-tool-use` refuses otherwise. **MUST open [`pr-evidence-forges.md`](pr-evidence-forges.md) before any attach shell.**
+9. **Create must declare forge-facing evidence for product kinds.** On an active run with Kind `api`/`ui`, the create command MUST include media `--attach` (only when the matrix row and doctor probe allow it) or a `Kind:` line in the body. `pre-tool-use` refuses otherwise. **MUST open [`pr-evidence-forges.md`](pr-evidence-forges.md) before any attach shell.**
 10. **Attach to the PR for reviewers, then write `ATTACHED.md` with `Head:`** set to the commit
    the capture proves. Staging paths in ATTACHED/RECORD are for the runtime gate, not the reviewer-facing comment body.
-11. **On every new commit to an open PR:** recapture if the product path changed, re-attach on
-   the PR, then `ultragentic previdence refresh --slug <slug>`. Stale `Head` vs current
+11. **On every new commit to an open PR:** recapture if the product path changed, re-attach on the PR, then `ultragentic previdence refresh --slug <slug>`. Stale `Head` vs current
    `git HEAD` fails `previdence check` / the `pr_evidence` verifier, and `pre-tool-use` refuses `git push`.
 12. **Scrub leaks.** If a PR already has comments that only point at local pr-evidence paths,
     edit or minimize them and replace with reviewer-visible proof (attach or inlined transcript).

@@ -65,12 +65,9 @@ Wait-Process, or PID polling). No markdown-only walk; see [`goal.md`](goal.md)
 
 **Three things you must not do, in order of how much damage they cause:**
 
-1. **Do not simulate the mode.** Walking the phases yourself and reporting them as done is the
-   failure this whole design exists to remove. The graph decides what runs next, from recorded evidence, and the only way to move it is `ultragentic verify` or `ultragentic checkpoint`.
-2. **Do not record `human_event` on a person's behalf.** Auto mode passes the approval gates by
-   graph edges guarded on a flag, never by writing evidence that claims someone approved. There is no source for model assertion, and inventing one through the human source would remove the one property this control plane has that no surveyed harness has.
-3. **Do not merge without the opt-in.** A workspace with no `.agent-state/auto.yaml`, or one whose
-   file still says `merge: false`, has not agreed to it. Absence is a no.
+1. **Do not simulate the mode.** Walking the phases yourself and reporting them as done is the failure this whole design exists to remove. The graph decides what runs next, from recorded evidence, and the only way to move it is `ultragentic verify` or `ultragentic checkpoint`.
+2. **Do not record `human_event` on a person's behalf.** Auto mode passes the approval gates by graph edges guarded on a flag, never by writing evidence that claims someone approved. There is no source for model assertion, and inventing one through the human source would remove the one property this control plane has that no surveyed harness has.
+3. **Do not merge without the opt-in.** A workspace with no `.agent-state/auto.yaml`, or one whose file still says `merge: false`, has not agreed to it. Absence is a no.
 </required>
 
 ## The task list (MUST)
@@ -83,8 +80,7 @@ Two consequences specific to this mode:
 
 - **A stale list stalls or loops the run.** `task_complete` decides on `task_lists`. With a person
   driving, a wrong answer there gets spotted; with auto driving, the run simply walks another build cycle for a task that is already finished, and keeps doing it.
-- **`auto gate` reads the plan document.** A task without acceptance criteria gives the spec and
-  plan gates nothing to test, and a plan that still says `TBD` keeps the gate closed - which is the gate working, not a fault to route around.
+- **`auto gate` reads the plan document.** A task without acceptance criteria gives the spec and plan gates nothing to test, and a plan that still says `TBD` keeps the gate closed - which is the gate working, not a fault to route around.
 
 Canonical rules: [`planning-and-task-breakdown`](../skills/planning-and-task-breakdown/SKILL.md), section **Task status (MUST)**.
 </required>
@@ -191,6 +187,5 @@ Model self-claim is never Passed evidence. Report results when the loop finishes
 - Use `ultragentic auto research "<topic>"` for literature → experiment → findings loops.
 - Use [`goal.md`](goal.md) when you want the approval gates, when the workspace has not opted in,
   or when the objective is exploratory.
-- Do **not** use for anything on the danger list. It will stop, and stopping late costs more than
-  not starting.
+- Do **not** use for anything on the danger list. It will stop, and stopping late costs more than not starting.
 </routing>

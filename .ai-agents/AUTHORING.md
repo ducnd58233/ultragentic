@@ -39,11 +39,9 @@ Read this file when you are: adding or changing an asset, wiring a harness, or m
 - **Follow the folder's `TEMPLATE.md`** where present when creating a skill, subagent, command, hook, reference, or stack profile.
 - **Update that folder's `ROUTER.md` in the same change** after creating, renaming, or deleting any asset under `skills/`, `agents/`, `commands/`, `hooks/`, `references/`, `stack-profiles/`, or `graphs/`.
 - **Do not restate a rule that already has a home.** Link to it. The stack-detection rule, the permissions defaults, the git gates, and the runtime requirement each live in exactly one place; copies drift and the copy is what a reader trusts.
-- **Tool naming and currency:** shared skills, references, and commands stay tool-agnostic and
-  describe the capability, not a product. Concrete tools, packages, and libraries are named only in [`stack-profiles/`](stack-profiles), and even there as non-exhaustive examples the agent must verify against current official docs. Prefer detecting what the repo uses over any hardcoded list.
+- **Tool naming and currency:** shared skills, references, and commands stay tool-agnostic and describe the capability, not a product. Concrete tools, packages, and libraries are named only in [`stack-profiles/`](stack-profiles), and even there as non-exhaustive examples the agent must verify against current official docs. Prefer detecting what the repo uses over any hardcoded list.
   See [`stack-profiles/TEMPLATE.md`](stack-profiles/TEMPLATE.md).
-- **Tool-specific rules:** Cursor rule files live in [`.cursor/rules/`](../.cursor/rules) and are not
-  interchangeable with Claude rules without editing.
+- **Tool-specific rules:** Cursor rule files live in [`.cursor/rules/`](../.cursor/rules) and are not interchangeable with Claude rules without editing.
 - **Permissions:** after changing tool or path requirements, align
   [`.claude/settings.json`](../.claude/settings.json) and [`PERMISSIONS.md`](PERMISSIONS.md). Deny overrides allow.
 </required>
@@ -111,18 +109,14 @@ Document tags are valid only in `templates/docs/`; `scripts/check-xml-tags.sh` s
 
 - Tags go **after** YAML frontmatter, never before. Frontmatter must stay the first bytes of the file
   or the skill and rule loaders will not parse it.
-- **One prose sentence goes above the first tag**, and no tag may be the first body line. This is the
-  single exception to total tag coverage below, and it is not a section: it is the description, for the loaders that never read frontmatter. Cursor's `.cursor/commands` takes plain Markdown and advertises the first body line as-is, so thirteen commands here showed up in Cursor's `/` picker as the literal string `<references>` or `<context>` while their frontmatter was valid the whole time.
+- **One prose sentence goes above the first tag**, and no tag may be the first body line. This is the single exception to total tag coverage below, and it is not a section: it is the description, for the loaders that never read frontmatter. Cursor's `.cursor/commands` takes plain Markdown and advertises the first body line as-is, so thirteen commands here showed up in Cursor's `/` picker as the literal string `<references>` or `<context>` while their frontmatter was valid the whole time.
   `commands/doctor.md` was the one that read correctly, because it happened to open on a sentence.
   `scripts/check-frontmatter.py` check 4 now fails a tag-first body.
 - Open and close on their own lines, so the Markdown around them still renders.
-- **Every section belongs to a block.** An untagged region between two tagged ones asks the model to
-  guess what kind of instruction it is reading, which is the ambiguity the tags exist to remove.
+- **Every section belongs to a block.** An untagged region between two tagged ones asks the model to guess what kind of instruction it is reading, which is the ambiguity the tags exist to remove.
   Every asset under `.ai-agents/` is tagged, including short ones.
-- **Stay within the size budget.** A file over its budget loses rules for short-context models. Limits and
-  writing rules: [`concise-docs.md`](references/concise-docs.md); `docs budget` enforces them.
-- **Nest only for genuine containment, one level deep.** Anthropic's prompting guidance says to
-  "nest tags when content has a natural hierarchy", and its example is a container holding items of the same kind. A long `<procedure>` whose phases each carry their own `<verification>` is that shape. Two categories side by side are not: `<required>` inside `<rules>` invents a question with no answer, namely whether the requirement stops applying outside that block.
+- **Stay within the size budget.** A file over its budget loses rules for short-context models. Limits and writing rules: [`concise-docs.md`](references/concise-docs.md); `docs budget` enforces them.
+- **Nest only for genuine containment, one level deep.** Anthropic's prompting guidance says to "nest tags when content has a natural hierarchy", and its example is a container holding items of the same kind. A long `<procedure>` whose phases each carry their own `<verification>` is that shape. Two categories side by side are not: `<required>` inside `<rules>` invents a question with no answer, namely whether the requirement stops applying outside that block.
 - **Pick the tag by what the block is, not by what it is called.** A heading reading "Quick
   Reference" that holds code examples is `<rules>`, not `<references>`.
 - Use the smallest set that partitions the file. Most assets need three or four, not eleven.
@@ -169,8 +163,7 @@ Run `scripts/link-ai-agents.ps1` (Windows) or `scripts/link-ai-agents.sh` (macOS
 - Treat `<toolkit-root>/.ai-agents` as the canonical shared assets path.
 - Give the consumer repo its own root `AGENTS.md` with product and domain constraints. It wins over
   this toolkit; see local-first precedence in [`AGENTS.md`](../AGENTS.md).
-- When an agent **writes** that charter (or `CURSOR.md`, `CLAUDE.md`, `.cursor/rules/*.mdc` for the
-  product repo), follow **Consumer charter files** below. Hooks still inject toolkit context at session time; the committed file must not depend on it.
+- When an agent **writes** that charter (or `CURSOR.md`, `CLAUDE.md`, `.cursor/rules/*.mdc` for the product repo), follow **Consumer charter files** below. Hooks still inject toolkit context at session time; the committed file must not depend on it.
 - Run the link scripts from the submodule with `-WorkspaceRoot` / `--workspace` set to the consumer
   root and `-AssetsRoot` / `--assets` set to `<toolkit-root>/.ai-agents`.
 - Treat tool permissions as repository-local policy: adapt `opencode.json`, `.claude/settings.json`,
@@ -197,8 +190,7 @@ When an agent creates or edits charter files **for a consumer/product repository
 
 - The name `ultragentic`, paths such as `.ultragentic/` or `.ai-agents/`, or global install locations.
 - "Read AGENTS.md" when that means this toolkit's charter rather than the file being edited.
-- Instructions to run toolkit-only commands (`ultragentic doctor`, `/ship`, and so on) unless the
-  consumer repo explicitly documents them as part of its own workflow.
+- Instructions to run toolkit-only commands (`ultragentic doctor`, `/ship`, and so on) unless the consumer repo explicitly documents them as part of its own workflow.
 
 Examples: [consumer-charter-authoring.md](references/consumer-charter-authoring.md).
 
