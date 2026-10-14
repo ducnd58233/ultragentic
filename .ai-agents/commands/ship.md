@@ -7,9 +7,7 @@ Run the pre-ship specialist fan-out over one change, then merge the lanes into a
 <prerequisites>
 
 **Runtime required (MUST).** GO is recorded as the `ship` check. [`ua-checks.yaml`](../../ua-checks.yaml)
-declares `verifier: human` for `/goal` because no exit code means GO. On `/auto` only, the same
-checkplan entry carries an `auto` alternative that reads `tmp/<date>/<slug>/<version>/ship/DECISION.md`
-via `file_assert` (see [`AGENTS.md`](../../AGENTS.md) **Auto `reviews` and `ship` (reversal)**).
+declares `verifier: human` for `/goal` because no exit code means GO. On `/auto` only, the same checkplan entry carries an `auto` alternative that reads `tmp/<date>/<slug>/<version>/ship/DECISION.md` via `file_assert` (see [`AGENTS.md`](../../AGENTS.md) **Auto `reviews` and `ship` (reversal)**).
 Merge stays refused by `pre-tool-use` until `merge_approved` is recorded. Rules: [`goal.md`](goal.md)
 section "Runtime is required".
 </prerequisites>
@@ -54,39 +52,27 @@ Treat these as **blockers**, not observations - they are deterministic, so a mis
 - An automated accessibility audit reports **zero** WCAG failures, or every remaining failure is explained and explicitly accepted.
 - Render evidence exists at the supported breakpoints.
 - The open PR/MR has the **portable evidence contract** per [`pr-evidence.md`](../references/pr-evidence.md):
-  forge-visible **Visual evidence** (attach via the active forge row in
-  [`pr-evidence-forges.md`](../references/pr-evidence-forges.md), or inlined transcript, or honest
-  Kind `none`/`redacted` with Reason) and **Reproduce / Verify** steps. Not a comment that only
-  names `.agent-state/.../pr-evidence/` paths. On forge CLI failure, research-retry — do not
-  silently skip. `pr_evidence` / `ATTACHED.md` Head must match HEAD via `ultragentic previdence
-  refresh`; captures come from `ultragentic previdence snapshot|record` only (no agent-authored
-  Playwright/Puppeteer capture path) and stay out of the git tree. Kind `ui` MUST include STEPS
-  and an agent analyze-before-attach pass that refuses blank/solid media; sketch-first UI
-  authoring per [`ux-taste.md`](../references/ux-taste.md).
+  forge-visible **Visual evidence** (attach via the active forge row in [`pr-evidence-forges.md`](../references/pr-evidence-forges.md), or inlined transcript, or honest
+  Kind `none`/`redacted` with Reason) and **Reproduce / Verify** steps. Not a comment that only names `.agent-state/.../pr-evidence/` paths. On forge CLI failure, research-retry — do not silently skip. `pr_evidence` / `ATTACHED.md` Head must match HEAD via `ultragentic previdence refresh`; captures come from `ultragentic previdence snapshot|record` only (no agent-authored
+  Playwright/Puppeteer capture path) and stay out of the git tree. Kind `ui` MUST include STEPS and an agent analyze-before-attach pass that refuses blank/solid media; sketch-first UI authoring per [`ux-taste.md`](../references/ux-taste.md).
 
 Where a check could not run, it must be reported as `UNVERIFIED: <reason>` - never as a pass. Run [`/design`](design.md) in audit mode to produce the missing evidence before re-running `/ship`.
 
 ### API evidence gate (MUST, when the change touches a backend path)
 
-- A redacted request/response transcript for the fixed or new path is attached to the PR (body or
-  comment), declared in `pr-evidence/MANIFEST.md` with `Kind: api`, and recorded in `ATTACHED.md`.
+- A redacted request/response transcript for the fixed or new path is attached to the PR (body or comment), declared in `pr-evidence/MANIFEST.md` with `Kind: api`, and recorded in `ATTACHED.md`.
 - Do not commit HAR dumps or other capture binaries into the repository.
 
 ## Phase C - Decision
 
 **Read the slop audit before deciding (MUST).** `ultragentic slop audit <path>`.
-In a `/goal` run the `slop` node has already recorded it as a check with
-`exit_code` provenance; run it here for a change shipped outside a run. A score
-above the threshold in [`ua-checks.yaml`](../../ua-checks.yaml) is a
-blocker like any other, and waiving it means raising the threshold in that file,
-which is a reviewed diff rather than a decision taken once in a conversation.
+In a `/goal` run the `slop` node has already recorded it as a check with `exit_code` provenance; run it here for a change shipped outside a run. A score above the threshold in [`ua-checks.yaml`](../../ua-checks.yaml) is a blocker like any other, and waiving it means raising the threshold in that file, which is a reviewed diff rather than a decision taken once in a conversation.
 
 Emit **Ship Decision: GO | NO-GO** with blockers, recommended fixes, acknowledged risks, **rollback plan**, and appended specialist reports.
 
 ### Decision file (MUST, when running under a tracked `docs/<category>/<slug>/`)
 
-Write `tmp/<slug>/ship/DECISION.md` in this exact shape, so a verifier can read it later instead of
-a person re-deriving it from chat prose. One line per element, no other text:
+Write `tmp/<slug>/ship/DECISION.md` in this exact shape, so a verifier can read it later instead of a person re-deriving it from chat prose. One line per element, no other text:
 
 ```text
 Ship Decision: GO
@@ -104,8 +90,7 @@ BLOCKER: <one line per blocking finding>
 Specialist: code-reviewer -> FAIL
 ```
 
-When product evidence was required and the agent **cannot analyze** the capture (no vision, unreadable
-media, tool failure), do not invent GO. Record NO-GO with `need_human` instead of a fake Evidence cite:
+When product evidence was required and the agent **cannot analyze** the capture (no vision, unreadable media, tool failure), do not invent GO. Record NO-GO with `need_human` instead of a fake Evidence cite:
 
 ```text
 Ship Decision: NO-GO
@@ -113,12 +98,8 @@ need_human: <one line reason the agent could not analyze the capture>
 ```
 
 A GO line carries zero `BLOCKER:` lines and zero `need_human:` lines; a NO-GO line carries at least one
-`BLOCKER:` or one `need_human:` — those must agree with the verdict, or the file is not evidence of
-either state. For a product-evidence run, GO should include an `Evidence:` line citing the PR URL,
-Head, and/or file basenames the agent actually reviewed. `Evidence:` and `need_human:` are mutually
-exclusive. Include a `Specialist:` line only for a lane that actually ran; skipping fan-out per this
-file's own triviality rule means zero `Specialist:` lines, not fabricated ones. Parsed by
-`runtime/internal/shipdecision`.
+`BLOCKER:` or one `need_human:` — those must agree with the verdict, or the file is not evidence of either state. For a product-evidence run, GO should include an `Evidence:` line citing the PR URL,
+Head, and/or file basenames the agent actually reviewed. `Evidence:` and `need_human:` are mutually exclusive. Include a `Specialist:` line only for a lane that actually ran; skipping fan-out per this file's own triviality rule means zero `Specialist:` lines, not fabricated ones. Parsed by `runtime/internal/shipdecision`.
 
 ### Merge gate (MUST)
 

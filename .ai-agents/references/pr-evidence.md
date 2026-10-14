@@ -16,9 +16,7 @@ do not invent host-only or ad-hoc capture paths.
 ## Rules (MUST)
 
 0. **Portable evidence contract (forge-agnostic).** Every in-scope product PR/MR body
-   MUST carry the same two fields regardless of forge (GitHub, GitLab, Bitbucket, or
-   unknown/self-hosted). Adapters choose CLI and template path only; they do not change
-   the fields. Instantiations: [forge templates](../templates/forge/PORTABLE_PR_BODY.md)
+   MUST carry the same two fields regardless of forge (GitHub, GitLab, Bitbucket, or unknown/self-hosted). Adapters choose CLI and template path only; they do not change the fields. Instantiations: [forge templates](../templates/forge/PORTABLE_PR_BODY.md)
    and the [forge matrix](pr-evidence-forges.md).
 
    | Field | Required when | What reviewers need |
@@ -26,73 +24,40 @@ do not invent host-only or ad-hoc capture paths.
    | **Visual evidence** | Kind `ui` (and product `api` when a transcript proves the path) | Forge-visible screenshot/video attach, or inlined Kind `api` transcript, or honest Kind `none`/`redacted` with Reason |
    | **Reproduce / Verify** | Kind `ui` (and critical product `api`) | Numbered steps matching STEPS.md / MANIFEST `Steps:` |
 
-   Consumers inherit these sections via toolkit link/install templates. Do **not** rely on
-   per-repo AGENTS.md patches for this contract.
+   Consumers inherit these sections via toolkit link/install templates. Do **not** rely on per-repo AGENTS.md patches for this contract.
 
-0a. **Failure → research → retry (MUST).** If a forge CLI or API call fails, research the
-   equivalent syntax for **that** forge (`CLI --help`, vendor docs, doctor probe) and
-   retry, or use the matrix body/browser fallback. **MUST NOT** silently skip Visual
-   evidence or Reproduce / Verify. Applies on every inventory AI host.
+0a. **Failure → research → retry (MUST).** If a forge CLI or API call fails, research the equivalent syntax for **that** forge (`CLI --help`, vendor docs, doctor probe) and retry, or use the matrix body/browser fallback. **MUST NOT** silently skip Visual evidence or Reproduce / Verify. Applies on every inventory AI host.
 
 1. **Audience is reviewers on the PR.** Evidence exists so reviewers understand the change.
    Do **not** PR-comment only to tell the owner that a file sits under
    `.agent-state/.../pr-evidence/`. Reviewers cannot open that path.
 2. **Never PR-comment RECORD/ATTACHED path dumps.** Comments that only paste or link
-   `RECORD.md` / `ATTACHED.md` (or other files) under `.agent-state/runs/.../pr-evidence/`
-   are forbidden. Put the proof on the PR: forge media attach per the
-   [command matrix](pr-evidence-forges.md), or inline the API transcript / reproduction
-   steps in the PR body or comment.
+   `RECORD.md` / `ATTACHED.md` (or other files) under `.agent-state/runs/.../pr-evidence/` are forbidden. Put the proof on the PR: forge media attach per the [command matrix](pr-evidence-forges.md), or inline the API transcript / reproduction steps in the PR body or comment.
 3. **Evidence must be real and in scope.** Capture or import proof that matches this PR's
-   change; include step-by-step reproduction. Fabricated, off-scope, or invented captures
-   are forbidden. Docs-only work may use `Kind: none` with a one-line reason.
-3a. **Sensitive product PRs MUST omit capture.** For credentials, PII, or
-   security-sensitive UI/API (or an explicit sensitive feature), MUST NOT record or
-   attach product evidence (no png/mp4/transcript dumps). MUST declare
+   change; include step-by-step reproduction. Fabricated, off-scope, or invented captures are forbidden. Docs-only work may use `Kind: none` with a one-line reason.
+3a. **Sensitive product PRs MUST omit capture.** For credentials, PII, or security-sensitive UI/API (or an explicit sensitive feature), MUST NOT record or attach product evidence (no png/mp4/transcript dumps). MUST declare
    `Kind: redacted` with a one-line `Reason` so reviewers see deliberate omission.
-   MUST NEVER dump secrets into pr-evidence staging or PR attachments. Do **not**
-   use `Kind: none` for sensitivity omit (`none` stays docs-only / non-product).
+   MUST NEVER dump secrets into pr-evidence staging or PR attachments. Do **not** use `Kind: none` for sensitivity omit (`none` stays docs-only / non-product).
 4. **Store captures under the run tree only** (staging):
    `.agent-state/runs/<date>/<slug>/<version>/pr-evidence/` (gitignored with `.agent-state/`).
 5. **Never commit** png, jpg, jpeg, webp, gif, mp4, webm, mov, or HAR as tracked repo files.
    `pre-tool-use` refuses `git add` of those extensions outside `.agent-state/`.
 6. **Capture via runtime only:** `ultragentic previdence snapshot` and `ultragentic previdence record`
    (or `--source` to import a file into pr-evidence/). Skills and commands that need UI evidence
-   MUST call these. **MUST NOT** invent agent-authored Playwright, Puppeteer, ffmpeg wrappers, or
-   other one-off capture scripts as the evidence path; the runtime owns capture. Browser/device
-   tools may produce a file only to import with `--source` after an honest host capture.
+   MUST call these. **MUST NOT** invent agent-authored Playwright, Puppeteer, ffmpeg wrappers, or other one-off capture scripts as the evidence path; the runtime owns capture. Browser/device tools may produce a file only to import with `--source` after an honest host capture.
 6c. **ffmpeg soft dependency (MUST).** Kind ui stills via `previdence snapshot` need no ffmpeg
-   (OS-native capture). Importing an existing recording with `--source` also needs no host
-   ffmpeg for the write step. `previdence record` and video mid-frame validation require
-   ffmpeg on PATH and fail closed when it is missing. Prefer snapshot (or `--source`) when
-   `ultragentic doctor` notes ffmpeg is absent; do not tell consumers a manual ffmpeg install
-   is required for still Kind ui evidence. This rule is host-neutral for every supported
-   inventory host.
-6a. **STEPS for Kind ui (MUST).** Product Kind `ui` (and critical product `api` paths) MUST include
-   step-by-step reproduce steps that match the capture (STEPS.md under pr-evidence/ or a `Steps:`
-   block in MANIFEST). Satisfied fails when Steps are missing for Kind `ui`.
-6b. **Analyze before attach (MUST).** Before forge attach, the agent MUST open and review the
-   capture (image frames / video content) against those Steps. Blank, all-white, solid-fill, or
-   long empty recordings MUST be refused and recaptured; do not attach broken evidence.
+   (OS-native capture). Importing an existing recording with `--source` also needs no host ffmpeg for the write step. `previdence record` and video mid-frame validation require ffmpeg on PATH and fail closed when it is missing. Prefer snapshot (or `--source`) when `ultragentic doctor` notes ffmpeg is absent; do not tell consumers a manual ffmpeg install is required for still Kind ui evidence. This rule is host-neutral for every supported inventory host.
+6a. **STEPS for Kind ui (MUST).** Product Kind `ui` (and critical product `api` paths) MUST include step-by-step reproduce steps that match the capture (STEPS.md under pr-evidence/ or a `Steps:` block in MANIFEST). Satisfied fails when Steps are missing for Kind `ui`.
+6b. **Analyze before attach (MUST).** Before forge attach, the agent MUST open and review the capture (image frames / video content) against those Steps. Blank, all-white, solid-fill, or long empty recordings MUST be refused and recaptured; do not attach broken evidence.
 7. **Write `MANIFEST.md` before opening the PR/MR** on an active run. Without it the hook
-   refuses create (GitHub `gh pr create` today; other forges follow the same MANIFEST gate
-   once their create shells are wired).
+   refuses create (GitHub `gh pr create` today; other forges follow the same MANIFEST gate once their create shells are wired).
 8. **Forge-visible proof is mandatory.** `ATTACHED.md` alone is not enough. For Kind `api`/`ui`,
-   the PR description or a comment MUST carry reviewer-visible proof (forge media attach per
-   the [command matrix](pr-evidence-forges.md), or an inlined transcript that includes the
-   MANIFEST Summary in a fenced block). For Kind `none`/`redacted`, the PR description or a
-   comment MUST declare `Kind:` and `Reason:` so omit is visible. `pr_evidence` checks the
-   forge via `ci_api`.
-9. **Create must declare forge-facing evidence for product kinds.** On an active run with
-   Kind `api`/`ui`, the create command MUST include media `--attach` (only when the matrix
-   row and doctor probe allow it) or a `Kind:` line in the body. `pre-tool-use` refuses
-   otherwise. **MUST open [`pr-evidence-forges.md`](pr-evidence-forges.md) before any attach shell.**
+   the PR description or a comment MUST carry reviewer-visible proof (forge media attach per the [command matrix](pr-evidence-forges.md), or an inlined transcript that includes the MANIFEST Summary in a fenced block). For Kind `none`/`redacted`, the PR description or a comment MUST declare `Kind:` and `Reason:` so omit is visible. `pr_evidence` checks the forge via `ci_api`.
+9. **Create must declare forge-facing evidence for product kinds.** On an active run with Kind `api`/`ui`, the create command MUST include media `--attach` (only when the matrix row and doctor probe allow it) or a `Kind:` line in the body. `pre-tool-use` refuses otherwise. **MUST open [`pr-evidence-forges.md`](pr-evidence-forges.md) before any attach shell.**
 10. **Attach to the PR for reviewers, then write `ATTACHED.md` with `Head:`** set to the commit
-   the capture proves. Staging paths in ATTACHED/RECORD are for the runtime gate, not the
-   reviewer-facing comment body.
-11. **On every new commit to an open PR:** recapture if the product path changed, re-attach on
-   the PR, then `ultragentic previdence refresh --slug <slug>`. Stale `Head` vs current
-   `git HEAD` fails `previdence check` / the `pr_evidence` verifier, and `pre-tool-use`
-   refuses `git push`.
+   the capture proves. Staging paths in ATTACHED/RECORD are for the runtime gate, not the reviewer-facing comment body.
+11. **On every new commit to an open PR:** recapture if the product path changed, re-attach on the PR, then `ultragentic previdence refresh --slug <slug>`. Stale `Head` vs current
+   `git HEAD` fails `previdence check` / the `pr_evidence` verifier, and `pre-tool-use` refuses `git push`.
 12. **Scrub leaks.** If a PR already has comments that only point at local pr-evidence paths,
     edit or minimize them and replace with reviewer-visible proof (attach or inlined transcript).
 
@@ -108,8 +73,7 @@ ultragentic help previdence
 ```
 
 Typical forms: `previdence snapshot|record --slug <slug> --name <file>` (optional
-`--source` import), then `previdence refresh` / `previdence check`. Do not copy
-usage lines into other docs; change `cmd/registry.go` and regenerate help.
+`--source` import), then `previdence refresh` / `previdence check`. Do not copy usage lines into other docs; change `cmd/registry.go` and regenerate help.
 
 `RECORD.md` under pr-evidence/ is append-only (Captured / Mode / Name / Head).
 
@@ -156,8 +120,7 @@ Reason: PII in security-sensitive UI; omit product capture
 ## Attach (forge-dynamic)
 
 **MUST** open [`pr-evidence-forges.md`](pr-evidence-forges.md) before any attach shell.
-Detect the active forge (`ultragentic doctor` or `git remote get-url origin`), then use that
-row only. Do not default to `gh` on GitLab or Bitbucket remotes. Fill the portable
+Detect the active forge (`ultragentic doctor` or `git remote get-url origin`), then use that row only. Do not default to `gh` on GitLab or Bitbucket remotes. Fill the portable
 **Visual evidence** and **Reproduce / Verify** sections on every forge.
 
 - GitHub: `gh pr create|comment --attach` when doctor/help shows support (CLI v2.99+).
@@ -166,11 +129,7 @@ row only. Do not default to `gh` on GitLab or Bitbucket remotes. Fill the portab
   Kind `ui` only. Do not invent a Bitbucket `--attach` CLI. New forges: follow
   [EXTENSION.md](../templates/forge/unknown/EXTENSION.md).
 
-Kind `api` transcripts can always go in the PR/MR body without media attach (include a
-`Kind: api` line and a fenced transcript that contains the MANIFEST Summary). Kind `ui`
-media needs a supported forge attach row or a browser upload that produces forge-visible
-proof; there is no honest invent-a-CLI path. On any CLI failure, research-retry per the
-forge matrix; never omit the portable contract silently.
+Kind `api` transcripts can always go in the PR/MR body without media attach (include a `Kind: api` line and a fenced transcript that contains the MANIFEST Summary). Kind `ui` media needs a supported forge attach row or a browser upload that produces forge-visible proof; there is no honest invent-a-CLI path. On any CLI failure, research-retry per the forge matrix; never omit the portable contract silently.
 
 GitHub examples (only when doctor says forge is github and attach is supported):
 

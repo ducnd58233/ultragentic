@@ -2,20 +2,15 @@
 
 <context>
 
-Host convention for answering "a graph node failed; from where?" and where to
-resume fixing, without a new checkpoint `--source`. Research:
-`docs/*/graph-node-failure-provenance/` and
-`docs/*/when-delivery-or-research/`.
+Host convention for answering "a graph node failed; from where?" and where to resume fixing, without a new checkpoint `--source`. Research:
+`docs/*/graph-node-failure-provenance/` and `docs/*/when-delivery-or-research/`.
 </context>
 
 ## When to write
 
 <rules>
 
-Write `.agent-state/runs/<date>/<slug>/<version>/failure/TRACE.md` when recording
-a blocker (especially the third strike) or when a verifier fails and the host
-will replan or rebuild. On `/auto` and `/goal`, write TRACE **before** the
-checkpoint that leaves the failed node. See [`../commands/failure-trace.md`](../commands/failure-trace.md).
+Write `.agent-state/runs/<date>/<slug>/<version>/failure/TRACE.md` when recording a blocker (especially the third strike) or when a verifier fails and the host will replan or rebuild. On `/auto` and `/goal`, write TRACE **before** the checkpoint that leaves the failed node. See [`../commands/failure-trace.md`](../commands/failure-trace.md).
 </rules>
 
 ## Required fields
@@ -46,11 +41,7 @@ checkpoint that leaves the failed node. See [`../commands/failure-trace.md`](../
 ## Task patch
 
 When `refine_target` is `plan`, or when assumption ids are invalidated, patch
-`task_lists` and `TASKS.md` before rebuild: insert or reorder tasks that
-name the broken assumption or failing acceptance criterion. Do not treat
-assumption truth as a Passed check. Done tasks settle only when each section has
-an `**Acceptance criteria:**` block with every checkbox checked; status alone
-does not clear `tasks_remaining`.
+`task_lists` and `TASKS.md` before rebuild: insert or reorder tasks that name the broken assumption or failing acceptance criterion. Do not treat assumption truth as a Passed check. Done tasks settle only when each section has an `**Acceptance criteria:**` block with every checkbox checked; status alone does not clear `tasks_remaining`.
 
 ## Non-goals
 
@@ -68,4 +59,3 @@ ultragentic checkpoint --slug <slug> --blocker "<reason>" --class <class>
 ```
 
 `--class` is required with `--blocker`.
-

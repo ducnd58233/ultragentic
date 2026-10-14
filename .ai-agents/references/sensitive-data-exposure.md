@@ -2,19 +2,12 @@
 
 <context>
 
-Organized by **leak channel**, not by vulnerability class. The question a channel answers is the
-one an agent actually faces mid-edit: *this value is about to go somewhere, can the wrong person
-read it there?*
+Organized by **leak channel**, not by vulnerability class. The question a channel answers is the one an agent actually faces mid-edit: *this value is about to go somewhere, can the wrong person read it there?*
 
-Companion to [`security-checklist.md`](security-checklist.md), which is organized by OWASP category
-and answers a different question. Use the always-on
-[`secure-by-default`](../skills/secure-by-default/SKILL.md) skill for the write-time rules, and
-[`security-and-hardening`](../skills/security-and-hardening/SKILL.md) for authn/authz and injection
-depth.
+Companion to [`security-checklist.md`](security-checklist.md), which is organized by OWASP category and answers a different question. Use the always-on [`secure-by-default`](../skills/secure-by-default/SKILL.md) skill for the write-time rules, and [`security-and-hardening`](../skills/security-and-hardening/SKILL.md) for authn/authz and injection depth.
 
 **Scope split:** this file names **channels and rules**, which generalize. Concrete mechanisms
-(which store, which flag, which library) belong in [`stack-profiles/`](../stack-profiles/ROUTER.md),
-per the tool-agnostic rule in root [`AGENTS.md`](../../AGENTS.md).
+(which store, which flag, which library) belong in [`stack-profiles/`](../stack-profiles/ROUTER.md), per the tool-agnostic rule in root [`AGENTS.md`](../../AGENTS.md).
 </context>
 
 ## The audience test
@@ -35,22 +28,18 @@ Before any value leaves your control, name who can read it at the destination:
 | Telemetry / analytics | The vendor, and everyone with vendor access |
 | Build artifact / CI log | Everyone with repository or pipeline read access |
 
-"Only our developers see it" is not a control. Developers leave, logs get exported, and an attacker
-who reaches any of these reaches all of them.
+"Only our developers see it" is not a control. Developers leave, logs get exported, and an attacker who reaches any of these reaches all of them.
 </rules>
 
 ## Channel 1: the client bundle
 
 <context>
 
-Anything the build inlines is public forever. Rotating it means a redeploy, and the old bundle is
-already cached.
+Anything the build inlines is public forever. Rotating it means a redeploy, and the old bundle is already cached.
 
 - Values behind a build-time public prefix are inlined verbatim. The prefix differs per tool
-  (`NEXT_PUBLIC_`, `VITE_`, `EXPO_PUBLIC_`, `REACT_APP_`, `PUBLIC_`, and others). Detect the rule
-  from the build tool the repo actually uses; do not assume.
-- A "publishable" or "anon" key from a vendor is designed for this. A "secret", "service", or
-  "admin" key from the same vendor is not, and the two often differ by one word.
+  (`NEXT_PUBLIC_`, `VITE_`, `EXPO_PUBLIC_`, `REACT_APP_`, `PUBLIC_`, and others). Detect the rule from the build tool the repo actually uses; do not assume.
+- A "publishable" or "anon" key from a vendor is designed for this. A "secret", "service", or "admin" key from the same vendor is not, and the two often differ by one word.
 - Source maps expose original source, comments, and sometimes inlined config. Decide deliberately
   whether they ship, and if they do, whether they are restricted to an error-reporting vendor.
 - Mobile and embedded binaries are extractable. A key compiled into an app is a published key;
@@ -58,8 +47,7 @@ already cached.
 - Server-only code must be provably unreachable from the client entry point, not merely
   conventionally separated.
 
-**Test:** build for production, then search the output directory for the value. If it appears, it
-is public.
+**Test:** build for production, then search the output directory for the value. If it appears, it is public.
 </context>
 
 ## Channel 2: client-side storage
@@ -67,11 +55,9 @@ is public.
 <rules>
 
 - Web: browser local and session storage are readable by any script on the origin. An XSS becomes
-  a token theft with no further work. Prefer an httpOnly, secure, sameSite cookie, or hold the
-  token in memory and accept re-auth on reload.
+  a token theft with no further work. Prefer an httpOnly, secure, sameSite cookie, or hold the token in memory and accept re-auth on reload.
 - Mobile: plaintext preference stores and unencrypted files are readable on a rooted or jailbroken
-  device and often ride along in device backups. Use the platform secure store. Mark sensitive
-  files as excluded from backup where the platform supports it.
+  device and often ride along in device backups. Use the platform secure store. Mark sensitive files as excluded from backup where the platform supports it.
 - Embedded: unencrypted flash is readable with physical access. Per-device keys beat a shared
   firmware key, because one extraction should not compromise the fleet.
 - Anything cached offline is storage too, including service-worker caches and offline databases.
@@ -79,12 +65,9 @@ is public.
 
 ## Channel 3: consoles and device logs
 
-- A debug statement that reaches production is a disclosure. Strip it in the production build, or
-  route it through a logger that is silent there.
-- Whole-object logging is the recurring failure. `console.log(user)` publishes every field the
-  object has now and every field a teammate adds next quarter. Name the fields.
-- Device logs are shared surfaces: Android logcat, iOS unified logging, and a serial console on
-  embedded hardware. Treat them as user-visible.
+- A debug statement that reaches production is a disclosure. Strip it in the production build, or route it through a logger that is silent there.
+- Whole-object logging is the recurring failure. `console.log(user)` publishes every field the object has now and every field a teammate adds next quarter. Name the fields.
+- Device logs are shared surfaces: Android logcat, iOS unified logging, and a serial console on embedded hardware. Treat them as user-visible.
 - Framework and driver errors often carry the query, the payload, or the connection string. Catch
   and re-shape them before they reach any log you do not control.
 
@@ -97,22 +80,18 @@ is public.
 - Mask by default in the UI where the full value is rarely needed: partial account numbers,
   partial contact details, no full government IDs.
 - Screenshots, screen recordings, and session-replay tools capture whatever is on screen.
-  Mark sensitive fields excluded, and verify the exclusion actually applies rather than trusting
-  the setting.
-- Autofill, spellcheck, and third-party keyboards can forward field contents. Disable them on
-  credential and high-sensitivity fields.
+  Mark sensitive fields excluded, and verify the exclusion actually applies rather than trusting the setting.
+- Autofill, spellcheck, and third-party keyboards can forward field contents. Disable them on credential and high-sensitivity fields.
 
 ## Channel 5: API response shape
 
-- Build responses from an explicit output type, never by serializing the storage record. An
-  allowlist stays correct when a column is added; a denylist does not.
+- Build responses from an explicit output type, never by serializing the storage record. An allowlist stays correct when a column is added; a denylist does not.
 - Errors get two shapes: a stable code and a safe message for the caller, full detail server-side,
   joined by an opaque request ID the user can quote to support.
 - Do not vary an error between "no such account" and "wrong password"; the difference enumerates
   accounts. The same applies to timing on authentication paths.
 - Identifiers in responses should not reveal volume or allow traversal to another tenant's row.
-- Verify authorization per record, not per endpoint. A list endpoint that filters by a
-  client-supplied tenant ID is an access-control bug wearing a filter.
+- Verify authorization per record, not per endpoint. A list endpoint that filters by a client-supplied tenant ID is an access-control bug wearing a filter.
 
 ## Channel 6: server logs and telemetry
 
@@ -120,12 +99,9 @@ is public.
   site only; a new caller added later inherits nothing.
 - Never log authentication material, even inside a caught exception. Exception objects routinely
   carry the arguments that caused them.
-- Log an opaque user identifier, and correlate to personal data out of band through a system with
-  its own access control.
-- Request and response body logging is the most common accidental dump. If it must exist, make it
-  field-allowlisted and off by default.
-- Trace attributes, span names, metric labels, and error-reporting context are all logs with a
-  different name. The same rules apply.
+- Log an opaque user identifier, and correlate to personal data out of band through a system with its own access control.
+- Request and response body logging is the most common accidental dump. If it must exist, make it field-allowlisted and off by default.
+- Trace attributes, span names, metric labels, and error-reporting context are all logs with a different name. The same rules apply.
 - Set retention deliberately. Data you no longer hold cannot leak.
 </rules>
 
@@ -136,10 +112,8 @@ is public.
 - Secrets passed as build arguments persist in image layers and build history, even when the final
   stage does not reference them.
 - CI logs are readable by everyone with pipeline access, and often by everyone with repository
-  access. Masking depends on the platform recognizing the value; a transformed secret is not
-  masked.
-- Committed history is permanent. A secret removed in a later commit is still in the history, and
-  rotation is the only real fix.
+  access. Masking depends on the platform recognizing the value; a transformed secret is not masked.
+- Committed history is permanent. A secret removed in a later commit is still in the history, and rotation is the only real fix.
 - Agent evidence under `tmp/` may contain PR comments, test output, and captured responses. Redact
   before writing, per [`goal-verification-records.md`](goal-verification-records.md).
 </context>
@@ -161,10 +135,7 @@ Channel-by-channel, this is what an agent should actually run or check:
 - [ ] CI logs and image layers checked for secret values
 - [ ] `tmp/` evidence redacted before write
 
-The deterministic part of this list is enforced by
-runtime `sensitive-data-guard` on file writes. The guard is
-a floor; it cannot tell whether an object carries personal data, whether a response field is
-authorized for its audience, or whether a leak is assembled across two files.
+The deterministic part of this list is enforced by runtime `sensitive-data-guard` on file writes. The guard is a floor; it cannot tell whether an object carries personal data, whether a response field is authorized for its audience, or whether a leak is assembled across two files.
 </verification>
 
 ## Standards
@@ -172,8 +143,7 @@ authorized for its audience, or whether a leak is assembled across two files.
 <rules>
 
 Mapped against **OWASP Top 10:2025**, **OWASP ASVS 5.0.0** (released 30 May 2025), and **CWE**.
-Versions are pinned here rather than inline, because category numbering changes between editions
-while the rules above do not. When you bump a version, this table is the only thing to re-check.
+Versions are pinned here rather than inline, because category numbering changes between editions while the rules above do not. When you bump a version, this table is the only thing to re-check.
 
 | Channel | OWASP Top 10:2025 | CWE |
 |---|---|---|
@@ -188,12 +158,9 @@ while the rules above do not. When you bump a version, this table is the only th
 Two notes on currency, verified against the OWASP project pages:
 
 - The 2025 edition dropped "Vulnerable and Outdated Components" and "Server-Side Request Forgery"
-  as standalone categories, and added A03 Software Supply Chain Failures and A10 Mishandling of
-  Exceptional Conditions. The unlabeled table in
-  [`security-checklist.md`](security-checklist.md) still reflects the 2021 edition.
+  as standalone categories, and added A03 Software Supply Chain Failures and A10 Mishandling of Exceptional Conditions. The unlabeled table in [`security-checklist.md`](security-checklist.md) still reflects the 2021 edition.
 - Mobile-specific verification maps to OWASP MASVS, which is platform-scoped. Keep those mappings
-  in the mobile [`stack-profiles/`](../stack-profiles/ROUTER.md) rather than here, so this file
-  stays stack-neutral.
+  in the mobile [`stack-profiles/`](../stack-profiles/ROUTER.md) rather than here, so this file stays stack-neutral.
 </rules>
 
 ## Related

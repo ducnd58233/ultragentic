@@ -2,13 +2,9 @@
 
 <context>
 
-Everything an agent needs **only when creating toolkit assets or setting a repo up**. It lived in the
-root [`AGENTS.md`](../AGENTS.md), which every session loads in full, so a rule needed once per month
-was costing tokens on every turn. AGENTS.md keeps the rules that govern behavior each turn and points
-here for the rest.
+Everything an agent needs **only when creating toolkit assets or setting a repo up**. It lived in the root [`AGENTS.md`](../AGENTS.md), which every session loads in full, so a rule needed once per month was costing tokens on every turn. AGENTS.md keeps the rules that govern behavior each turn and points here for the rest.
 
-Read this file when you are: adding or changing an asset, wiring a harness, or mounting the toolkit
-into a consumer repo. Skip it otherwise.
+Read this file when you are: adding or changing an asset, wiring a harness, or mounting the toolkit into a consumer repo. Skip it otherwise.
 </context>
 
 ## Project layout
@@ -39,24 +35,14 @@ into a consumer repo. Skip it otherwise.
 
 <required>
 
-- **Follow the folder's `TEMPLATE.md`** where present when creating a skill, subagent, command, hook,
-  reference, or stack profile.
-- **Update that folder's `ROUTER.md` in the same change** after creating, renaming, or deleting any
-  asset under `skills/`, `agents/`, `commands/`, `hooks/`, `references/`, `stack-profiles/`, or
-  `graphs/`.
-- **Do not restate a rule that already has a home.** Link to it. The stack-detection rule, the
-  permissions defaults, the git gates, and the runtime requirement each live in exactly one place;
-  copies drift and the copy is what a reader trusts.
-- **Tool naming and currency:** shared skills, references, and commands stay tool-agnostic and
-  describe the capability, not a product. Concrete tools, packages, and libraries are named only in
-  [`stack-profiles/`](stack-profiles), and even there as non-exhaustive examples the agent must
-  verify against current official docs. Prefer detecting what the repo uses over any hardcoded list.
-  See [`stack-profiles/TEMPLATE.md`](stack-profiles/TEMPLATE.md).
-- **Tool-specific rules:** Cursor rule files live in [`.cursor/rules/`](../.cursor/rules) and are not
-  interchangeable with Claude rules without editing.
-- **Permissions:** after changing tool or path requirements, align
-  [`.claude/settings.json`](../.claude/settings.json) and [`PERMISSIONS.md`](PERMISSIONS.md). Deny
-  overrides allow.
+- **Prose soft wrap (MUST).** Write prose as paragraph flow; let the editor soft-wrap. Do not hard-break mid-sentence or mid-clause. Hard newlines only for paragraph boundaries, headings, lists, fences, tables, front matter, XML tags on their own lines, and other Markdown structure.
+
+- **Follow the folder's `TEMPLATE.md`** where present when creating a skill, subagent, command, hook, reference, or stack profile.
+- **Update that folder's `ROUTER.md` in the same change** after creating, renaming, or deleting any asset under `skills/`, `agents/`, `commands/`, `hooks/`, `references/`, `stack-profiles/`, or `graphs/`.
+- **Do not restate a rule that already has a home.** Link to it. The stack-detection rule, the permissions defaults, the git gates, and the runtime requirement each live in exactly one place; copies drift and the copy is what a reader trusts.
+- **Tool naming and currency:** shared skills, references, and commands stay tool-agnostic and describe the capability, not a product. Concrete tools, packages, and libraries are named only in [`stack-profiles/`](stack-profiles), and even there as non-exhaustive examples the agent must verify against current official docs. Prefer detecting what the repo uses over any hardcoded list. See [`stack-profiles/TEMPLATE.md`](stack-profiles/TEMPLATE.md).
+- **Tool-specific rules:** Cursor rule files live in [`.cursor/rules/`](../.cursor/rules) and are not interchangeable with Claude rules without editing.
+- **Permissions:** after changing tool or path requirements, align [`.claude/settings.json`](../.claude/settings.json) and [`PERMISSIONS.md`](PERMISSIONS.md). Deny overrides allow.
 </required>
 
 ## XML section tags
@@ -64,18 +50,14 @@ into a consumer repo. Skip it otherwise.
 <context>
 
 Always-loaded files wrap their sections in XML tags. This is **prompt content, not a file format**.
-Anthropic's prompt guidance says XML tags "help Claude parse complex prompts unambiguously,
-especially when your prompt mixes instructions, context, examples, and variable inputs", and advises
+Anthropic's prompt guidance says XML tags "help Claude parse complex prompts unambiguously, especially when your prompt mixes instructions, context, examples, and variable inputs", and advises
 "consistent, descriptive tag names across your prompts". Nothing in it is about files on disk.
 
-Converting assets to HTML or XML files was considered and rejected on evidence: Claude Code requires
-a `SKILL.md`, and Cursor requires `.mdc` and ignores a plain `.md` in `.cursor/rules`. Neither
-documents HTML or XML support. Files stay Markdown; only the body gains tags.
+Converting assets to HTML or XML files was considered and rejected on evidence: Claude Code requires a `SKILL.md`, and Cursor requires `.mdc` and ignores a plain `.md` in `.cursor/rules`. Neither documents HTML or XML support. Files stay Markdown; only the body gains tags.
 
 ### The tag set
 
-Bounded on purpose. A vocabulary nobody can remember gets used inconsistently, and inconsistent tags
-are worse than none: they teach the model a partition that does not hold.
+Bounded on purpose. A vocabulary nobody can remember gets used inconsistently, and inconsistent tags are worse than none: they teach the model a partition that does not hold.
 
 **Charter files** (loaded every turn):
 
@@ -104,8 +86,7 @@ are worse than none: they teach the model a partition that does not hold.
 | `<escalation>` | Conditions to stop and ask a human | When do I stop? |
 | `<references>` | Links out: further reading, related assets, source URLs | Where do I read more? |
 
-**Document files** (deliverables under `docs/<category>/<slug>/`, and the templates in
-[`templates/docs/`](templates/docs/) that produce them). Each type requires a fixed, ordered subset;
+**Document files** (deliverables under `docs/<category>/<slug>/`, and the templates in [`templates/docs/`](templates/docs/) that produce them). Each type requires a fixed, ordered subset;
 `ultragentic docs types` prints it and `docs check` enforces it:
 
 | Tag | Holds |
@@ -119,46 +100,23 @@ are worse than none: they teach the model a partition that does not hold.
 | `<procedure>`, `<screens>`, `<stories>`, `<model>` | RECORD steps; WIREFRAME; USERSTORY; ERD |
 | `<open_questions>`, `<references>`, `<revisions>` | Unknowns, sources, the change log |
 
-Document tags are valid only in `templates/docs/`; `scripts/check-xml-tags.sh` scopes them there. The
-runtime registry (`runtime/internal/pkg/docmeta/doctype.go`) is the source of truth, and a Go test
-fails when a template, the registry, or the checker's list disagree.
+Document tags are valid only in `templates/docs/` (`scripts/check-xml-tags.sh`). The runtime registry (`runtime/internal/pkg/docmeta/doctype.go`) is source of truth; a Go test fails on drift.
 
-**`<required>` versus `<rules>` is the distinction that earns the whole scheme.** A weak model
-flattens a document into one list of suggestions. Splitting the blocking rules from the advisory ones
-tells it which line it may trade away under pressure and which it may not. If a block would be
-correct to violate given a good reason, it is `<rules>`. If violating it is always a defect, it is
-`<required>`.
+**`<required>` versus `<rules>`:** if violating a block is always a defect, use `<required>`; if a good reason could justify trading it away, use `<rules>`. The split stops a weak model from flattening both into one suggestion list.
 
 ### Rules for using them
 
-- Tags go **after** YAML frontmatter, never before. Frontmatter must stay the first bytes of the file
-  or the skill and rule loaders will not parse it.
-- **One prose sentence goes above the first tag**, and no tag may be the first body line. This is the
-  single exception to total tag coverage below, and it is not a section: it is the description, for
-  the loaders that never read frontmatter. Cursor's `.cursor/commands` takes plain Markdown and
-  advertises the first body line as-is, so thirteen commands here showed up in Cursor's `/` picker as
-  the literal string `<references>` or `<context>` while their frontmatter was valid the whole time.
-  `commands/doctor.md` was the one that read correctly, because it happened to open on a sentence.
-  `scripts/check-frontmatter.py` check 4 now fails a tag-first body.
+- Tags go **after** YAML frontmatter, never before. Frontmatter must stay the first bytes of the file or the skill and rule loaders will not parse it.
+- **One prose sentence goes above the first tag**, and no tag may be the first body line. This is the single exception to total tag coverage below, and it is not a section: it is the description, for the loaders that never read frontmatter. Cursor's `.cursor/commands` takes plain Markdown and advertises the first body line as-is, so thirteen commands here showed up in Cursor's `/` picker as the literal string `<references>` or `<context>` while their frontmatter was valid the whole time. `commands/doctor.md` was the one that read correctly, because it happened to open on a sentence. `scripts/check-frontmatter.py` check 4 now fails a tag-first body.
 - Open and close on their own lines, so the Markdown around them still renders.
-- **Every section belongs to a block.** An untagged region between two tagged ones asks the model to
-  guess what kind of instruction it is reading, which is the ambiguity the tags exist to remove.
-  Every asset under `.ai-agents/` is tagged, including short ones.
-- **Stay within the size budget.** A file over its budget loses rules for short-context models. Limits and
-  writing rules: [`concise-docs.md`](references/concise-docs.md); `docs budget` enforces them.
-- **Nest only for genuine containment, one level deep.** Anthropic's prompting guidance says to
-  "nest tags when content has a natural hierarchy", and its example is a container holding items of
-  the same kind. A long `<procedure>` whose phases each carry their own `<verification>` is that
-  shape. Two categories side by side are not: `<required>` inside `<rules>` invents a question with
-  no answer, namely whether the requirement stops applying outside that block.
-- **Pick the tag by what the block is, not by what it is called.** A heading reading "Quick
-  Reference" that holds code examples is `<rules>`, not `<references>`.
+- **Every section belongs to a block.** An untagged region between two tagged ones asks the model to guess what kind of instruction it is reading, which is the ambiguity the tags exist to remove. Every asset under `.ai-agents/` is tagged, including short ones.
+- **Stay within the size budget.** A file over its budget loses rules for short-context models. Limits and writing rules: [`concise-docs.md`](references/concise-docs.md); `docs budget` enforces them.
+- **Nest only for genuine containment, one level deep.** Anthropic's prompting guidance says to "nest tags when content has a natural hierarchy", and its example is a container holding items of the same kind. A long `<procedure>` whose phases each carry their own `<verification>` is that shape. Two categories side by side are not: `<required>` inside `<rules>` invents a question with no answer, namely whether the requirement stops applying outside that block.
+- **Pick the tag by what the block is, not by what it is called.** A heading reading "Quick Reference" that holds code examples is `<rules>`, not `<references>`.
 - Use the smallest set that partitions the file. Most assets need three or four, not eleven.
-- A tag pair costs roughly six tokens. Measured here, tags cost about as much as the restated
-  boilerplate they replaced, so treat the partition as the return, not a smaller file.
+- A tag pair costs roughly six tokens. Measured here, tags cost about as much as the restated boilerplate they replaced, so treat the partition as the return, not a smaller file.
 
-`scripts/check-xml-tags.sh` fails on a mispaired tag, an unknown tag, a tag placed above
-frontmatter, a tag nested inside itself, or nesting past one level.
+`scripts/check-xml-tags.sh` fails on a mispaired tag, an unknown tag, a tag placed above frontmatter, a tag nested inside itself, or nesting past one level.
 </context>
 
 ## Checks to run
@@ -183,11 +141,9 @@ The python checks need `python3 -m pip install -r scripts/requirements.txt`. Ful
 
 <procedure>
 
-Run `scripts/link-ai-agents.ps1` (Windows) or `scripts/link-ai-agents.sh` (macOS, Linux) so
-`.claude`, `.cursor`, `.opencode`, `.agents`, and `.codex/agents` point at or are generated from `.ai-agents`. Codex commands are generated as skills under `.agents/skills`; current Codex CLI does not load custom `/prompts`. The script also installs minimal hook configs when they are absent, installs the git `prepare-commit-msg` attribution hook, and refreshes the runtime binary.
+Run `scripts/link-ai-agents.ps1` (Windows) or `scripts/link-ai-agents.sh` (macOS, Linux) so `.claude`, `.cursor`, `.opencode`, `.agents`, and `.codex/agents` point at or are generated from `.ai-agents`. Codex commands are generated as skills under `.agents/skills`; current Codex CLI does not load custom `/prompts`. The script also installs minimal hook configs when they are absent, installs the git `prepare-commit-msg` attribution hook, and refreshes the runtime binary.
 
-**Re-run it after every asset edit.** On Windows the script writes copies rather than symlinks, so
-until it runs again the harness serves the previous text while every other check reports green.
+**Re-run it after every asset edit.** On Windows the script writes copies rather than symlinks, so until it runs again the harness serves the previous text while every other check reports green.
 `scripts/check-generated-views.sh` exists because that happened.
 </procedure>
 
@@ -198,48 +154,36 @@ until it runs again the harness serves the previous text while every other check
 - Keep the consumer repo as its own repository and the source of product code.
 - Mount this toolkit as a submodule at a chosen path, for example `.ultragentic`.
 - Treat `<toolkit-root>/.ai-agents` as the canonical shared assets path.
-- Give the consumer repo its own root `AGENTS.md` with product and domain constraints. It wins over
-  this toolkit; see local-first precedence in [`AGENTS.md`](../AGENTS.md).
-- When an agent **writes** that charter (or `CURSOR.md`, `CLAUDE.md`, `.cursor/rules/*.mdc` for the
-  product repo), follow **Consumer charter files** below. Hooks still inject toolkit context at
-  session time; the committed file must not depend on it.
-- Run the link scripts from the submodule with `-WorkspaceRoot` / `--workspace` set to the consumer
-  root and `-AssetsRoot` / `--assets` set to `<toolkit-root>/.ai-agents`.
-- Treat tool permissions as repository-local policy: adapt `opencode.json`, `.claude/settings.json`,
-  and local rules to that repo's layout and risk profile.
+- Give the consumer repo its own root `AGENTS.md` with product and domain constraints. It wins over this toolkit; see local-first precedence in [`AGENTS.md`](../AGENTS.md).
+- When an agent **writes** that charter (or `CURSOR.md`, `CLAUDE.md`, `.cursor/rules/*.mdc` for the product repo), follow **Consumer charter files** below. Hooks still inject toolkit context at session time; the committed file must not depend on it.
+- Run the link scripts from the submodule with `-WorkspaceRoot` / `--workspace` set to the consumer root and `-AssetsRoot` / `--assets` set to `<toolkit-root>/.ai-agents`.
+- Treat tool permissions as repository-local policy: adapt `opencode.json`, `.claude/settings.json`, and local rules to that repo's layout and risk profile.
 </rules>
 
 ## Consumer charter files
 
 <rules>
 
-When an agent creates or edits charter files **for a consumer/product repository** (not this toolkit
-repo), the committed text must be **harness-neutral**.
+When an agent creates or edits charter files **for a consumer/product repository** (not this toolkit repo), the committed text must be **harness-neutral**.
 
-**In scope:** workspace-root `AGENTS.md`, `CLAUDE.md`, `CURSOR.md`, `CLAUDE.local.md`, and
-`.cursor/rules/*.mdc` files that encode that repo's own conventions.
+**In scope:** workspace-root `AGENTS.md`, `CLAUDE.md`, `CURSOR.md`, `CLAUDE.local.md`, and `.cursor/rules/*.mdc` files that encode that repo's own conventions.
 
-**Out of scope:** this toolkit's root charter, `runtime/AGENTS.md`, assets under `.ai-agents/`, and
-machine-wide install blocks managed by `scripts/install-global.*` (those intentionally name the
-toolkit).
+**Out of scope:** this toolkit's root charter, `runtime/AGENTS.md`, assets under `.ai-agents/`, and machine-wide install blocks managed by `scripts/install-global.*` (those intentionally name the toolkit).
 
 **Write only:**
 
-- Product and domain rules, stack conventions, repo layout, test/lint commands, security boundaries
-  for that product.
+- Product and domain rules, stack conventions, repo layout, test/lint commands, security boundaries for that product.
 - Plain policy graduated from `.agent-state/MISTAKES.md` (no toolkit cross-links).
 
 **Do not write:**
 
 - The name `ultragentic`, paths such as `.ultragentic/` or `.ai-agents/`, or global install locations.
 - "Read AGENTS.md" when that means this toolkit's charter rather than the file being edited.
-- Instructions to run toolkit-only commands (`ultragentic doctor`, `/ship`, and so on) unless the
-  consumer repo explicitly documents them as part of its own workflow.
+- Instructions to run toolkit-only commands (`ultragentic doctor`, `/ship`, and so on) unless the consumer repo explicitly documents them as part of its own workflow.
 
 Examples: [consumer-charter-authoring.md](references/consumer-charter-authoring.md).
 
-Local-first precedence still applies at **read** time: hooks may inject toolkit context into a
-session. The **committed** consumer charter must not require that injection to make sense.
+Local-first precedence still applies at **read** time: hooks may inject toolkit context into a session. The **committed** consumer charter must not require that injection to make sense.
 </rules>
 
 ## Supported harness parity
@@ -247,9 +191,7 @@ session. The **committed** consumer charter must not require that injection to m
 <rules>
 
 This toolkit ships assets for every host in the runtime's contract table (`harness.HostContracts`;
-the `--client` values in `ultragentic`'s usage text list them). When you add or change something a
-person invokes through any of them, keep parity unless the spec names a documented
-host-only gap.
+the `--client` values in `ultragentic`'s usage text list them). When you add or change something a person invokes through any of them, keep parity unless the spec names a documented host-only gap.
 
 **In scope (parity required):**
 
@@ -258,9 +200,7 @@ host-only gap.
 - Permissions and config touched by the link or global-install scripts
 - Delivery workflow nodes, check plans, and verifiers that hosts drive through hooks
 
-**Canonical edit path:** change `.ai-agents/` (or `runtime/` for the control plane), then regenerate
-harness views. Do not edit generated paths under `.claude/`, `.cursor/`, `.codex/`, or `.agents/`
-as the source of truth.
+**Canonical edit path:** change `.ai-agents/` (or `runtime/` for the control plane), then regenerate harness views. Do not edit generated paths under `.claude/`, `.cursor/`, `.codex/`, or `.agents/` as the source of truth.
 
 **Before merge, run:**
 
@@ -271,53 +211,36 @@ as the source of truth.
 5. After hooks or runtime change: `ultragentic doctor` (hook resolution and host contract rows)
 6. After a runtime change: `make check` in its repo
 
-**Host-only exceptions:** allowed only when the vendor API lacks the capability and the gap is
-recorded in [`host-hook-contracts.md`](references/host-hook-contracts.md). The spec must say which
-hosts are excluded and why; silent single-host features do not ship.
+**Host-only exceptions:** allowed only when the vendor API lacks the capability and the gap is recorded in [`host-hook-contracts.md`](references/host-hook-contracts.md). The spec must say which hosts are excluded and why; silent single-host features do not ship.
 
-Research-only hosts (Kimi, Muse, Antigravity) follow the same contract table but are not the parity
-bar for new toolkit features unless the work explicitly targets them.
+Research-only hosts (Kimi, Muse, Antigravity) follow the same contract table but are not the parity bar for new toolkit features unless the work explicitly targets them.
 </rules>
 
 ## Machine-wide install
 
 <procedure>
 
-Installs the assets into the user-level directories, so every project on the machine sees them
-without a wrapper workspace and without a submodule. Use it when the toolkit should follow you
-rather than a repository, and keep using the link script for repositories that also want the
-permissions, hooks, and runtime gates.
+Installs the assets into the user-level directories, so every project on the machine sees them without a wrapper workspace and without a submodule. Use it when the toolkit should follow you rather than a repository, and keep using the link script for repositories that also want the permissions, hooks, and runtime gates.
 
 | Platform | Run |
 |---|---|
 | Linux, macOS, WSL, Git Bash | `sh scripts/install-global.sh` |
 | Windows | `powershell -ExecutionPolicy Bypass -File scripts/install-global.ps1` |
 
-Both also install the runtime binary, downloading a signed release after a license prompt, so a
-fresh machine needs one command. Set `UA_SKIP_RUNTIME` to install only the
-markdown. A failed download never fails the install: the assets work without the binary, and the
-delivery commands that need the control plane say so.
+Both also install the runtime binary, downloading a signed release after a license prompt, so a fresh machine needs one command. Set `UA_SKIP_RUNTIME` to install only the markdown. A failed download never fails the install: the assets work without the binary, and the delivery commands that need the control plane say so.
 
-Both write the same layout and share one manifest, so either can uninstall what the other installed.
-The PowerShell port is not duplication for symmetry: Git Bash on Windows accepts `ln -s` and
-silently copies, so only PowerShell can produce live symlinks, and only with Developer Mode on.
-Each script attempts a link, verifies it, falls back to a copy, and reports which it did.
+Both write the same layout and share one manifest, so either can uninstall what the other installed. The PowerShell port exists because Git Bash on Windows accepts `ln -s` and silently copies; only PowerShell (with Developer Mode) can make live symlinks. Each script tries a link, verifies it, falls back to a copy, and reports which it did.
 
-Everything installs under a `ua-` prefix, and the prefix carries weight. Claude Code resolves a
-skill-name collision toward the personal level, so an unprefixed global install would make this
-toolkit override a repository's own skills instead of being the fallback that
-[`AGENTS.md`](../AGENTS.md) says it is. Prefixing means the collision never happens.
+Everything installs under a `ua-` prefix, and the prefix carries weight. Claude Code resolves a skill-name collision toward the personal level, so an unprefixed global install would make this toolkit override a repository's own skills instead of being the fallback that [`AGENTS.md`](../AGENTS.md) says it is. Prefixing means the collision never happens.
 
-**Skills need only two directories to reach all four tools**, because the Agent Skills convention is
-shared:
+**Skills need only two directories to reach all four tools**, because the Agent Skills convention is shared:
 
 | Path | Read by |
 |---|---|
 | `~/.claude/skills/` | Claude Code, opencode |
 | `~/.agents/skills/` | Codex, Cursor, opencode |
 
-Codex reads `$HOME/.agents/skills` and not `~/.codex/skills`, which is easy to get backwards because
-an empty `~/.codex/skills` exists on some machines.
+Codex reads `$HOME/.agents/skills` and not `~/.codex/skills`, which is easy to get backwards because an empty `~/.codex/skills` exists on some machines.
 
 | Asset | Installed as | Why that shape |
 |---|---|---|
@@ -327,8 +250,7 @@ an empty `~/.codex/skills` exists on some machines.
 | Subagents | generated copies with `name: ua-<name>` | A subagent is identified by its frontmatter `name:` and the filename need not match, so renaming namespaces nothing |
 | Rules | a marked block in each global instructions file, plus `~/.cursor/rules/ua-toolkit.mdc` | Codex concatenates global with project rules; Cursor has no global `AGENTS.md`, so it gets an `alwaysApply` rule instead |
 
-**A repository does not need to vendor the toolkit to use the runtime.** `ultragentic doctor` and the
-delivery commands look for `.ai-agents` in this order, most specific first:
+**A repository does not need to vendor the toolkit to use the runtime.** `ultragentic doctor` and the delivery commands look for `.ai-agents` in this order, most specific first:
 
 1. `--toolkit`, which beats everything
 2. the workspace root
@@ -336,25 +258,16 @@ delivery commands look for `.ai-agents` in this order, most specific first:
 4. `$ULTRAGENTIC_TOOLKIT`
 5. `~/.ultragentic`, written by the global install
 
-Local before global matches the precedence rule in [`AGENTS.md`](../AGENTS.md): a repository that
-ships its own assets means them. Without steps 4 and 5, a consumer repo had to vendor the whole
-toolkit to obtain two files, and `doctor` failed on a missing `.ai-agents/graphs` in a workspace that
-was otherwise set up correctly.
+Local before global matches the precedence rule in [`AGENTS.md`](../AGENTS.md): a repository that ships its own assets means them. Without steps 4 and 5, a consumer repo had to vendor the whole toolkit to obtain two files, and `doctor` failed on a missing `.ai-agents/graphs` in a workspace that was otherwise set up correctly.
 
 **Hooks are installed per workspace by the link script when a host config file is absent. Permissions remain repository-local policy and are never installed globally.** This repo denies 21 patterns and hooks six events;
-applying that to every unrelated repository on the machine is the user's call, made by running the
-link script in a specific project.
+applying that to every unrelated repository on the machine is the user's call, made by running the link script in a specific project.
 
-Subagent files are rewritten, and any asset that could not be symlinked is a copy, so both can go
-stale. `--check` compares what is installed against what a fresh install would produce, `--uninstall`
-removes exactly what the manifest records and strips only the marked block from a rules file, and
-`--dry-run` writes nothing.
+Subagent files are rewritten, and any asset that could not be symlinked is a copy, so both can go stale. `--check` compares what is installed against what a fresh install would produce, `--uninstall` removes exactly what the manifest records and strips only the marked block from a rules file, and `--dry-run` writes nothing.
 
 ### Third-party Agent Skills (not this toolkit)
 
-Install community skills with the shared Agent Skills CLI, or the thin ultragentic wrapper that
-defaults to the four hosts this toolkit targets. Do not vendor third-party trees into
-`.ai-agents/`. Do not ask ultragentic to write MCP configs or host hooks for a skill.
+Install community skills with the shared Agent Skills CLI, or the thin ultragentic wrapper that defaults to the four hosts this toolkit targets. Do not vendor third-party trees into `.ai-agents/`. Do not ask ultragentic to write MCP configs or host hooks for a skill.
 
 ```sh
 # All four hosts (claude-code, codex, cursor, opencode), user-level:
@@ -376,14 +289,12 @@ Skills built for one host sometimes carry host-only frontmatter (`disable-model-
 ultragentic skills convert-report ~/.agents/skills/<name>
 ```
 
-DeepSeek Harness / Cordis-style plugins are a different runtime model; they are not an Agent Skills
-converter and are not a dependency of this toolkit.
+DeepSeek Harness / Cordis-style plugins are a different runtime model; they are not an Agent Skills converter and are not a dependency of this toolkit.
 </procedure>
 
 ## Asset inventory
 
 <context>
 
-There is no list here on purpose. The router files are authoritative, and a second list in prose is
-a list that goes stale without anything failing. Start at [`ROUTER.md`](ROUTER.md).
+There is no list here on purpose. The router files are authoritative, and a second list in prose is a list that goes stale without anything failing. Start at [`ROUTER.md`](ROUTER.md).
 </context>
