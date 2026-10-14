@@ -2,12 +2,9 @@
 
 <context>
 
-Everything an agent needs **only when creating toolkit assets or setting a repo up**. It lived in the root [`AGENTS.md`](../AGENTS.md), which every session loads in full, so a rule needed once per month
-was costing tokens on every turn. AGENTS.md keeps the rules that govern behavior each turn and points
-here for the rest.
+Everything an agent needs **only when creating toolkit assets or setting a repo up**. It lived in the root [`AGENTS.md`](../AGENTS.md), which every session loads in full, so a rule needed once per month was costing tokens on every turn. AGENTS.md keeps the rules that govern behavior each turn and points here for the rest.
 
-Read this file when you are: adding or changing an asset, wiring a harness, or mounting the toolkit
-into a consumer repo. Skip it otherwise.
+Read this file when you are: adding or changing an asset, wiring a harness, or mounting the toolkit into a consumer repo. Skip it otherwise.
 </context>
 
 ## Project layout
@@ -48,8 +45,7 @@ into a consumer repo. Skip it otherwise.
 - **Tool-specific rules:** Cursor rule files live in [`.cursor/rules/`](../.cursor/rules) and are not
   interchangeable with Claude rules without editing.
 - **Permissions:** after changing tool or path requirements, align
-  [`.claude/settings.json`](../.claude/settings.json) and [`PERMISSIONS.md`](PERMISSIONS.md). Deny
-  overrides allow.
+  [`.claude/settings.json`](../.claude/settings.json) and [`PERMISSIONS.md`](PERMISSIONS.md). Deny overrides allow.
 </required>
 
 ## XML section tags
@@ -57,17 +53,14 @@ into a consumer repo. Skip it otherwise.
 <context>
 
 Always-loaded files wrap their sections in XML tags. This is **prompt content, not a file format**.
-Anthropic's prompt guidance says XML tags "help Claude parse complex prompts unambiguously,
-especially when your prompt mixes instructions, context, examples, and variable inputs", and advises
+Anthropic's prompt guidance says XML tags "help Claude parse complex prompts unambiguously, especially when your prompt mixes instructions, context, examples, and variable inputs", and advises
 "consistent, descriptive tag names across your prompts". Nothing in it is about files on disk.
 
-Converting assets to HTML or XML files was considered and rejected on evidence: Claude Code requires
-a `SKILL.md`, and Cursor requires `.mdc` and ignores a plain `.md` in `.cursor/rules`. Neither documents HTML or XML support. Files stay Markdown; only the body gains tags.
+Converting assets to HTML or XML files was considered and rejected on evidence: Claude Code requires a `SKILL.md`, and Cursor requires `.mdc` and ignores a plain `.md` in `.cursor/rules`. Neither documents HTML or XML support. Files stay Markdown; only the body gains tags.
 
 ### The tag set
 
-Bounded on purpose. A vocabulary nobody can remember gets used inconsistently, and inconsistent tags
-are worse than none: they teach the model a partition that does not hold.
+Bounded on purpose. A vocabulary nobody can remember gets used inconsistently, and inconsistent tags are worse than none: they teach the model a partition that does not hold.
 
 **Charter files** (loaded every turn):
 
@@ -110,12 +103,9 @@ are worse than none: they teach the model a partition that does not hold.
 | `<procedure>`, `<screens>`, `<stories>`, `<model>` | RECORD steps; WIREFRAME; USERSTORY; ERD |
 | `<open_questions>`, `<references>`, `<revisions>` | Unknowns, sources, the change log |
 
-Document tags are valid only in `templates/docs/`; `scripts/check-xml-tags.sh` scopes them there. The runtime registry (`runtime/internal/pkg/docmeta/doctype.go`) is the source of truth, and a Go test
-fails when a template, the registry, or the checker's list disagree.
+Document tags are valid only in `templates/docs/`; `scripts/check-xml-tags.sh` scopes them there. The runtime registry (`runtime/internal/pkg/docmeta/doctype.go`) is the source of truth, and a Go test fails when a template, the registry, or the checker's list disagree.
 
-**`<required>` versus `<rules>` is the distinction that earns the whole scheme.** A weak model
-flattens a document into one list of suggestions. Splitting the blocking rules from the advisory ones
-tells it which line it may trade away under pressure and which it may not. If a block would be correct to violate given a good reason, it is `<rules>`. If violating it is always a defect, it is `<required>`.
+**`<required>` versus `<rules>` is the distinction that earns the whole scheme.** A weak model flattens a document into one list of suggestions. Splitting the blocking rules from the advisory ones tells it which line it may trade away under pressure and which it may not. If a block would be correct to violate given a good reason, it is `<rules>`. If violating it is always a defect, it is `<required>`.
 
 ### Rules for using them
 
@@ -139,8 +129,7 @@ tells it which line it may trade away under pressure and which it may not. If a 
 - A tag pair costs roughly six tokens. Measured here, tags cost about as much as the restated
   boilerplate they replaced, so treat the partition as the return, not a smaller file.
 
-`scripts/check-xml-tags.sh` fails on a mispaired tag, an unknown tag, a tag placed above
-frontmatter, a tag nested inside itself, or nesting past one level.
+`scripts/check-xml-tags.sh` fails on a mispaired tag, an unknown tag, a tag placed above frontmatter, a tag nested inside itself, or nesting past one level.
 </context>
 
 ## Checks to run
@@ -192,8 +181,7 @@ Run `scripts/link-ai-agents.ps1` (Windows) or `scripts/link-ai-agents.sh` (macOS
 
 <rules>
 
-When an agent creates or edits charter files **for a consumer/product repository** (not this toolkit
-repo), the committed text must be **harness-neutral**.
+When an agent creates or edits charter files **for a consumer/product repository** (not this toolkit repo), the committed text must be **harness-neutral**.
 
 **In scope:** workspace-root `AGENTS.md`, `CLAUDE.md`, `CURSOR.md`, `CLAUDE.local.md`, and `.cursor/rules/*.mdc` files that encode that repo's own conventions.
 
@@ -222,8 +210,7 @@ Local-first precedence still applies at **read** time: hooks may inject toolkit 
 <rules>
 
 This toolkit ships assets for every host in the runtime's contract table (`harness.HostContracts`;
-the `--client` values in `ultragentic`'s usage text list them). When you add or change something a person invokes through any of them, keep parity unless the spec names a documented
-host-only gap.
+the `--client` values in `ultragentic`'s usage text list them). When you add or change something a person invokes through any of them, keep parity unless the spec names a documented host-only gap.
 
 **In scope (parity required):**
 
@@ -232,9 +219,7 @@ host-only gap.
 - Permissions and config touched by the link or global-install scripts
 - Delivery workflow nodes, check plans, and verifiers that hosts drive through hooks
 
-**Canonical edit path:** change `.ai-agents/` (or `runtime/` for the control plane), then regenerate
-harness views. Do not edit generated paths under `.claude/`, `.cursor/`, `.codex/`, or `.agents/`
-as the source of truth.
+**Canonical edit path:** change `.ai-agents/` (or `runtime/` for the control plane), then regenerate harness views. Do not edit generated paths under `.claude/`, `.cursor/`, `.codex/`, or `.agents/` as the source of truth.
 
 **Before merge, run:**
 
@@ -247,16 +232,14 @@ as the source of truth.
 
 **Host-only exceptions:** allowed only when the vendor API lacks the capability and the gap is recorded in [`host-hook-contracts.md`](references/host-hook-contracts.md). The spec must say which hosts are excluded and why; silent single-host features do not ship.
 
-Research-only hosts (Kimi, Muse, Antigravity) follow the same contract table but are not the parity
-bar for new toolkit features unless the work explicitly targets them.
+Research-only hosts (Kimi, Muse, Antigravity) follow the same contract table but are not the parity bar for new toolkit features unless the work explicitly targets them.
 </rules>
 
 ## Machine-wide install
 
 <procedure>
 
-Installs the assets into the user-level directories, so every project on the machine sees them without a wrapper workspace and without a submodule. Use it when the toolkit should follow you
-rather than a repository, and keep using the link script for repositories that also want the permissions, hooks, and runtime gates.
+Installs the assets into the user-level directories, so every project on the machine sees them without a wrapper workspace and without a submodule. Use it when the toolkit should follow you rather than a repository, and keep using the link script for repositories that also want the permissions, hooks, and runtime gates.
 
 | Platform | Run |
 |---|---|
@@ -296,15 +279,12 @@ Codex reads `$HOME/.agents/skills` and not `~/.codex/skills`, which is easy to g
 4. `$ULTRAGENTIC_TOOLKIT`
 5. `~/.ultragentic`, written by the global install
 
-Local before global matches the precedence rule in [`AGENTS.md`](../AGENTS.md): a repository that ships its own assets means them. Without steps 4 and 5, a consumer repo had to vendor the whole
-toolkit to obtain two files, and `doctor` failed on a missing `.ai-agents/graphs` in a workspace that was otherwise set up correctly.
+Local before global matches the precedence rule in [`AGENTS.md`](../AGENTS.md): a repository that ships its own assets means them. Without steps 4 and 5, a consumer repo had to vendor the whole toolkit to obtain two files, and `doctor` failed on a missing `.ai-agents/graphs` in a workspace that was otherwise set up correctly.
 
 **Hooks are installed per workspace by the link script when a host config file is absent. Permissions remain repository-local policy and are never installed globally.** This repo denies 21 patterns and hooks six events;
 applying that to every unrelated repository on the machine is the user's call, made by running the link script in a specific project.
 
-Subagent files are rewritten, and any asset that could not be symlinked is a copy, so both can go
-stale. `--check` compares what is installed against what a fresh install would produce, `--uninstall`
-removes exactly what the manifest records and strips only the marked block from a rules file, and `--dry-run` writes nothing.
+Subagent files are rewritten, and any asset that could not be symlinked is a copy, so both can go stale. `--check` compares what is installed against what a fresh install would produce, `--uninstall` removes exactly what the manifest records and strips only the marked block from a rules file, and `--dry-run` writes nothing.
 
 ### Third-party Agent Skills (not this toolkit)
 
@@ -330,8 +310,7 @@ Skills built for one host sometimes carry host-only frontmatter (`disable-model-
 ultragentic skills convert-report ~/.agents/skills/<name>
 ```
 
-DeepSeek Harness / Cordis-style plugins are a different runtime model; they are not an Agent Skills
-converter and are not a dependency of this toolkit.
+DeepSeek Harness / Cordis-style plugins are a different runtime model; they are not an Agent Skills converter and are not a dependency of this toolkit.
 </procedure>
 
 ## Asset inventory

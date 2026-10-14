@@ -64,14 +64,10 @@ Use `ultragentic research` / `auto research` for the researcher graph. Choosing 
 
 ### Choosing the graph (MUST)
 
-`ultragentic goal` and `ultragentic auto` start a workflow graph from the objective. Pass the user's
-words through unchanged: the runtime reads the first word and the objective, and you must not strip,
-reword, or reorder them.
+`ultragentic goal` and `ultragentic auto` start a workflow graph from the objective. Pass the user's words through unchanged: the runtime reads the first word and the objective, and you must not strip, reword, or reorder them.
 
 **Inventory is the catalog, not this file.** List workflow first-words with `ultragentic inventory`
-(from `graphroute.Workflows`). List docs kinds with `ultragentic docs types` or the same inventory
-command (from `docmeta.DocTypes`). Do not add a workflow or docs kind by editing this table-shaped
-prose; update the registries and templates only. `/auto` follows the same rule ([`auto.md`](auto.md)).
+(from `graphroute.Workflows`). List docs kinds with `ultragentic docs types` or the same inventory command (from `docmeta.DocTypes`). Do not add a workflow or docs kind by editing this table-shaped prose; update the registries and templates only. `/auto` follows the same rule ([`auto.md`](auto.md)).
 
 1. **Read the `chosen` line the start command printed.** When the runtime read the objective, say
    in one sentence which graph it picked and why, and ask the user whether that is right, at the intake gate before anything else.
@@ -80,17 +76,13 @@ prose; update the registries and templates only. `/auto` follows the same rule (
 3. **If the runtime asks which kind of work it is, ask the user the same question.** Do not pick for
    them.
 4. **A code change with a non-code deliverable** (a feature plus an announcement, a migration plus a
-   report) starts `goal-delivery` with the `task_required` flag set, either because the objective
-   said both or because you passed `--with-task`. The non-code part runs after the last code task.
+   report) starts `goal-delivery` with the `task_required` flag set, either because the objective said both or because you passed `--with-task`. The non-code part runs after the last code task.
    Its nodes are in [`task.md`](task.md), and the SPEC must list its deliverable, acceptance rows, and outward actions ([`spec.md`](spec.md)).
 5. **`tutor` needs a learner.** Use `/goal tutor` only; `/auto tutor` is refused.
 
 ### Numbers in a run (MUST)
 
-Every figure in a document this run writes (RESEARCH, SPEC, PLAN, TASKS, FINDINGS, WRITEUP) is computed
-with `ultragentic calc`, not in your head, and logged in a fenced `calc` block. `checkpoint` recomputes
-the block at the node that wrote the document and refuses to leave while a line is wrong, so a wrong
-figure is caught on `/goal` and on `/auto` alike, with nobody reading it. Rules and worked examples:
+Every figure in a document this run writes (RESEARCH, SPEC, PLAN, TASKS, FINDINGS, WRITEUP) is computed with `ultragentic calc`, not in your head, and logged in a fenced `calc` block. `checkpoint` recomputes the block at the node that wrote the document and refuses to leave while a line is wrong, so a wrong figure is caught on `/goal` and on `/auto` alike, with nobody reading it. Rules and worked examples:
 [`quantitative-accuracy`](../skills/quantitative-accuracy/SKILL.md).
 
 ### Rules in this mode (MUST)
@@ -118,17 +110,14 @@ Three hooks keep it there, and two of them refuse:
 | `pre-tool-use` | **Refuses** a push to `main`, an unapproved `gh pr merge`, a hand-write to run state, and a live credential literal |
 | `post-tool-use` | Journals the tool call; proposes a memory when a command reported a non-zero exit |
 
-`stop` blocks at most once per turn, and never for a run awaiting a human or one past three
-blocker attempts, because neither can be moved by another model turn.
+`stop` blocks at most once per turn, and never for a run awaiting a human or one past three blocker attempts, because neither can be moved by another model turn.
 
 ### The task list (MUST)
 
-The run is driven by the `task_lists` row in `.agent-state/memory.db` (same schema as [`schemas/tasks.schema.json`](../../schemas/tasks.schema.json)). It is what answers `tasks_remaining`,
-so a task missing from it is a task the run will not come back for, and a status left stale is a cycle spent on work that was already done. Do not write `docs/**/tasks-*.json`.
+The run is driven by the `task_lists` row in `.agent-state/memory.db` (same schema as [`schemas/tasks.schema.json`](../../schemas/tasks.schema.json)). It is what answers `tasks_remaining`, so a task missing from it is a task the run will not come back for, and a status left stale is a cycle spent on work that was already done. Do not write `docs/**/tasks-*.json`.
 
 - **Read it before every task.** Take the first `queued` task whose dependencies are all `done`.
-  Never restart one already `done`. A `blocked` one needs its blocker resolved or the task
-  re-planned.
+  Never restart one already `done`. A `blocked` one needs its blocker resolved or the task re-planned.
 - **Write the status when it changes**, `in_progress` on start and `done` when the acceptance
   criteria pass, in `task_lists` **and** `TASKS.md`, ticking the acceptance checkboxes as they are met.
 - **Write it before the verifier reads it.** `task_complete` decides on `task_lists`. A status
@@ -158,8 +147,7 @@ Canonical rules, including the status vocabulary:
 <verification>
 
 **The run is done when `ultragentic run status` reports the `done` terminal node, and not before.**
-The list below is what the graph requires to get there; it is a reading aid, not a second checklist
-to tick by hand.
+The list below is what the graph requires to get there; it is a reading aid, not a second checklist to tick by hand.
 
 Stop only when:
 
@@ -182,16 +170,12 @@ Merge to `main` only after **GO** and **explicit human approval** ([`build.md`](
 1. Restate the objective and list unknowns.
 2. **Ask** focused questions when requirements are ambiguous or conflicting ([`karpathy-guardrails`](../skills/karpathy-guardrails/SKILL.md), [`AGENTS.md`](../../AGENTS.md)). Do not implement until clarified.
 3. **Check for an existing slug to continue before minting a new one.** Run `ultragentic run list --titles`
-   (or read `docs/ROUTER.md`) and compare the incoming objective against existing titles. If one
-   already covers this request, continue that slug instead of forking a new one: its documents are revised in place (`ultragentic docs revise`), never copied to a new folder or a new name. Fork a new slug only when nothing existing covers it.
-   When that slug's latest run is finished (`done`, `failed`, `cancelled`, `budget_exceeded`), start
-   its next run with `ultragentic run start --continue --slug <slug> "<objective>"` (MCP:
+   (or read `docs/ROUTER.md`) and compare the incoming objective against existing titles. If one already covers this request, continue that slug instead of forking a new one: its documents are revised in place (`ultragentic docs revise`), never copied to a new folder or a new name. Fork a new slug only when nothing existing covers it.
+   When that slug's latest run is finished (`done`, `failed`, `cancelled`, `budget_exceeded`), start its next run with `ultragentic run start --continue --slug <slug> "<objective>"` (MCP:
    `ua_run_start` with `slug` and `continue: true`); the run gets a new version under
-   `.agent-state/runs/`, and the documents stay in the slug's one folder. It refuses while the latest
-   run is still `running` or `awaiting_human`; resume that run with `ultragentic run status --slug <slug>` instead.
+   `.agent-state/runs/`, and the documents stay in the slug's one folder. It refuses while the latest run is still `running` or `awaiting_human`; resume that run with `ultragentic run status --slug <slug>` instead.
 4. Choose the slug; its documents will live in `docs/<category>/<slug>/` (the run picks the
-   category from the workflow, or pass `--category`). Confirm `<slug>` with the human when not obvious. The slug is a short English gloss of the objective, never a mechanical transliteration of non-English input (`charter-detail.md` "Docs and naming", moved out of `AGENTS.md`). When the task is small enough that no SPEC/PLAN is warranted, still start the run with `--slug no-docs-<short-name>` rather than skip
-   slug creation (`AGENTS.md` "A 'no docs needed' decision still gets a slug").
+   category from the workflow, or pass `--category`). Confirm `<slug>` with the human when not obvious. The slug is a short English gloss of the objective, never a mechanical transliteration of non-English input (`charter-detail.md` "Docs and naming", moved out of `AGENTS.md`). When the task is small enough that no SPEC/PLAN is warranted, still start the run with `--slug no-docs-<short-name>` rather than skip slug creation (`AGENTS.md` "A 'no docs needed' decision still gets a slug").
 5. State **ASSUMPTIONS** and the measurable **done** line.
 
 Skip to Phase 4 only if a **human-approved** `TASKS.md` already exists and the user asked to continue implementation.
