@@ -59,7 +59,7 @@ For skill and agent behavioral evaluation more broadly, see
 | Run the citation digest slash command on a scoped topic | command | [`research.md`](../commands/research.md) |
 | Deep research a question across many angles with claim voting | command | [`deep-research.md`](../commands/deep-research.md) |
 | Analyze evidence with a metacognition pass before recommending | command | [`deep-analyze.md`](../commands/deep-analyze.md) |
-| Run multi-angle deep research with adversarial claim verification | skill | [`deep-research`](../skills/deep-research/SKILL.md) |
+| Run multi-angle deep research with adversarial claim verification | skill | [`deep-research-harness`](../skills/deep-research-harness/SKILL.md) |
 | Teach me a subject over two months, quiz me, and schedule my reviews | command | [`tutor.md`](../commands/tutor.md) |
 | Give a stuck learner hints in steps instead of the answer | skill | [`self-tutoring`](../skills/self-tutoring/SKILL.md) |
 | Compare two growth rates with units and rounding stated, and show the working | skill | [`quantitative-accuracy`](../skills/quantitative-accuracy/SKILL.md) |

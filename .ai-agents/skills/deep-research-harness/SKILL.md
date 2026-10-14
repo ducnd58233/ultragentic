@@ -1,5 +1,5 @@
 ---
-name: deep-research
+name: deep-research-harness
 description: >-
   Runs multi-angle deep research with parallel retrieve, adversarial claim
   voting, and a cited digest. Use for deep research, deep dive, or

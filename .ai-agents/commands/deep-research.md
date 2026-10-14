@@ -6,7 +6,7 @@ Run deep research on a scoped question: multi-angle plan, parallel retrieve, adv
 
 <references>
 
-Follow [`deep-research`](../skills/deep-research/SKILL.md). Host paths: [`deep-work-host-matrix.md`](../references/deep-work-host-matrix.md). Citation rules: [`research-with-citations`](../skills/research-with-citations/SKILL.md). Persona: [`research-investigator`](../agents/research-investigator.md).
+Follow [`deep-research-harness`](../skills/deep-research-harness/SKILL.md). Host paths: [`deep-work-host-matrix.md`](../references/deep-work-host-matrix.md). Citation rules: [`research-with-citations`](../skills/research-with-citations/SKILL.md). Persona: [`research-investigator`](../agents/research-investigator.md).
 
 </references>
 

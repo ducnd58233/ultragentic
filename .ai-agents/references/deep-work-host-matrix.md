@@ -1,6 +1,6 @@
 # Deep-work host matrix
 
-How `/deep-research` and `/deep-analyze` run on every host in the runtime inventory (`codex`, `claude`, `cursor`, `opencode`, `kimi`, `muse`, `antigravity`). Prefer the native path when present; otherwise emulate with the [`deep-research`](../skills/deep-research/SKILL.md) skill.
+How `/deep-research` and `/deep-analyze` run on every host in the runtime inventory (`codex`, `claude`, `cursor`, `opencode`, `kimi`, `muse`, `antigravity`). Prefer the native path when present; otherwise emulate with the [`deep-research-harness`](../skills/deep-research-harness/SKILL.md) skill.
 
 | Host | Native deep research | Emulation path | Notes |
 |------|----------------------|----------------|-------|
